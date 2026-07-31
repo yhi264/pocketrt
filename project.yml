@@ -1,0 +1,51 @@
+name: PocketRT
+options:
+  bundleIdPrefix: jp.yoshiki
+  deploymentTarget:
+    iOS: "18.0"
+  developmentLanguage: ja
+settings:
+  base:
+    SWIFT_VERSION: "6.0"
+    MARKETING_VERSION: "0.9.0"
+    CURRENT_PROJECT_VERSION: "1"
+    # 署名用の Team ID。ビルドする方はご自身の Team ID を設定してください。
+    # 空のままでもシミュレータでのビルドとテストは可能です
+    # （CODE_SIGNING_ALLOWED=NO を指定してください）。
+    DEVELOPMENT_TEAM: ""
+    CODE_SIGN_STYLE: Automatic
+targets:
+  PocketRT:
+    type: application
+    platform: iOS
+    sources:
+      - PocketRT
+    info:
+      path: PocketRT/Info.plist
+      properties:
+        UILaunchScreen: {}
+        CFBundleDisplayName: PocketRT
+        ITSAppUsesNonExemptEncryption: false
+        CFBundleShortVersionString: "$(MARKETING_VERSION)"
+        CFBundleVersion: "$(CURRENT_PROJECT_VERSION)"
+        UISupportedInterfaceOrientations:
+          - UIInterfaceOrientationPortrait
+    settings:
+      base:
+        PRODUCT_BUNDLE_IDENTIFIER: jp.yoshiki.PocketRT
+        GENERATE_INFOPLIST_FILE: NO
+        ASSETCATALOG_COMPILER_APPICON_NAME: AppIcon
+        ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME: AccentColor
+        # iPhone 専用（1 = iPhone, 2 = iPad）。
+        # 指定しないと iPhone + iPad の両対応になり、iPad マルチタスキングの要件として
+        # 4 方向すべての画面向きが必須となる。本アプリは縦向き固定で設計されており、
+        # iPad レイアウトも未検証のため iPhone 専用とする。
+        # iPhone 専用アプリは iPad でも互換モードでインストール・実行できる。
+        TARGETED_DEVICE_FAMILY: "1"
+  PocketRTTests:
+    type: bundle.unit-test
+    platform: iOS
+    sources:
+      - PocketRTTests
+    dependencies:
+      - target: PocketRT
