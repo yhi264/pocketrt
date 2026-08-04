@@ -170,4 +170,19 @@ enum ScheduleCalculator {
         }
         return grids
     }
+
+    /// start から end までが跨る月数を返す。カレンダー表示に使うため 1〜3 にクランプする。
+    static func monthCount(
+        from startDate: Date,
+        to endDate: Date,
+        calendar: Calendar = .jstGregorian
+    ) -> Int {
+        let startComps = calendar.dateComponents([.year, .month], from: startDate)
+        let endComps = calendar.dateComponents([.year, .month], from: endDate)
+        guard let start = calendar.date(from: startComps), let end = calendar.date(from: endComps) else {
+            return 1
+        }
+        let months = (calendar.dateComponents([.month], from: start, to: end).month ?? 0) + 1
+        return min(3, max(1, months))
+    }
 }

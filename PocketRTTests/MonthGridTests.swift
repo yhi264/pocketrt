@@ -75,3 +75,31 @@ struct MonthGridTests {
         #expect(ScheduleCalculator.monthGrids(from: date(2026, 8, 1), monthCount: -1).isEmpty)
     }
 }
+
+@Suite("ScheduleCalculator.monthCount")
+struct MonthCountDerivationTests {
+
+    private func date(_ y: Int, _ m: Int, _ d: Int) -> Date {
+        var c = DateComponents()
+        c.year = y; c.month = m; c.day = d
+        return Calendar.jstGregorian.date(from: c)!
+    }
+
+    @Test("1ヶ月に収まるコースは月数1")
+    func withinOneMonth() {
+        let count = ScheduleCalculator.monthCount(from: date(2026, 8, 3), to: date(2026, 8, 11))
+        #expect(count == 1)
+    }
+
+    @Test("月末に始まり翌月にまたがるコースは月数2")
+    func spansTwoMonths() {
+        let count = ScheduleCalculator.monthCount(from: date(2026, 8, 27), to: date(2026, 9, 5))
+        #expect(count == 2)
+    }
+
+    @Test("3ヶ月以上にまたがるコースは3にクランプされる")
+    func clampedToThree() {
+        let count = ScheduleCalculator.monthCount(from: date(2026, 8, 3), to: date(2027, 1, 15))
+        #expect(count == 3)
+    }
+}

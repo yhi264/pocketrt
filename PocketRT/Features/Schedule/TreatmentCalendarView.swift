@@ -1,15 +1,29 @@
 import SwiftUI
 
+/// カレンダーの日の種別。色・記号・読み上げの3つに同じ判定を使う。
+private enum DayKind {
+    case treatment(fraction: Int)
+    case manualRest      // 個別休止
+    case holiday         // 祝日（照射しない設定のとき）
+    case weekend
+    case ordinary        // 治療期間内の非照射日
+    case outsidePeriod
+}
+
 struct TreatmentCalendarView: View {
     let schedule: ScheduleResult
     let holidays: HolidayProvider
     let includeHolidays: Bool
     let overrideOff: Set<DateKey>
     let today: Date
-    var monthCount: Int = 3
 
     private let calendar = Calendar.jstGregorian
     private let columns = Array(repeating: GridItem(.flexible(), spacing: 2), count: 7)
+
+    /// 表示月数は治療期間（開始日〜終了日）から導出する。1〜3ヶ月にクランプ。
+    private var monthCount: Int {
+        ScheduleCalculator.monthCount(from: schedule.startDate, to: schedule.endDate, calendar: calendar)
+    }
 
     private var treatmentKeys: [DateKey: Int] {
         var map: [DateKey: Int] = [:]
@@ -28,6 +42,16 @@ struct TreatmentCalendarView: View {
         let f = DateFormatter()
         f.timeZone = calendar.timeZone
         f.setLocalizedDateFormatFromTemplate("yMMMM")
+        return f
+    }
+
+    /// アクセシビリティラベル用の「8月3日」形式の日付フォーマッタ。
+    /// グリッドの日付は JST で計算されるため、timeZone を明示しないと
+    /// JST より西のデバイスで日付がずれて読み上げられる（過去に一度修正した不具合）。
+    private var accessibilityDateFormatter: DateFormatter {
+        let f = DateFormatter()
+        f.timeZone = calendar.timeZone
+        f.setLocalizedDateFormatFromTemplate("Md")
         return f
     }
 
@@ -87,56 +111,100 @@ struct TreatmentCalendarView: View {
     @ViewBuilder
     private func dayCell(_ date: Date) -> some View {
         let key = DateKey(from: date, calendar: calendar)
-        let frNumber = treatmentKeys[key]
         let isToday = calendar.isDate(date, inSameDayAs: today)
         let inPeriod = date >= calendar.startOfDay(for: schedule.startDate)
             && date <= calendar.startOfDay(for: schedule.endDate)
+        let kind = dayKind(date: date, key: key, inPeriod: inPeriod)
 
         VStack(spacing: 1) {
             Text("\(calendar.component(.day, from: date))")
                 .font(.caption2)
-            if let frNumber {
-                Text("\(frNumber)")
-                    .font(.caption2.bold())
-            } else {
-                Text(" ").font(.caption2)
-            }
+            Text(marker(for: kind))
+                .font(.caption2.bold())
         }
         .frame(maxWidth: .infinity)
         .frame(height: 34)
         .background(
             RoundedRectangle(cornerRadius: 4)
-                .fill(backgroundColor(date: date, key: key, isTreatment: frNumber != nil, inPeriod: inPeriod))
+                .fill(color(for: kind))
         )
         .overlay(
             RoundedRectangle(cornerRadius: 4)
                 .stroke(isToday ? Color.accentColor : .clear, lineWidth: 2)
         )
         .foregroundStyle(inPeriod ? .primary : .tertiary)
+        .accessibilityElement(children: .ignore)
+        .accessibilityLabel(accessibilityLabel(date: date, kind: kind))
     }
 
-    private func backgroundColor(date: Date, key: DateKey, isTreatment: Bool, inPeriod: Bool) -> Color {
-        if isTreatment { return .green.opacity(0.25) }
-        guard inPeriod else { return .clear }
-        if overrideOff.contains(key) { return .red.opacity(0.15) }
-        if holidays.holidayName(date) != nil && !includeHolidays { return .orange.opacity(0.15) }
+    /// 日の種別を1箇所で判定する。色・記号・読み上げの3つがこの結果を共有する。
+    private func dayKind(date: Date, key: DateKey, inPeriod: Bool) -> DayKind {
+        if let frNumber = treatmentKeys[key] { return .treatment(fraction: frNumber) }
+        guard inPeriod else { return .outsidePeriod }
+        if overrideOff.contains(key) { return .manualRest }
+        if holidays.holidayName(date) != nil && !includeHolidays { return .holiday }
         let wd = calendar.component(.weekday, from: date)
-        if wd == 1 || wd == 7 { return Color(.systemGray5) }
-        return .clear
+        if wd == 1 || wd == 7 { return .weekend }
+        return .ordinary
+    }
+
+    private func color(for kind: DayKind) -> Color {
+        switch kind {
+        case .treatment: return .green.opacity(0.25)
+        case .holiday: return .red.opacity(0.15)
+        case .manualRest: return .orange.opacity(0.15)
+        case .weekend: return Color(.systemGray5)
+        case .ordinary, .outsidePeriod: return .clear
+        }
+    }
+
+    /// 分割回数がない日のうち、色だけでは区別できない種別に1文字の記号を添える。
+    ///
+    /// `LocalizedStringKey` を返すことで `Text(_:)` の非ローカライズ初期化子
+    /// （`Text(some StringProtocol)`）に解決されるのを避け、「祝」「休」が
+    /// String Catalog に載るようにする。
+    private func marker(for kind: DayKind) -> LocalizedStringKey {
+        switch kind {
+        case .treatment(let fraction): return "\(fraction)"
+        case .manualRest: return "休"
+        case .holiday: return "祝"
+        case .weekend, .ordinary, .outsidePeriod: return " "
+        }
+    }
+
+    private func accessibilityLabel(date: Date, kind: DayKind) -> String {
+        let dateText = accessibilityDateFormatter.string(from: date)
+        switch kind {
+        case .treatment(let fraction):
+            return String(localized: "\(dateText) 第\(fraction)回")
+        case .manualRest:
+            return String(localized: "\(dateText) 個別休止")
+        case .holiday:
+            return String(localized: "\(dateText) 祝日")
+        case .weekend:
+            let wd = calendar.component(.weekday, from: date)
+            return wd == 1
+                ? String(localized: "\(dateText) 日曜")
+                : String(localized: "\(dateText) 土曜")
+        case .ordinary:
+            return String(localized: "\(dateText) 照射なし")
+        case .outsidePeriod:
+            return String(localized: "\(dateText) 治療期間外")
+        }
     }
 
     private var legend: some View {
         HStack(spacing: 12) {
             legendItem(.green.opacity(0.25), "照射日")
             legendItem(Color(.systemGray5), "土日")
-            legendItem(.orange.opacity(0.15), "祝日")
-            legendItem(.red.opacity(0.15), "個別休止")
+            legendItem(.red.opacity(0.15), "祝日")
+            legendItem(.orange.opacity(0.15), "個別休止")
         }
         .font(.caption2)
         .foregroundStyle(.secondary)
     }
 
-    private func legendItem(_ color: Color, _ label: String) -> some View {
+    private func legendItem(_ color: Color, _ label: LocalizedStringKey) -> some View {
         HStack(spacing: 3) {
             RoundedRectangle(cornerRadius: 2).fill(color).frame(width: 10, height: 10)
             Text(label)

@@ -18,20 +18,20 @@ struct NumberField: View {
         VStack(alignment: .leading, spacing: 4) {
             HStack {
                 Text(label)
-                    .frame(width: 80, alignment: .leading)
+                    .layoutPriority(1)
                 TextField("", text: $value)
                     .keyboardType(.decimalPad)
                     .textFieldStyle(.roundedBorder)
                     .multilineTextAlignment(.trailing)
+                    .accessibilityLabel(label)
+                    .accessibilityHint(error ?? "")
                 Text(unit)
                     .foregroundStyle(.secondary)
-                    .frame(width: 40, alignment: .leading)
             }
             if let error {
                 Text(error)
                     .font(.caption)
                     .foregroundStyle(.red)
-                    .padding(.leading, 80)
             }
         }
     }

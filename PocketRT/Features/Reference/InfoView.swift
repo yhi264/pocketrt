@@ -23,8 +23,7 @@ struct InfoView: View {
                             .navigationTitle("免責事項")
                             .navigationBarTitleDisplayMode(.inline)
                     }
-                    Link("プライバシーポリシー",
-                         destination: URL(string: "https://yhi264.github.io/pocketrt/")!)
+                    NavigationLink("プライバシーポリシー") { PrivacyPolicyView() }
                 }
                 Section("このアプリについて") {
                     HStack {

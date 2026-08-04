@@ -104,7 +104,7 @@ struct PlanQualityView: View {
                                 if let l = vm.limits {
                                     Text(String(format: "許容値: R50%% < %.2f (none) / < %.2f (minor)、D2cm < %.1f%% / < %.1f%%",
                                                 l.r50None, l.r50Minor, l.d2cmNone, l.d2cmMinor))
-                                        .font(.caption2)
+                                        .font(.caption2.monospacedDigit())
                                         .foregroundStyle(.secondary)
                                 }
                             }
