@@ -75,6 +75,7 @@ struct OARConversionView: View {
                 .padding()
             }
             .navigationTitle("OAR制約換算")
+            .infoToolbarButton()
         }
     }
 }

@@ -18,6 +18,9 @@ struct PocketRTApp: App {
 
                 ScheduleView()
                     .tabItem { Label("予定", systemImage: "calendar") }
+
+                PlanQualityView()
+                    .tabItem { Label("品質", systemImage: "checkmark.seal") }
             }
             .fullScreenCover(isPresented: Binding(
                 get: { !hasAcceptedDisclaimer },

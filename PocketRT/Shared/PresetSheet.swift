@@ -8,7 +8,7 @@ struct PresetSheet: View {
         NavigationStack {
             List {
                 ForEach(PresetCategory.allCases) { cat in
-                    Section(cat.rawValue) {
+                    Section(cat.displayName) {
                         ForEach(FractionationPresets.byCategory(cat)) { p in
                             Button {
                                 onSelect(p)
@@ -23,9 +23,14 @@ struct PresetSheet: View {
                                             .font(.callout.monospacedDigit())
                                             .foregroundStyle(.secondary)
                                     }
-                                    Text("出典: \(p.source) / α/β \(String(format: "%.1f", p.recommendedAlphaBeta))")
+                                    Text("出典: \(p.citations.map(\.shortLabel).joined(separator: " / ")) / α/β \(String(format: "%.1f", p.recommendedAlphaBeta))")
                                         .font(.caption2)
                                         .foregroundStyle(.tertiary)
+                                    if let note = p.note {
+                                        Text(note)
+                                            .font(.caption2)
+                                            .foregroundStyle(.tertiary)
+                                    }
                                 }
                             }
                         }

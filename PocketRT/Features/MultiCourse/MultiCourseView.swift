@@ -62,6 +62,7 @@ struct MultiCourseView: View {
                     vm.apply(preset: preset, to: target)
                 }
             }
+            .infoToolbarButton()
         }
     }
 

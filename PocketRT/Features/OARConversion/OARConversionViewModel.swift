@@ -21,26 +21,26 @@ final class OARConversionViewModel {
     var targetDoseFx: Double? { Double(targetDoseFxText) }
 
     var sourceDoseError: String? {
-        guard let v = sourceDose else { return sourceDoseText.isEmpty ? nil : "数値を入力" }
-        return (0.1...200).contains(v) ? nil : "0.1〜200 Gy"
+        guard let v = sourceDose else { return sourceDoseText.isEmpty ? nil : String(localized: "数値を入力") }
+        return (0.1...200).contains(v) ? nil : String(localized: "0.1〜200 Gy")
     }
     var sourceFractionsError: String? {
-        guard let v = sourceFractions else { return sourceFractionsText.isEmpty ? nil : "整数を入力" }
-        return (1...99).contains(v) ? nil : "1〜99 Fr"
+        guard let v = sourceFractions else { return sourceFractionsText.isEmpty ? nil : String(localized: "整数を入力") }
+        return (1...99).contains(v) ? nil : String(localized: "1〜99 Fr")
     }
     var alphaBetaError: String? {
-        guard let v = alphaBeta else { return alphaBetaText.isEmpty ? nil : "数値を入力" }
-        return (0.5...30).contains(v) ? nil : "0.5〜30 Gy"
+        guard let v = alphaBeta else { return alphaBetaText.isEmpty ? nil : String(localized: "数値を入力") }
+        return (0.5...30).contains(v) ? nil : String(localized: "0.5〜30 Gy")
     }
 
     var targetError: String? {
         switch mode {
         case .fractions:
-            guard let v = targetFractions else { return targetFractionsText.isEmpty ? nil : "整数を入力" }
-            return (1...99).contains(v) ? nil : "1〜99 Fr"
+            guard let v = targetFractions else { return targetFractionsText.isEmpty ? nil : String(localized: "整数を入力") }
+            return (1...99).contains(v) ? nil : String(localized: "1〜99 Fr")
         case .dosePerFraction:
-            guard let v = targetDoseFx else { return targetDoseFxText.isEmpty ? nil : "数値を入力" }
-            return (0.1...30).contains(v) ? nil : "0.1〜30 Gy"
+            guard let v = targetDoseFx else { return targetDoseFxText.isEmpty ? nil : String(localized: "数値を入力") }
+            return (0.1...30).contains(v) ? nil : String(localized: "0.1〜30 Gy")
         }
     }
 

@@ -39,6 +39,12 @@ struct JapaneseHolidaysProviderTests {
     func outOfRange() {
         #expect(!provider.isHoliday(date(2031, 1, 1)))
     }
+
+    @Test("coveredYears は収録データの実際の最小・最大年と一致する")
+    func coveredYearsMatchesActualDataExtent() {
+        #expect(provider.coveredYears.lowerBound == 2024)
+        #expect(provider.coveredYears.upperBound == 2030)
+    }
 }
 
 // MARK: - ScheduleCalculator

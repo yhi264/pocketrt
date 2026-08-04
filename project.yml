@@ -4,14 +4,12 @@ options:
   deploymentTarget:
     iOS: "18.0"
   developmentLanguage: ja
+  knownRegions: [ja, en, Base]
 settings:
   base:
     SWIFT_VERSION: "6.0"
-    MARKETING_VERSION: "0.9.0"
-    CURRENT_PROJECT_VERSION: "1"
-    # 署名用の Team ID。ビルドする方はご自身の Team ID を設定してください。
-    # 空のままでもシミュレータでのビルドとテストは可能です
-    # （CODE_SIGNING_ALLOWED=NO を指定してください）。
+    MARKETING_VERSION: "0.9.1"
+    CURRENT_PROJECT_VERSION: "2"
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
 targets:
@@ -49,3 +47,10 @@ targets:
       - PocketRTTests
     dependencies:
       - target: PocketRT
+    settings:
+      base:
+        # これがないと xcodebuild test が
+        # "Cannot code sign because the target does not have an Info.plist file" で
+        # ビルドに失敗する。アプリ本体は明示的な Info.plist を使うが
+        # （GENERATE_INFOPLIST_FILE: NO）、テストバンドルは自動生成でよい。
+        GENERATE_INFOPLIST_FILE: YES

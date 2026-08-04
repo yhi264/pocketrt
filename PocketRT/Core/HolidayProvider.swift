@@ -4,6 +4,10 @@ import Foundation
 protocol HolidayProvider {
     func isHoliday(_ date: Date) -> Bool
     func holidayName(_ date: Date) -> String?
+
+    /// 祝日データが収録されている年の範囲。範囲外の日付について
+    /// `holidayName(_:)` が nil を返しても、それは「祝日でない」ことを意味しない。
+    var coveredYears: ClosedRange<Int> { get }
 }
 
 /// 内閣府 syukujitsu.csv に準拠した日本の祝日（2024-2030）
@@ -175,6 +179,20 @@ struct JapaneseHolidaysProvider: HolidayProvider {
         holidays[key(for: date)]
     }
 
-    /// データが網羅している年の範囲
-    var coveredYears: ClosedRange<Int> { 2024...2030 }
+    /// データが網羅している年の範囲。
+    ///
+    /// ハードコードされた定数ではなく、収録データのキー（"yyyy-MM-dd"）から
+    /// 実際の最小・最大年を都度算出する。データを追加・削除しても定数を
+    /// 更新し忘れて実態とずれる、ということが起こらない。
+    var coveredYears: ClosedRange<Int> {
+        let years = holidays.keys.compactMap { key in
+            Int(key.prefix(4))
+        }
+        guard let lower = years.min(), let upper = years.max() else {
+            // holidays が空になることは実運用では起こらないが、
+            // 空範囲を返して「何も網羅していない」ことを明示する。
+            return 0...0
+        }
+        return lower...upper
+    }
 }

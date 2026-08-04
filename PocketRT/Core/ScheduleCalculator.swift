@@ -145,4 +145,29 @@ enum ScheduleCalculator {
 
         return true
     }
+
+    /// 開始日の属する月から `monthCount` ヶ月ぶんのグリッド情報を返す。
+    static func monthGrids(
+        from startDate: Date,
+        monthCount: Int,
+        calendar: Calendar = .jstGregorian
+    ) -> [MonthGrid] {
+        guard monthCount > 0 else { return [] }
+
+        let comps = calendar.dateComponents([.year, .month], from: startDate)
+        guard let firstMonth = calendar.date(from: comps) else { return [] }
+
+        var grids: [MonthGrid] = []
+        for offset in 0..<monthCount {
+            guard let first = calendar.date(byAdding: .month, value: offset, to: firstMonth),
+                  let range = calendar.range(of: .day, in: .month, for: first) else { continue }
+            // weekday は日曜=1 … 土曜=7。空セル数は 0 起点にする
+            let weekday = calendar.component(.weekday, from: first)
+            grids.append(MonthGrid(
+                firstDay: first,
+                leadingBlanks: weekday - 1,
+                dayCount: range.count))
+        }
+        return grids
+    }
 }

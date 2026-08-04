@@ -1,0 +1,67 @@
+name: CI
+
+# 公開ソースが単体でビルドでき、テストが通ることを機械的に検証する。
+# 論文の再現性の主張（このリポジトリを clone すれば同じ結果が得られる）を支える。
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+  workflow_dispatch:
+
+jobs:
+  test:
+    name: Build & Test
+    runs-on: macos-15
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # iOS 18 をターゲットにしているため Xcode 16 以降が要る
+      - name: Select Xcode
+        run: |
+          sudo xcode-select -switch /Applications/Xcode_16.app
+          xcodebuild -version
+
+      # .xcodeproj はリポジトリに含めない方針。project.yml から生成する
+      - name: Install XcodeGen
+        run: brew install xcodegen
+
+      - name: Generate project
+        working-directory: app
+        run: xcodegen generate
+
+      - name: Show available simulators
+        run: xcrun simctl list devices available | grep -E "iPhone" || true
+
+      # シミュレータ向けビルドのため署名は不要。
+      # DEVELOPMENT_TEAM は公開版では空にしてあるので、明示的に署名を切る。
+      - name: Test
+        working-directory: app
+        run: |
+          set -o pipefail
+          xcodebuild test \
+            -project PocketRT.xcodeproj \
+            -scheme PocketRT \
+            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            CODE_SIGNING_ALLOWED=NO \
+            | tee /tmp/xcodebuild.log
+
+      # xcodebuild は Swift Testing の失敗でも成功終了することがあるため、
+      # 出力の文字列で最終判定する
+      - name: Verify test result
+        if: always()
+        run: |
+          if ! grep -q "TEST SUCCEEDED" /tmp/xcodebuild.log; then
+            echo "::error::TEST SUCCEEDED が出力に見つかりません"
+            exit 1
+          fi
+          grep -oE "Test run with [0-9]+ tests in [0-9]+ suites (passed|failed)" /tmp/xcodebuild.log | tail -1
+
+      - name: Upload log on failure
+        if: failure()
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-log
+          path: /tmp/xcodebuild.log

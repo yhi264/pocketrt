@@ -28,12 +28,12 @@ final class ScheduleViewModel {
     }
 
     var totalDoseError: String? {
-        guard let v = totalDose else { return totalDoseText.isEmpty ? nil : "数値を入力" }
-        return (0.1...200).contains(v) ? nil : "0.1〜200 Gy"
+        guard let v = totalDose else { return totalDoseText.isEmpty ? nil : String(localized: "数値を入力") }
+        return (0.1...200).contains(v) ? nil : String(localized: "0.1〜200 Gy")
     }
     var fractionsError: String? {
-        guard let v = fractions else { return fractionsText.isEmpty ? nil : "整数を入力" }
-        return (1...99).contains(v) ? nil : "1〜99 Fr"
+        guard let v = fractions else { return fractionsText.isEmpty ? nil : String(localized: "整数を入力") }
+        return (1...99).contains(v) ? nil : String(localized: "1〜99 Fr")
     }
 
     var isValid: Bool {
@@ -54,6 +54,18 @@ final class ScheduleViewModel {
         return ScheduleCalculator.generate(
             fractions: n, startDate: startDate, rules: rules, holidays: holidays
         )
+    }
+
+    /// 生成されたスケジュールが祝日データの収録範囲を超える場合の警告。
+    ///
+    /// 収録範囲外の日付は「祝日でない」として扱われる（HolidayProvider 参照）ため、
+    /// 範囲を超えた予定は実際には祝日に照射日を置いている可能性がある。
+    /// 静かに間違えるより、範囲を超えたことを画面上で明示する。
+    var holidayDataWarning: String? {
+        guard let schedule else { return nil }
+        let endYear = Calendar.jstGregorian.component(.year, from: schedule.endDate)
+        guard endYear > holidays.coveredYears.upperBound else { return nil }
+        return String(localized: "祝日データは\(holidays.coveredYears.upperBound)年までです。それ以降の祝日は反映されません")
     }
 
     var todayCompletedFractions: Int {
@@ -107,11 +119,25 @@ final class ScheduleViewModel {
     private func restReason(date: Date) -> String {
         let cal = Calendar.jstGregorian
         let key = DateKey(from: date, calendar: cal)
-        if overrideOff.contains(key) { return "個別休止" }
+        if overrideOff.contains(key) { return String(localized: "個別休止") }
         if let name = holidays.holidayName(date), !includeHolidays { return name }
         let wd = cal.component(.weekday, from: date)
-        if (wd == 1 || wd == 7) && !includeWeekends { return wd == 1 ? "日曜" : "土曜" }
+        if (wd == 1 || wd == 7) && !includeWeekends { return wd == 1 ? String(localized: "日曜") : String(localized: "土曜") }
         return "—"
+    }
+
+    @ObservationIgnored private var appliedPreset: FractionationPreset?
+
+    /// 現在の入力がプリセットと一致する場合のみ出典を返す。
+    ///
+    /// プリセット適用後にユーザーが数値を編集した場合、その結果はもはや
+    /// プリセットの出典に帰属しない。誤った帰属を表示しないための判定。
+    var activeCitations: [Citation] {
+        guard let p = appliedPreset,
+              let d = totalDose, let n = fractions,
+              abs(d - p.totalDose) < 0.001, n == p.fractions
+        else { return [] }
+        return p.citations
     }
 
     func apply(preset: FractionationPreset) {
@@ -119,6 +145,7 @@ final class ScheduleViewModel {
             ? "\(Int(preset.totalDose))"
             : String(format: "%.2f", preset.totalDose)
         fractionsText = "\(preset.fractions)"
+        appliedPreset = preset
     }
 
     func addOverrideOn(_ date: Date) {

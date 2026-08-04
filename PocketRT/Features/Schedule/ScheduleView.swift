@@ -10,14 +10,12 @@ struct ScheduleView: View {
 
     private let dayFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateFormat = "M/d (E)"
-        f.locale = Locale(identifier: "ja_JP")
+        f.setLocalizedDateFormatFromTemplate("Md E")
         return f
     }()
     private let fullDateFormatter: DateFormatter = {
         let f = DateFormatter()
-        f.dateFormat = "yyyy-MM-dd (E)"
-        f.locale = Locale(identifier: "ja_JP")
+        f.setLocalizedDateFormatFromTemplate("yMMMd E")
         return f
     }()
 
@@ -53,7 +51,6 @@ struct ScheduleView: View {
                     Group {
                         Text("スケジュール条件").font(.headline)
                         DatePicker("開始日", selection: $vm.startDate, displayedComponents: .date)
-                            .environment(\.locale, Locale(identifier: "ja_JP"))
                         Toggle("土日も照射", isOn: $vm.includeWeekends)
                         Toggle("祝日も照射", isOn: $vm.includeHolidays)
                     }
@@ -79,6 +76,12 @@ struct ScheduleView: View {
                     )
 
                     // --- 結果 ---
+                    if let warning = vm.holidayDataWarning {
+                        Label(warning, systemImage: "exclamationmark.triangle.fill")
+                            .font(.caption)
+                            .foregroundStyle(.orange)
+                    }
+
                     ResultCard(title: "予測", isDisabled: !vm.isValid) {
                         if let s = vm.schedule {
                             VStack(alignment: .leading, spacing: 8) {
@@ -100,6 +103,16 @@ struct ScheduleView: View {
                                     Spacer()
                                     Text("\(s.totalCalendarDays) 日（照射 \(s.treatmentDays.count) + 休止 \(s.restDays)）")
                                         .font(.body.monospacedDigit())
+                                }
+                                if !vm.activeCitations.isEmpty {
+                                    Divider()
+                                    HStack(spacing: 4) {
+                                        Image(systemName: "text.book.closed")
+                                            .font(.caption2)
+                                        Text("線量分割の出典: \(vm.activeCitations.map(\.shortLabel).joined(separator: " / "))")
+                                            .font(.caption2)
+                                    }
+                                    .foregroundStyle(.secondary)
                                 }
                             }
                         } else {
@@ -135,6 +148,17 @@ struct ScheduleView: View {
                                     }
                                 }
                             }
+                        }
+                    }
+
+                    if let s = vm.schedule {
+                        ResultCard(title: "カレンダー") {
+                            TreatmentCalendarView(
+                                schedule: s,
+                                holidays: vm.holidays,
+                                includeHolidays: vm.includeHolidays,
+                                overrideOff: vm.overrideOff,
+                                today: Date())
                         }
                     }
 
@@ -175,6 +199,7 @@ struct ScheduleView: View {
                     vm.apply(preset: preset)
                 }
             }
+            .infoToolbarButton()
         }
     }
 
@@ -213,7 +238,6 @@ struct ScheduleView: View {
             NavigationStack {
                 DatePicker("日付を選択", selection: pickerDate, displayedComponents: .date)
                     .datePickerStyle(.graphical)
-                    .environment(\.locale, Locale(identifier: "ja_JP"))
                     .padding()
                     .navigationTitle(title)
                     .navigationBarTitleDisplayMode(.inline)

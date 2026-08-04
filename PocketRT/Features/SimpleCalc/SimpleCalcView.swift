@@ -55,6 +55,16 @@ struct SimpleCalcView: View {
                                     .font(.caption)
                                     .foregroundStyle(.secondary)
                             }
+                            if !vm.activeCitations.isEmpty {
+                                Divider()
+                                HStack(spacing: 4) {
+                                    Image(systemName: "text.book.closed")
+                                        .font(.caption2)
+                                    Text("線量分割の出典: \(vm.activeCitations.map(\.shortLabel).joined(separator: " / "))")
+                                        .font(.caption2)
+                                }
+                                .foregroundStyle(.secondary)
+                            }
                         }
                     }
 
@@ -77,6 +87,7 @@ struct SimpleCalcView: View {
                     vm.apply(preset: preset)
                 }
             }
+            .infoToolbarButton()
         }
     }
 }

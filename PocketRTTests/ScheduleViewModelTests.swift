@@ -93,4 +93,24 @@ struct ScheduleViewModelUpcomingEntriesTests {
         let vm = ScheduleViewModel(clock: { today })
         #expect(DateKey(from: vm.startDate) == DateKey(year: 2026, month: 8, day: 5))
     }
+
+    @Test("祝日データの収録範囲内で終わるスケジュールは警告を出さない")
+    func scheduleWithinCoveredYearsHasNoWarning() {
+        let vm = makeVM(today: date(2026, 8, 3))
+        #expect(vm.schedule != nil)
+        #expect(vm.holidayDataWarning == nil)
+    }
+
+    @Test("祝日データの収録範囲を超えて終わるスケジュールは警告を出す")
+    func scheduleBeyondCoveredYearsHasWarning() {
+        let today = date(2030, 12, 1)
+        let vm = ScheduleViewModel(clock: { today })
+        vm.totalDoseText = "60"
+        vm.fractionsText = "30"
+        vm.startDate = date(2030, 12, 1)
+        vm.includeWeekends = false
+        vm.includeHolidays = false
+        #expect(vm.schedule != nil)
+        #expect(vm.holidayDataWarning != nil)
+    }
 }
