@@ -18,41 +18,58 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      # iOS 18 をターゲットにしているため Xcode 16 以降が要る
-      - name: Select Xcode
+      - name: Show toolchain
         run: |
-          sudo xcode-select -switch /Applications/Xcode_16.app
           xcodebuild -version
+          swift --version
 
-      # .xcodeproj はリポジトリに含めない方針。project.yml から生成する
+      # .xcodeproj はリポジトリに含めない方針。project.yml から生成する。
+      # clone した人と同じ手順を CI でも踏む。
       - name: Install XcodeGen
         run: brew install xcodegen
 
       - name: Generate project
-        working-directory: app
         run: xcodegen generate
 
-      - name: Show available simulators
-        run: xcrun simctl list devices available | grep -E "iPhone" || true
+      # シミュレータ名はランナーの Xcode バージョンで変わるため、
+      # ハードコードせず利用可能な iPhone を実行時に選ぶ。
+      - name: Pick a simulator
+        id: sim
+        run: |
+          set -euo pipefail
+          NAME=$(xcrun simctl list devices available \
+                 | grep -oE '^ +iPhone [^(]+' \
+                 | sed 's/^ *//; s/ *$//' \
+                 | head -1)
+          if [ -z "$NAME" ]; then
+            echo "::error::利用可能な iPhone シミュレータが見つかりません"
+            xcrun simctl list devices available
+            exit 1
+          fi
+          echo "選択: $NAME"
+          echo "name=$NAME" >> "$GITHUB_OUTPUT"
 
       # シミュレータ向けビルドのため署名は不要。
-      # DEVELOPMENT_TEAM は公開版では空にしてあるので、明示的に署名を切る。
+      # 公開版は DEVELOPMENT_TEAM が空なので明示的に署名を切る。
       - name: Test
-        working-directory: app
         run: |
           set -o pipefail
           xcodebuild test \
             -project PocketRT.xcodeproj \
             -scheme PocketRT \
-            -destination 'platform=iOS Simulator,name=iPhone 16' \
+            -destination "platform=iOS Simulator,name=${{ steps.sim.outputs.name }}" \
             CODE_SIGNING_ALLOWED=NO \
             | tee /tmp/xcodebuild.log
 
-      # xcodebuild は Swift Testing の失敗でも成功終了することがあるため、
-      # 出力の文字列で最終判定する
+      # xcodebuild はパイプ経由だと終了コードが後段のものになる。
+      # 出力の文字列で最終判定する。
       - name: Verify test result
         if: always()
         run: |
+          if [ ! -f /tmp/xcodebuild.log ]; then
+            echo "::error::ビルドログがありません（前段で失敗しています）"
+            exit 1
+          fi
           if ! grep -q "TEST SUCCEEDED" /tmp/xcodebuild.log; then
             echo "::error::TEST SUCCEEDED が出力に見つかりません"
             exit 1
@@ -65,3 +82,4 @@ jobs:
         with:
           name: xcodebuild-log
           path: /tmp/xcodebuild.log
+          if-no-files-found: ignore
