@@ -4,7 +4,7 @@ import Foundation
 ///
 /// `unsourcedNote` は、特定の一次文献を同定できなかったレジメンに用いる。
 /// 推測で `pmid` / `doi` を埋めることは禁止する（app/docs/data-sources.md 参照）。
-struct Citation: Identifiable, Hashable, Sendable {
+struct Citation: Identifiable, Sendable {
     let id: String
     let shortLabel: String
     let authors: String
@@ -14,7 +14,7 @@ struct Citation: Identifiable, Hashable, Sendable {
     let pmid: String?
     let doi: String?
     let urlString: String?
-    let unsourcedNote: String?
+    let unsourcedNote: LocalizedStringResource?
 
     init(
         id: String,
@@ -26,7 +26,7 @@ struct Citation: Identifiable, Hashable, Sendable {
         pmid: String? = nil,
         doi: String? = nil,
         urlString: String? = nil,
-        unsourcedNote: String? = nil
+        unsourcedNote: LocalizedStringResource? = nil
     ) {
         self.id = id
         self.shortLabel = shortLabel
@@ -45,7 +45,9 @@ struct Citation: Identifiable, Hashable, Sendable {
 
     /// "Nagata Y, et al. Int J Radiat Oncol Biol Phys. 2015." 形式
     var formattedReference: String {
-        guard hasPrimarySource else { return unsourcedNote ?? "" }
+        guard hasPrimarySource else {
+            return unsourcedNote.map { String(localized: $0) } ?? ""
+        }
         return "\(authors) \(journal). \(year)."
     }
 
@@ -56,4 +58,11 @@ struct Citation: Identifiable, Hashable, Sendable {
         if let doi { return URL(string: "https://doi.org/\(doi)") }
         return nil
     }
+}
+
+// LocalizedStringResource は Hashable に準拠しないため、合成できない。
+// id は文献ごとに一意なので、これで同一性を決められる。
+extension Citation: Hashable {
+    static func == (lhs: Citation, rhs: Citation) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }

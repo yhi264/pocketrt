@@ -76,6 +76,19 @@ jobs:
           fi
           grep -oE "Test run with [0-9]+ tests in [0-9]+ suites (passed|failed)" /tmp/xcodebuild.log | tail -1
 
+      # カタログがコードより古いままコミットされることを防ぐ。
+      # xcodebuild は .stringsdata を生成するだけでカタログを更新しないため、
+      # 同期は tools/sync-strings.sh が担う。差分が出たら同期漏れである。
+      - name: Verify String Catalog is in sync
+        run: |
+          set -euo pipefail
+          ./tools/sync-strings.sh
+          if ! git diff --exit-code -- PocketRT/Localizable.xcstrings; then
+            echo "::error::String Catalog がコードより古いです。app/ で ./tools/sync-strings.sh を実行してコミットしてください"
+            exit 1
+          fi
+          echo "String Catalog は同期されています"
+
       - name: Upload log on failure
         if: failure()
         uses: actions/upload-artifact@v4

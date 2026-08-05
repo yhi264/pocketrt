@@ -120,7 +120,7 @@ final class ScheduleViewModel {
         let cal = Calendar.jstGregorian
         let key = DateKey(from: date, calendar: cal)
         if overrideOff.contains(key) { return String(localized: "個別休止") }
-        if let name = holidays.holidayName(date), !includeHolidays { return name }
+        if let name = holidays.holidayName(date), !includeHolidays { return String(localized: name) }
         let wd = cal.component(.weekday, from: date)
         if (wd == 1 || wd == 7) && !includeWeekends { return wd == 1 ? String(localized: "日曜") : String(localized: "土曜") }
         return "—"

@@ -3,7 +3,7 @@ import Foundation
 /// 祝日判定の抽象化。Phase 2 で API/EventKit 差替が可能。
 protocol HolidayProvider {
     func isHoliday(_ date: Date) -> Bool
-    func holidayName(_ date: Date) -> String?
+    func holidayName(_ date: Date) -> LocalizedStringResource?
 
     /// 祝日データが収録されている年の範囲。範囲外の日付について
     /// `holidayName(_:)` が nil を返しても、それは「祝日でない」ことを意味しない。
@@ -23,7 +23,7 @@ struct JapaneseHolidaysProvider: HolidayProvider {
         return f
     }()
 
-    private let holidays: [String: String] = [
+    private let holidays: [String: LocalizedStringResource] = [
         // 2024
         "2024-01-01": "元日",
         "2024-01-08": "成人の日",
@@ -175,7 +175,7 @@ struct JapaneseHolidaysProvider: HolidayProvider {
         holidays[key(for: date)] != nil
     }
 
-    func holidayName(_ date: Date) -> String? {
+    func holidayName(_ date: Date) -> LocalizedStringResource? {
         holidays[key(for: date)]
     }
 

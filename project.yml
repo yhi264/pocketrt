@@ -8,6 +8,9 @@ options:
 settings:
   base:
     SWIFT_VERSION: "6.0"
+    # String Catalog への抽出には .stringsdata の生成が要る。
+    # 既定は NO で、無効のままだと Text("リテラル") すらカタログに入らない。
+    SWIFT_EMIT_LOC_STRINGS: YES
     MARKETING_VERSION: "0.9.1"
     CURRENT_PROJECT_VERSION: "2"
     DEVELOPMENT_TEAM: ""

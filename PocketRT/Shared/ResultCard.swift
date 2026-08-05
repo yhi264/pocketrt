@@ -1,11 +1,11 @@
 import SwiftUI
 
 struct ResultCard<Content: View>: View {
-    let title: String
+    let title: LocalizedStringKey
     let content: Content
     let isDisabled: Bool
 
-    init(title: String, isDisabled: Bool = false, @ViewBuilder content: () -> Content) {
+    init(title: LocalizedStringKey, isDisabled: Bool = false, @ViewBuilder content: () -> Content) {
         self.title = title
         self.isDisabled = isDisabled
         self.content = content()

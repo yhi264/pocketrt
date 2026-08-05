@@ -35,18 +35,28 @@ struct ConversionResult: Hashable {
 }
 
 /// α/β プリセット（早見表用）
-struct AlphaBetaPreset: Identifiable, Hashable {
+///
+/// `label` と `note` は `LocalizedStringResource` で保持する。
+/// 素の `String` だと String Catalog に抽出されない。
+struct AlphaBetaPreset: Identifiable {
     let id: UUID
-    let label: String           // "腫瘍（一般）"
-    let value: Double           // 10.0
-    let note: String?           // "デフォルト"
+    let label: LocalizedStringResource   // "腫瘍（一般）"
+    let value: Double                    // 10.0
+    let note: LocalizedStringResource?   // "デフォルト"
 
-    init(id: UUID = UUID(), label: String, value: Double, note: String? = nil) {
+    init(id: UUID = UUID(), label: LocalizedStringResource, value: Double, note: LocalizedStringResource? = nil) {
         self.id = id
         self.label = label
         self.value = value
         self.note = note
     }
+}
+
+// LocalizedStringResource は Hashable に準拠しないため、合成できない。
+// FractionationPreset と同じく id で同一性を決める。
+extension AlphaBetaPreset: Hashable {
+    static func == (lhs: AlphaBetaPreset, rhs: AlphaBetaPreset) -> Bool { lhs.id == rhs.id }
+    func hash(into hasher: inout Hasher) { hasher.combine(id) }
 }
 
 /// 線量分割プリセットのカテゴリ
@@ -77,22 +87,22 @@ enum PresetCategory: String, CaseIterable, Identifiable, Sendable {
 struct FractionationPreset: Identifiable {
     let id: UUID
     let category: PresetCategory
-    let site: String           // "頭頸部根治"
+    let site: LocalizedStringResource           // "頭頸部根治"
     let totalDose: Double
     let fractions: Int
     let recommendedAlphaBeta: Double
     let citations: [Citation]
-    let note: String?
+    let note: LocalizedStringResource?
 
     init(
         id: UUID = UUID(),
         category: PresetCategory,
-        site: String,
+        site: LocalizedStringResource,
         totalDose: Double,
         fractions: Int,
         recommendedAlphaBeta: Double,
         citations: [Citation],
-        note: String? = nil
+        note: LocalizedStringResource? = nil
     ) {
         self.id = id
         self.category = category

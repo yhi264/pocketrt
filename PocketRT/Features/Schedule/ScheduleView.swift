@@ -179,7 +179,7 @@ struct ScheduleView: View {
                                         Text("\(fn) Fr")
                                             .font(.callout.monospacedDigit())
                                     } else {
-                                        Text(entry.restReason ?? "休")
+                                        Text(entry.restReason ?? String(localized: "休"))
                                             .font(.caption)
                                             .foregroundStyle(.secondary)
                                     }
@@ -205,7 +205,7 @@ struct ScheduleView: View {
 
     @ViewBuilder
     private func overrideSection(
-        title: String,
+        title: LocalizedStringKey,
         keys: [DateKey],
         showPicker: Binding<Bool>,
         pickerDate: Binding<Date>,

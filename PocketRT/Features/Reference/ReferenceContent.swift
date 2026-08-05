@@ -1,11 +1,16 @@
 import Foundation
 
+/// 解説 1 セクション。
+///
+/// `title` と `body` は `LocalizedStringResource` で保持する。
+/// 素の `String` だと String Catalog に抽出されない。
+/// `id` は言語非依存の安定キー、`formula` は数式なのでいずれも `String` のまま。
 struct ReferenceSection: Identifiable {
     let id: String
-    let title: String
+    let title: LocalizedStringResource
     /// 数式（等幅で表示する）
     let formula: String?
-    let body: String
+    let body: LocalizedStringResource
 }
 
 enum ReferenceContent {

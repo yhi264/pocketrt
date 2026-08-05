@@ -17,7 +17,7 @@ struct JapaneseHolidaysProviderTests {
     @Test("元日は祝日")
     func newYearDay() {
         #expect(provider.isHoliday(date(2026, 1, 1)))
-        #expect(provider.holidayName(date(2026, 1, 1)) == "元日")
+        #expect(provider.holidayName(date(2026, 1, 1)).map { String(localized: $0) } == "元日")
     }
 
     @Test("通常の平日は祝日でない")
@@ -27,12 +27,12 @@ struct JapaneseHolidaysProviderTests {
 
     @Test("2026年の振替休日 5/6")
     func substituteHoliday() {
-        #expect(provider.holidayName(date(2026, 5, 6)) == "振替休日")
+        #expect(provider.holidayName(date(2026, 5, 6)).map { String(localized: $0) } == "振替休日")
     }
 
     @Test("2026年の国民の休日 9/22")
     func citizensHoliday() {
-        #expect(provider.holidayName(date(2026, 9, 22)) == "国民の休日")
+        #expect(provider.holidayName(date(2026, 9, 22)).map { String(localized: $0) } == "国民の休日")
     }
 
     @Test("カバー範囲外（2031年）の元日は祝日扱いされない")
