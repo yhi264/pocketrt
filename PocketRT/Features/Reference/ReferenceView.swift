@@ -4,7 +4,12 @@ struct ReferenceView: View {
     var body: some View {
         List {
             ForEach(ReferenceContent.sections) { section in
-                Section(section.title) {
+                // Section(_ titleResource: LocalizedStringResource) only exists in the
+                // Xcode 26 SDK. CI builds with Xcode 16.4, where the literal-taking
+                // overloads are LocalizedStringKey and StringProtocol only, so passing
+                // the resource directly fails to compile there. The header: form works
+                // on both and localizes identically.
+                Section {
                     VStack(alignment: .leading, spacing: 8) {
                         if let formula = section.formula {
                             Text(formula)
@@ -21,6 +26,8 @@ struct ReferenceView: View {
                             .fixedSize(horizontal: false, vertical: true)
                     }
                     .padding(.vertical, 4)
+                } header: {
+                    Text(section.title)
                 }
             }
         }
