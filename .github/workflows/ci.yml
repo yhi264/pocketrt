@@ -78,16 +78,34 @@ jobs:
 
       # カタログがコードより古いままコミットされることを防ぐ。
       # xcodebuild は .stringsdata を生成するだけでカタログを更新しないため、
-      # 同期は tools/sync-strings.sh が担う。差分が出たら同期漏れである。
+      # 同期は tools/sync-strings.sh が担う。
+      #
+      # 厳密な差分ではなく包含で見る。抽出されるキーの集合は Xcode の
+      # バージョンでわずかに異なり（実測: 26.3 は "%@ (%lld)" を出すが 16.4 は出さない）、
+      # 完全一致を要求するとランナーの更新だけで落ちる。捕まえたいのは
+      # 「抽出されたのにカタログに無い」＝翻訳不能な文字列がある状態の方である。
       - name: Verify String Catalog is in sync
         run: |
           set -euo pipefail
+          cp PocketRT/Localizable.xcstrings /tmp/catalog-committed.json
           ./tools/sync-strings.sh
-          if ! git diff --exit-code -- PocketRT/Localizable.xcstrings; then
-            echo "::error::String Catalog がコードより古いです。app/ で ./tools/sync-strings.sh を実行してコミットしてください"
-            exit 1
-          fi
-          echo "String Catalog は同期されています"
+          python3 - <<'PYEOF'
+          import json, sys
+          committed = set(json.load(open('/tmp/catalog-committed.json'))['strings'])
+          extracted = set(json.load(open('PocketRT/Localizable.xcstrings'))['strings'])
+          missing = sorted(extracted - committed)
+          if missing:
+              print(f"::error::String Catalog に載っていない文字列が {len(missing)} 件あります。app/ で ./tools/sync-strings.sh を実行してコミットしてください")
+              for k in missing[:20]:
+                  print(f"  {k[:80]}")
+              sys.exit(1)
+          extra = sorted(committed - extracted)
+          if extra:
+              print(f"::notice::このランナーの Xcode では抽出されないキーが {len(extra)} 件あります（新しい Xcode 由来か、既に使われていない文字列）")
+              for k in extra[:20]:
+                  print(f"  {k[:80]}")
+          print(f"String Catalog は同期されています（抽出 {len(extracted)} 件 / コミット済み {len(committed)} 件）")
+          PYEOF
 
       - name: Upload log on failure
         if: failure()
