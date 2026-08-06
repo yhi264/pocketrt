@@ -63,26 +63,12 @@ enum Citations {
         journal: "Int J Radiat Oncol Biol Phys", year: 2022,
         pmid: "35932949", doi: "10.1016/j.ijrobp.2022.05.054")
 
-    static let jlgk0901 = Citation(
-        id: "jlgk0901", shortLabel: "JLGK0901",
-        authors: "Yamamoto M, Serizawa T, Shuto T, et al.",
-        title: "Stereotactic radiosurgery for patients with multiple brain metastases (JLGK0901): a multi-institutional prospective observational study.",
-        journal: "Lancet Oncol", year: 2014,
-        pmid: "24621620", doi: "10.1016/S1470-2045(14)70061-0")
-
     static let rtog9005 = Citation(
         id: "rtog_90_05", shortLabel: "RTOG 90-05",
         authors: "Shaw E, Scott C, Souhami L, et al.",
         title: "Single dose radiosurgical treatment of recurrent previously irradiated primary brain tumors and brain metastases: final report of RTOG protocol 90-05.",
         journal: "Int J Radiat Oncol Biol Phys", year: 2000,
         pmid: "10802351", doi: "10.1016/S0360-3016(99)00507-6")
-
-    static let paceB = Citation(
-        id: "pace_b", shortLabel: "PACE-B",
-        authors: "van As N, Griffin C, Tree A, et al.",
-        title: "Phase 3 Trial of Stereotactic Body Radiotherapy in Localized Prostate Cancer.",
-        journal: "N Engl J Med", year: 2024,
-        pmid: "39413377", doi: "10.1056/NEJMoa2403365")
 
     static let boneMetsMeta = Citation(
         id: "bone_mets_meta", shortLabel: "Rich/Chow 2018 メタ解析",
@@ -123,8 +109,7 @@ enum Citations {
         unsourcedNote: "広く用いられる慣用レジメン。特定の一次文献に基づかない")
 
     static let all: [Citation] = [
-        chhip, startB, fastForward, whelan, jcog0403, jrosg10_1, jcog0303, jcog0909,
-        jlgk0901, rtog9005, paceB, boneMetsMeta,
+        chhip, startB, fastForward, whelan, jcog0403, jrosg10_1, jcog0303, jcog0909, rtog9005, boneMetsMeta,
         nccnHeadNeck, jastroProstate, breastConventional, stupp, bonePainTrial,
         conventionalRegimen
     ]

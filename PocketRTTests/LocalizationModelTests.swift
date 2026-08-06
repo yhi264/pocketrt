@@ -26,9 +26,9 @@ struct LocalizationModelTests {
         #expect(p.flatMap { $0.note.map { String(localized: $0) } } == "デフォルト")
     }
 
-    @Test("線量分割プリセットは 23 件で、うち 2 件が注記を持つ")
+    @Test("線量分割プリセットは 18 件で、うち 2 件が注記を持つ")
     func fractionationPresetCounts() {
-        #expect(FractionationPresets.all.count == 23)
+        #expect(FractionationPresets.all.count == 18)
         #expect(FractionationPresets.all.filter { $0.note != nil }.count == 2)
     }
 

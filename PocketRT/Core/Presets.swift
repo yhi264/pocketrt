@@ -31,8 +31,6 @@ enum FractionationPresets {
         // SRT（頭蓋内）
         FractionationPreset(category: .srt, site: "脳転移 SRS 単発・標準",   totalDose: 20.0, fractions: 1, recommendedAlphaBeta: 10, citations: [Citations.rtog9005]),
         FractionationPreset(category: .srt, site: "脳転移 SRS 単発・高線量", totalDose: 24.0, fractions: 1, recommendedAlphaBeta: 10, citations: [Citations.rtog9005]),
-        FractionationPreset(category: .srt, site: "脳転移 分割SRT 27/3",     totalDose: 27.0, fractions: 3, recommendedAlphaBeta: 10, citations: [Citations.jlgk0901]),
-        FractionationPreset(category: .srt, site: "脳転移 分割SRT 30/5",     totalDose: 30.0, fractions: 5, recommendedAlphaBeta: 10, citations: [Citations.conventionalRegimen]),
         FractionationPreset(category: .srt, site: "聴神経腫瘍",             totalDose: 12.0, fractions: 1, recommendedAlphaBeta: 2,  citations: [Citations.conventionalRegimen]),
 
         // SBRT（体幹部）
@@ -40,14 +38,11 @@ enum FractionationPresets {
                             note: "アイソセンタ処方"),
         FractionationPreset(category: .sbrt, site: "早期肺癌 中心", totalDose: 60.0,  fractions: 8, recommendedAlphaBeta: 10,  citations: [Citations.jrosg10_1],
                             note: "アイソセンタ処方。JROSG10-1 の推奨線量"),
-        FractionationPreset(category: .sbrt, site: "肝SBRT",       totalDose: 40.0,  fractions: 5, recommendedAlphaBeta: 10,  citations: [Citations.conventionalRegimen]),
-        FractionationPreset(category: .sbrt, site: "前立腺SBRT",    totalDose: 36.25, fractions: 5, recommendedAlphaBeta: 1.5, citations: [Citations.paceB]),
-        FractionationPreset(category: .sbrt, site: "脊椎転移SBRT", totalDose: 24.0,  fractions: 2, recommendedAlphaBeta: 10,  citations: [Citations.conventionalRegimen]),
 
         // 緩和
-        FractionationPreset(category: .palliative, site: "骨転移 シングル", totalDose:  8.0, fractions:  1, recommendedAlphaBeta: 10, citations: [Citations.bonePainTrial]),
-        FractionationPreset(category: .palliative, site: "骨転移 中等回数", totalDose: 20.0, fractions:  5, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
-        FractionationPreset(category: .palliative, site: "骨転移 マルチ",   totalDose: 30.0, fractions: 10, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
+        FractionationPreset(category: .palliative, site: "骨転移", totalDose:  8.0, fractions:  1, recommendedAlphaBeta: 10, citations: [Citations.bonePainTrial]),
+        FractionationPreset(category: .palliative, site: "骨転移", totalDose: 20.0, fractions:  5, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
+        FractionationPreset(category: .palliative, site: "骨転移",   totalDose: 30.0, fractions: 10, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
         FractionationPreset(category: .palliative, site: "全脳照射",       totalDose: 30.0, fractions: 10, recommendedAlphaBeta: 10, citations: [Citations.conventionalRegimen])
     ]
 
