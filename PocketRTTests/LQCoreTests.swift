@@ -101,12 +101,12 @@ struct LQCoreCumulativeTests {
 
 // MARK: - Convert: fractions mode
 
-@Suite("LQCore.convertConstraint.fractions")
+@Suite("LQCore.convertFractionation.fractions")
 struct LQCoreConvertFractionsTests {
 
     @Test("50Gy/25Fr (α/β=3) → 10Fr 換算で D≈37.2 Gy")
     func standardToHypo() {
-        let result = LQCore.convertConstraint(
+        let result = LQCore.convertFractionation(
             sourceDose: 50.0, sourceFractions: 25, alphaBeta: 3.0,
             target: .fractions(10)
         )
@@ -120,7 +120,7 @@ struct LQCoreConvertFractionsTests {
 
     @Test("28Gy/10Fr (α/β=3) → 3Fr 換算")
     func conversionHigherHypo() {
-        let result = LQCore.convertConstraint(
+        let result = LQCore.convertFractionation(
             sourceDose: 28.0, sourceFractions: 10, alphaBeta: 3.0,
             target: .fractions(3)
         )
@@ -135,12 +135,12 @@ struct LQCoreConvertFractionsTests {
 
 // MARK: - Convert: dosePerFraction mode
 
-@Suite("LQCore.convertConstraint.dosePerFraction")
+@Suite("LQCore.convertFractionation.dosePerFraction")
 struct LQCoreConvertDoseTests {
 
     @Test("50Gy/25Fr (α/β=3) → 3Gy/Fr 指定で n=14 D=42.0")
     func standardToDoseFx() {
-        let result = LQCore.convertConstraint(
+        let result = LQCore.convertFractionation(
             sourceDose: 50.0, sourceFractions: 25, alphaBeta: 3.0,
             target: .dosePerFraction(3.0)
         )
@@ -152,13 +152,54 @@ struct LQCoreConvertDoseTests {
 
     @Test("28Gy/10Fr (α/β=3) → 8Gy/Fr 指定で n=2 D=16.0")
     func sbrtToSingleFraction() {
-        let result = LQCore.convertConstraint(
+        let result = LQCore.convertFractionation(
             sourceDose: 28.0, sourceFractions: 10, alphaBeta: 3.0,
             target: .dosePerFraction(8.0)
         )
         // BED=54.13, d=8, n_real = 54.13/(8*(1+8/3)) = 54.13/29.33 = 1.846 → 2
         #expect(result.fractions == 2)
         #expect(abs(result.totalDose - 16.0) < 0.01)
+    }
+
+    @Test("極端に小さい d_b（1e-300）でも n_b_real が Int に収まらずクラッシュせず、退化した結果を返す")
+    func extremelySmallDoseFractionDoesNotCrash() {
+        // n_b_real = BED / (d_b * (1 + d_b/alphaBeta)) は d_b が 0 に近いほど
+        // 発散する。呼び出し元（ViewModel）は d_b を 0.1〜30 に制限しているが、
+        // convertFractionation 自体はその検証を持たない純粋関数なので、
+        // 範囲外の入力を直接渡してもトラップしないことを確かめる。
+        let result = LQCore.convertFractionation(
+            sourceDose: 200.0, sourceFractions: 1, alphaBeta: 0.5,
+            target: .dosePerFraction(1e-300)
+        )
+        // 直前の guard（d_b > 0, alphaBeta > 0）と同じ退化した結果になる。
+        #expect(result.fractions == 0)
+        #expect(result.totalDose == 0)
+        #expect(result.dosePerFraction == 1e-300)
+    }
+
+    @Test("d_b が非常に大きく分母が +Infinity に発散しても、Int(exactly:) は 0 として成功し n=1 に丸まる")
+    func denominatorOverflowToInfinityYieldsSingleFraction() {
+        // これは extremelySmallDoseFractionDoesNotCrash とは別の経路を確かめる
+        // テストである。d_b が大きいと denom（d_b * (1 + d_b/alphaBeta)）自体が
+        // Double の表現範囲を超えて +Infinity になり、n_b_real = sourceBED / Infinity
+        // は「Int に収まらない大きな値」ではなく「厳密に 0.0」になる。
+        // Int(exactly: 0.0) は失敗せず 0 を返すので、guard let n_b_rounded には
+        // 入らず、直後の max(1, 0) で n=1 に丸められる。
+        //
+        // つまりこのテストは Int(exactly:) の失敗（トラップ回避）を検証しない
+        // ——素の Int() に戻しても、この入力では 0 が返るだけで落ちない。
+        // ここで確かめたいのは、denom が Infinity に発散する側の経路も
+        // （guard に入る側の経路と同様に）決定的な値を返し、クラッシュしたり
+        // NaN が紛れ込んだりしないこと。
+        let result = LQCore.convertFractionation(
+            sourceDose: 200.0, sourceFractions: 1, alphaBeta: 0.5,
+            target: .dosePerFraction(1e300)
+        )
+        #expect(result.fractions == 1)
+        #expect(result.totalDose == 1e300)
+        #expect(result.dosePerFraction == 1e300)
+        #expect(result.bed == .infinity, "BED も同じ発散で +Infinity になる（NaN にはならない）")
+        #expect(result.eqd2 == .infinity)
     }
 }
 

@@ -1,5 +1,15 @@
 import Foundation
 
+/// 出典の状態。
+///
+/// ガイドラインは追跡可能な出典であり、版と章を書けば読者が確かめられる。
+/// 根拠を同定できていない状態とは区別する。
+enum SourceKind: Sendable {
+    case primary      // pmid または doi がある
+    case guideline    // ガイドラインに明記されている
+    case unsourced    // 根拠を同定できていない
+}
+
 /// 一次文献の書誌情報。
 ///
 /// `unsourcedNote` は、特定の一次文献を同定できなかったレジメンに用いる。
@@ -14,6 +24,7 @@ struct Citation: Identifiable, Sendable {
     let pmid: String?
     let doi: String?
     let urlString: String?
+    let guidelineNote: LocalizedStringResource?
     let unsourcedNote: LocalizedStringResource?
 
     init(
@@ -26,6 +37,7 @@ struct Citation: Identifiable, Sendable {
         pmid: String? = nil,
         doi: String? = nil,
         urlString: String? = nil,
+        guidelineNote: LocalizedStringResource? = nil,
         unsourcedNote: LocalizedStringResource? = nil
     ) {
         self.id = id
@@ -37,11 +49,19 @@ struct Citation: Identifiable, Sendable {
         self.pmid = pmid
         self.doi = doi
         self.urlString = urlString
+        self.guidelineNote = guidelineNote
         self.unsourcedNote = unsourcedNote
     }
 
     /// 一次文献が同定できているか
     var hasPrimarySource: Bool { pmid != nil || doi != nil }
+
+    /// 出典の状態
+    var kind: SourceKind {
+        if pmid != nil || doi != nil { return .primary }
+        if guidelineNote != nil { return .guideline }
+        return .unsourced
+    }
 
     /// "Nagata Y, et al. Int J Radiat Oncol Biol Phys. 2015." 形式
     var formattedReference: String {

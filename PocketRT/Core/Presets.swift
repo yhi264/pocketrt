@@ -16,34 +16,34 @@ enum AlphaBetaPresets {
 enum FractionationPresets {
     static let all: [FractionationPreset] = [
         // 通常分割
-        FractionationPreset(category: .conventional, site: "頭頸部根治",   totalDose: 70.0, fractions: 35, recommendedAlphaBeta: 10,  citations: [Citations.nccnHeadNeck]),
-        FractionationPreset(category: .conventional, site: "前立腺癌根治", totalDose: 78.0, fractions: 39, recommendedAlphaBeta: 1.5, citations: [Citations.jastroProstate]),
-        FractionationPreset(category: .conventional, site: "食道癌根治",   totalDose: 60.0, fractions: 30, recommendedAlphaBeta: 10,  citations: [Citations.jcog0303, Citations.jcog0909]),
-        FractionationPreset(category: .conventional, site: "乳癌温存術後", totalDose: 50.0, fractions: 25, recommendedAlphaBeta: 4,   citations: [Citations.breastConventional]),
-        FractionationPreset(category: .conventional, site: "Glioblastoma", totalDose: 60.0, fractions: 30, recommendedAlphaBeta: 10, citations: [Citations.stupp]),
+        FractionationPreset(id: "conventional_head_neck", category: .conventional, site: "頭頸部根治",   totalDose: 70.0, fractions: 35, recommendedAlphaBeta: 10,  citations: [Citations.jastroHeadNeck]),
+        FractionationPreset(id: "conventional_prostate", category: .conventional, site: "前立腺癌根治", totalDose: 78.0, fractions: 39, recommendedAlphaBeta: 1.5, citations: [Citations.jastroProstate]),
+        FractionationPreset(id: "conventional_esophagus", category: .conventional, site: "食道癌根治",   totalDose: 60.0, fractions: 30, recommendedAlphaBeta: 10,  citations: [Citations.jcog0303, Citations.jcog0909]),
+        FractionationPreset(id: "conventional_breast", category: .conventional, site: "乳癌温存術後", totalDose: 50.0, fractions: 25, recommendedAlphaBeta: 4,   citations: [Citations.jastroBreast]),
+        FractionationPreset(id: "conventional_glioblastoma", category: .conventional, site: "Glioblastoma", totalDose: 60.0, fractions: 30, recommendedAlphaBeta: 10, citations: [Citations.stupp]),
 
         // 中等度寡分割
-        FractionationPreset(category: .hypofractionation, site: "前立腺癌中等度寡分割",   totalDose: 60.0,  fractions: 20, recommendedAlphaBeta: 1.5, citations: [Citations.chhip]),
-        FractionationPreset(category: .hypofractionation, site: "乳癌寡分割 (START-B)",  totalDose: 40.05, fractions: 15, recommendedAlphaBeta: 4,   citations: [Citations.startB]),
-        FractionationPreset(category: .hypofractionation, site: "乳癌寡分割 (Whelan)",   totalDose: 42.56, fractions: 16, recommendedAlphaBeta: 4,   citations: [Citations.whelan]),
-        FractionationPreset(category: .hypofractionation, site: "乳癌超寡分割 (FAST-F)", totalDose: 26.0,  fractions: 5,  recommendedAlphaBeta: 4,   citations: [Citations.fastForward]),
+        FractionationPreset(id: "hypo_prostate_moderate", category: .hypofractionation, site: "前立腺癌中等度寡分割",   totalDose: 60.0,  fractions: 20, recommendedAlphaBeta: 1.5, citations: [Citations.chhip]),
+        FractionationPreset(id: "hypo_breast_start_b", category: .hypofractionation, site: "乳癌寡分割 (START-B)",  totalDose: 40.05, fractions: 15, recommendedAlphaBeta: 4,   citations: [Citations.startB]),
+        FractionationPreset(id: "hypo_breast_whelan", category: .hypofractionation, site: "乳癌寡分割 (Whelan)",   totalDose: 42.56, fractions: 16, recommendedAlphaBeta: 4,   citations: [Citations.whelan]),
+        FractionationPreset(id: "hypo_breast_fast_forward", category: .hypofractionation, site: "乳癌超寡分割 (FAST-F)", totalDose: 26.0,  fractions: 5,  recommendedAlphaBeta: 4,   citations: [Citations.fastForward]),
 
         // SRT（頭蓋内）
-        FractionationPreset(category: .srt, site: "脳転移 SRS 単発・標準",   totalDose: 20.0, fractions: 1, recommendedAlphaBeta: 10, citations: [Citations.rtog9005]),
-        FractionationPreset(category: .srt, site: "脳転移 SRS 単発・高線量", totalDose: 24.0, fractions: 1, recommendedAlphaBeta: 10, citations: [Citations.rtog9005]),
-        FractionationPreset(category: .srt, site: "聴神経腫瘍",             totalDose: 12.0, fractions: 1, recommendedAlphaBeta: 2,  citations: [Citations.conventionalRegimen]),
+        FractionationPreset(id: "srt_brain_mets_srs_standard", category: .srt, site: "脳転移 SRS 単発・標準",   totalDose: 20.0, fractions: 1, recommendedAlphaBeta: 10, citations: [Citations.rtog9005]),
+        FractionationPreset(id: "srt_brain_mets_srs_high", category: .srt, site: "脳転移 SRS 単発・高線量", totalDose: 24.0, fractions: 1, recommendedAlphaBeta: 10, citations: [Citations.rtog9005]),
+        FractionationPreset(id: "srt_acoustic_neuroma", category: .srt, site: "聴神経腫瘍",             totalDose: 12.0, fractions: 1, recommendedAlphaBeta: 2,  citations: [Citations.jastroAcoustic]),
 
         // SBRT（体幹部）
-        FractionationPreset(category: .sbrt, site: "早期肺癌 末梢", totalDose: 48.0,  fractions: 4, recommendedAlphaBeta: 10,  citations: [Citations.jcog0403],
+        FractionationPreset(id: "sbrt_lung_peripheral", category: .sbrt, site: "早期肺癌 末梢", totalDose: 48.0,  fractions: 4, recommendedAlphaBeta: 10,  citations: [Citations.jcog0403],
                             note: "アイソセンタ処方"),
-        FractionationPreset(category: .sbrt, site: "早期肺癌 中心", totalDose: 60.0,  fractions: 8, recommendedAlphaBeta: 10,  citations: [Citations.jrosg10_1],
+        FractionationPreset(id: "sbrt_lung_central", category: .sbrt, site: "早期肺癌 中心", totalDose: 60.0,  fractions: 8, recommendedAlphaBeta: 10,  citations: [Citations.jrosg10_1],
                             note: "アイソセンタ処方。JROSG10-1 の推奨線量"),
 
         // 緩和
-        FractionationPreset(category: .palliative, site: "骨転移", totalDose:  8.0, fractions:  1, recommendedAlphaBeta: 10, citations: [Citations.bonePainTrial]),
-        FractionationPreset(category: .palliative, site: "骨転移", totalDose: 20.0, fractions:  5, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
-        FractionationPreset(category: .palliative, site: "骨転移",   totalDose: 30.0, fractions: 10, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
-        FractionationPreset(category: .palliative, site: "全脳照射",       totalDose: 30.0, fractions: 10, recommendedAlphaBeta: 10, citations: [Citations.conventionalRegimen])
+        FractionationPreset(id: "palliative_bone_single", category: .palliative, site: "骨転移", totalDose:  8.0, fractions:  1, recommendedAlphaBeta: 10, citations: [Citations.bonePainTrial]),
+        FractionationPreset(id: "palliative_bone_5fx", category: .palliative, site: "骨転移", totalDose: 20.0, fractions:  5, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
+        FractionationPreset(id: "palliative_bone_10fx", category: .palliative, site: "骨転移",   totalDose: 30.0, fractions: 10, recommendedAlphaBeta: 10, citations: [Citations.boneMetsMeta]),
+        FractionationPreset(id: "palliative_whole_brain", category: .palliative, site: "全脳照射",       totalDose: 30.0, fractions: 10, recommendedAlphaBeta: 10, citations: [Citations.jastroWholeBrain])
     ]
 
     static func byCategory(_ cat: PresetCategory) -> [FractionationPreset] {

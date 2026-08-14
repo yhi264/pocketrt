@@ -1,16 +1,16 @@
 import Foundation
 
-enum OARConversionMode: Hashable {
+enum FractionationConversionMode: Hashable {
     case fractions
     case dosePerFraction
 }
 
 @Observable
-final class OARConversionViewModel {
+final class FractionationConversionViewModel {
     var sourceDoseText: String = "50"
     var sourceFractionsText: String = "25"
     var alphaBetaText: String = "3"
-    var mode: OARConversionMode = .fractions
+    var mode: FractionationConversionMode = .fractions
     var targetFractionsText: String = "10"
     var targetDoseFxText: String = "3.0"
 
@@ -49,6 +49,32 @@ final class OARConversionViewModel {
             && alphaBetaError == nil && targetError == nil
     }
 
+    /// 元の線量分割だけで決まる入力が揃っているか。
+    ///
+    /// 換算先の入力とは独立に判定する。換算先を打っている途中で
+    /// 元の BED が消えると、何と比べているのかが分からなくなる。
+    private var sourceIsValid: Bool {
+        sourceDoseError == nil && sourceFractionsError == nil && alphaBetaError == nil
+    }
+
+    /// 元の線量分割の BED。
+    ///
+    /// 換算は BED を保つように行われる。元の値を並べて出すことで、
+    /// 換算後と一致しているかを利用者が目で確かめられる。
+    /// 1 回線量を指定した場合は分割数を丸めるため厳密には一致しないので、
+    /// そのずれもここで見える。
+    var sourceBED: Double? {
+        guard sourceIsValid,
+              let D = sourceDose, let n = sourceFractions, let ab = alphaBeta else { return nil }
+        return LQCore.bed(totalDose: D, fractions: n, alphaBeta: ab)
+    }
+
+    /// 元の線量分割の EQD2
+    var sourceEQD2: Double? {
+        guard let b = sourceBED, let ab = alphaBeta else { return nil }
+        return LQCore.eqd2(bed: b, alphaBeta: ab)
+    }
+
     var result: ConversionResult? {
         guard isValid,
               let D = sourceDose, let n = sourceFractions, let ab = alphaBeta else { return nil }
@@ -56,7 +82,7 @@ final class OARConversionViewModel {
         case .fractions: .fractions(targetFractions ?? 0)
         case .dosePerFraction: .dosePerFraction(targetDoseFx ?? 0)
         }
-        return LQCore.convertConstraint(
+        return LQCore.convertFractionation(
             sourceDose: D, sourceFractions: n, alphaBeta: ab, target: target
         )
     }

@@ -3,6 +3,7 @@ import SwiftUI
 struct MultiCourseView: View {
     @State private var vm = MultiCourseViewModel()
     @State private var presetTargetID: UUID?
+    @Environment(PresetStoreModel.self) private var presetStore
 
     var body: some View {
         NavigationStack {
@@ -58,9 +59,9 @@ struct MultiCourseView: View {
                 get: { presetTargetID.flatMap { id in vm.courses.first(where: { $0.id == id }) } },
                 set: { _ in presetTargetID = nil }
             )) { target in
-                PresetSheet { preset in
-                    vm.apply(preset: preset, to: target)
-                }
+                PresetSheet(onSelect: { selection in
+                    vm.apply(selection, to: target)
+                }, model: presetStore)
             }
             .infoToolbarButton()
         }

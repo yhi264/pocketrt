@@ -15,7 +15,9 @@ struct InfoView: View {
             List {
                 Section("計算の根拠") {
                     NavigationLink("計算式と α/β の解説") { ReferenceView() }
-                    NavigationLink("プリセットの出典") { CitationListView() }
+                    // プリセットだけでなく品質指標の逸脱判定の根拠も載せるため、
+                    // 「プリセットの出典」から「出典」に改めた。
+                    NavigationLink("出典") { CitationListView() }
                 }
                 Section("ご利用にあたって") {
                     NavigationLink("免責事項") {

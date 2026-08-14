@@ -32,7 +32,7 @@ enum ReferenceContent {
             """),
 
         ReferenceSection(
-            id: "oar", title: "OAR 制約換算",
+            id: "fractionation_conversion", title: "線量分割換算",
             formula: "d' = (α/β)/2 · [ -1 + √(1 + 4·BED / (n'·(α/β))) ]",
             body: """
             元の制約（総線量と分割数）から BED を求め、それと等しい BED になる別の分割を逆算します。

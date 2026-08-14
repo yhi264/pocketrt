@@ -4,6 +4,7 @@ struct SimpleCalcView: View {
     @State private var vm = SimpleCalcViewModel()
     @State private var showPresetSheet = false
     @State private var showFormula = false
+    @Environment(PresetStoreModel.self) private var presetStore
 
     var body: some View {
         NavigationStack {
@@ -65,6 +66,11 @@ struct SimpleCalcView: View {
                                 }
                                 .foregroundStyle(.secondary)
                             }
+                            if let name = vm.activeInstitutionalName {
+                                Text("自施設のプロトコル: \(name)")
+                                    .font(.caption2)
+                                    .foregroundStyle(.tertiary)
+                            }
                         }
                     }
 
@@ -83,9 +89,9 @@ struct SimpleCalcView: View {
             }
             .navigationTitle("単純計算")
             .sheet(isPresented: $showPresetSheet) {
-                PresetSheet { preset in
-                    vm.apply(preset: preset)
-                }
+                PresetSheet(onSelect: { selection in
+                    vm.apply(selection)
+                }, model: presetStore)
             }
             .infoToolbarButton()
         }

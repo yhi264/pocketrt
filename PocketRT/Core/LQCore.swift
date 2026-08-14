@@ -31,9 +31,15 @@ enum LQCore {
         }
     }
 
-    /// OAR 制約換算
+    /// 線量分割換算。OAR の制約に限らず、腫瘍の処方にも同じ式が使える
     /// sourceDose/sourceFractions/alphaBeta から BED を計算し、target に応じて変換
-    static func convertConstraint(
+    ///
+    /// 入力の臨床的な妥当性（線量・分割数・α/β の範囲）はここでは検証しない。
+    /// 呼び出し元（ViewModel の入力検証）に依存する。ただし、値の組み合わせ
+    /// 次第で `Int` に変換できない・非有限になるなど、実行時にトラップしうる
+    /// 経路は関数内で防ぎ、範囲外の入力には他の異常系と同じ退化した結果
+    /// （`fractions: 0` など）を返す。
+    static func convertFractionation(
         sourceDose: Double, sourceFractions: Int, alphaBeta: Double,
         target: ConversionTarget
     ) -> ConversionResult {
@@ -65,7 +71,15 @@ enum LQCore {
                 return ConversionResult(totalDose: 0, dosePerFraction: d_b, fractions: 0, bed: sourceBED, eqd2: 0)
             }
             let n_b_real = sourceBED / (d_b * (1.0 + d_b / alphaBeta))
-            let n_b = max(1, Int(n_b_real.rounded()))
+            // n_b_real は入力の組み合わせ次第で非有限（NaN・無限大）になったり
+            // Int の範囲を超えたりしうる。呼び出し元の検証だけに依存せず、
+            // Int(exactly:) でトラップを避ける。範囲外なら直前の guard と同じ
+            // 退化した結果を返す。臨床的な妥当性の判断（分割数の上限など）は
+            // ここでは行わない。防ぐのはトラップだけである。
+            guard let n_b_rounded = Int(exactly: n_b_real.rounded()) else {
+                return ConversionResult(totalDose: 0, dosePerFraction: d_b, fractions: 0, bed: sourceBED, eqd2: 0)
+            }
+            let n_b = max(1, n_b_rounded)
             let D_b = Double(n_b) * d_b
             let newBED = bed(totalDose: D_b, fractions: n_b, alphaBeta: alphaBeta)
             return ConversionResult(

@@ -72,12 +72,10 @@ struct LocalizationModelTests {
         #expect(c.formattedReference == "Nagata Y, et al. Int J Radiat Oncol Biol Phys. 2015.")
     }
 
-    @Test("出典未特定の注記は 6 件で、いずれも空でない")
-    func unsourcedNotesAreNonEmpty() {
-        let unsourced = Citations.all.filter { $0.unsourcedNote != nil }
-        #expect(unsourced.count == 6)
-        for c in unsourced {
-            #expect(!String(localized: c.unsourcedNote!).isEmpty)
+    @Test("すべての出典が一次文献かガイドラインに基づく")
+    func everyCitationHasAKnownSource() {
+        for c in Citations.all {
+            #expect(c.kind != .unsourced, "根拠が同定できていない: \(c.shortLabel)")
         }
     }
 

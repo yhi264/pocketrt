@@ -76,13 +76,61 @@ struct PlanQualityView: View {
                     Divider()
 
                     Group {
-                        Text("プロトコル逸脱判定").font(.headline)
-                        Picker("プロトコル", selection: $vm.selectedProtocol) {
+                        Text("プロトコル").font(.headline)
+                        // Picker(.menu) ではなく Menu を使う。Picker は畳んだときの
+                        // 表示が選択行のラベルそのものになるため、行に線量分割まで
+                        // 併記すると畳んだ側が長くなって切れる。Menu なら畳んだ表示と
+                        // 行の表示を別々に指定できる。
+                        Menu {
                             ForEach(ProtocolSelection.allCases) { p in
-                                Text(p.displayName).tag(p)
+                                Button {
+                                    vm.selectedProtocol = p
+                                } label: {
+                                    // 試験番号だけでは、どの部位のどの線量分割に対する
+                                    // 基準なのかを選ぶ時点で判断できない。1 つの Text に
+                                    // まとめる（メニューの行は複数 Text を並べても
+                                    // 2 行にならないことがあるため）。
+                                    Text(p.menuLabel)
+                                    if vm.selectedProtocol == p {
+                                        Image(systemName: "checkmark")
+                                    }
+                                }
+                            }
+                        } label: {
+                            HStack {
+                                Text(vm.selectedProtocol.displayName)
+                                Image(systemName: "chevron.up.chevron.down")
+                                    .font(.caption2)
+                                Spacer()
+                            }
+                            .contentShape(Rectangle())
+                        }
+                        .accessibilityLabel("プロトコル")
+                        .accessibilityValue(vm.selectedProtocol.displayName)
+
+                        // 名前と分割数だけでは、その表が自分の症例に当てはまるかを
+                        // 判断できない。何を調べた試験なのかをここで示し、
+                        // 書誌情報は出典一覧（情報画面）で確認できるようにする。
+                        if let summary = vm.selectedProtocol.summary {
+                            Text(summary)
+                                .font(.caption)
+                                .foregroundStyle(.secondary)
+                            // 群や線量レベルが併記されていると、どれに対する基準なのかが
+                            // 読み取れない。表は比と割合だけで定義されており共通である。
+                            Text(ConformityCriteria.scopeNote)
+                                .font(.caption2)
+                                .foregroundStyle(.tertiary)
+                            ForEach(vm.selectedProtocol.citations) { c in
+                                HStack(spacing: 6) {
+                                    Text(c.formattedReference)
+                                        .font(.caption2)
+                                        .foregroundStyle(.tertiary)
+                                    if let url = c.url {
+                                        Link("開く", destination: url).font(.caption2)
+                                    }
+                                }
                             }
                         }
-                        .pickerStyle(.menu)
                     }
 
                     ResultCard(title: "判定", isDisabled: vm.judgementBlockKind == .incompleteInput) {

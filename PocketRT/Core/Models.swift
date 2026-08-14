@@ -19,13 +19,13 @@ struct Course: Hashable, Identifiable {
     }
 }
 
-/// OAR制約換算の指定方式
+/// 線量分割換算の指定方式
 enum ConversionTarget: Hashable {
     case fractions(Int)
     case dosePerFraction(Double)
 }
 
-/// OAR制約換算の結果
+/// 線量分割換算の結果
 struct ConversionResult: Hashable {
     let totalDose: Double
     let dosePerFraction: Double
@@ -85,7 +85,9 @@ enum PresetCategory: String, CaseIterable, Identifiable, Sendable {
 
 /// 線量分割プリセット
 struct FractionationPreset: Identifiable {
-    let id: UUID
+    /// 言語非依存の安定キー。非表示設定の保存に使うため、
+    /// UUID のように起動ごとに変わる値であってはならない。
+    let id: String
     let category: PresetCategory
     let site: LocalizedStringResource           // "頭頸部根治"
     let totalDose: Double
@@ -95,7 +97,7 @@ struct FractionationPreset: Identifiable {
     let note: LocalizedStringResource?
 
     init(
-        id: UUID = UUID(),
+        id: String,
         category: PresetCategory,
         site: LocalizedStringResource,
         totalDose: Double,
@@ -116,8 +118,7 @@ struct FractionationPreset: Identifiable {
 
     /// 表示用: "60 Gy / 30 Fr"
     var regimenLabel: String {
-        let doseStr = totalDose == totalDose.rounded() ? "\(Int(totalDose))" : String(format: "%.2f", totalDose)
-        return "\(doseStr) Gy / \(fractions) Fr"
+        DoseFormat.regimenLabel(totalDose: totalDose, fractions: fractions)
     }
 }
 

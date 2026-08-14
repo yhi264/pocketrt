@@ -15,11 +15,11 @@ struct CitationDataTests {
         }
     }
 
-    @Test("citation は pmid / doi / unsourcedNote のいずれかを必ず持つ")
+    @Test("citation は pmid / doi / guidelineNote / unsourcedNote のいずれかを必ず持つ")
     func citationHasProvenance() {
         for c in Citations.all {
             let hasPrimary = (c.pmid != nil) || (c.doi != nil)
-            let hasNote = c.unsourcedNote != nil
+            let hasNote = (c.guidelineNote != nil) || (c.unsourcedNote != nil)
             #expect(hasPrimary || hasNote, "根拠なし: \(c.shortLabel)")
         }
     }
@@ -77,7 +77,7 @@ struct ActiveCitationTests {
     @Test("プリセット適用直後は出典を返す")
     func citationAfterApply() {
         let vm = SimpleCalcViewModel()
-        vm.apply(preset: jcog0403Preset)
+        vm.apply(.builtIn(jcog0403Preset))
         #expect(vm.activeCitations.map(\.id) == ["jcog0403"])
     }
 
@@ -90,7 +90,7 @@ struct ActiveCitationTests {
     @Test("総線量を編集すると出典が外れる（誤帰属を防ぐ）")
     func citationClearedOnDoseEdit() {
         let vm = SimpleCalcViewModel()
-        vm.apply(preset: jcog0403Preset)
+        vm.apply(.builtIn(jcog0403Preset))
         vm.totalDoseText = "50"
         #expect(vm.activeCitations.isEmpty)
     }
@@ -98,7 +98,7 @@ struct ActiveCitationTests {
     @Test("分割数を編集すると出典が外れる")
     func citationClearedOnFractionsEdit() {
         let vm = SimpleCalcViewModel()
-        vm.apply(preset: jcog0403Preset)
+        vm.apply(.builtIn(jcog0403Preset))
         vm.fractionsText = "5"
         #expect(vm.activeCitations.isEmpty)
     }
@@ -107,7 +107,7 @@ struct ActiveCitationTests {
     func citationRestoredWhenValuesMatchAgain() {
         let vm = SimpleCalcViewModel()
         let p = jcog0403Preset
-        vm.apply(preset: p)
+        vm.apply(.builtIn(p))
         vm.totalDoseText = "50"
         #expect(vm.activeCitations.isEmpty)
         vm.totalDoseText = "48"
@@ -117,7 +117,7 @@ struct ActiveCitationTests {
     @Test("ScheduleViewModel も同じ挙動")
     func scheduleViewModelBehavesSame() {
         let vm = ScheduleViewModel()
-        vm.apply(preset: jcog0403Preset)
+        vm.apply(.builtIn(jcog0403Preset))
         #expect(vm.activeCitations.map(\.id) == ["jcog0403"])
         vm.fractionsText = "30"
         #expect(vm.activeCitations.isEmpty)
@@ -129,7 +129,7 @@ struct ActiveCitationTests {
             $0.category == .conventional && $0.totalDose == 60.0 && $0.fractions == 30
         }!
         let vm = SimpleCalcViewModel()
-        vm.apply(preset: esophagealPreset)
+        vm.apply(.builtIn(esophagealPreset))
         #expect(vm.activeCitations.map(\.id) == ["jcog0303", "jcog0909"])
     }
 }

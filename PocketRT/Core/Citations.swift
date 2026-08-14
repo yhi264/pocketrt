@@ -77,44 +77,82 @@ enum Citations {
         journal: "Radiother Oncol", year: 2018,
         pmid: "29397209", doi: "10.1016/j.radonc.2018.01.003")
 
-    // MARK: - 書誌情報が未照合のもの（BL-3）
+    // MARK: - ガイドラインに明記されているもの（JASTRO 放射線治療計画ガイドライン 2020）
 
-    static let nccnHeadNeck = Citation(
-        id: "nccn_hn", shortLabel: "NCCN 頭頸部",
-        unsourcedNote: "NCCN Guidelines（頭頸部）に基づく代表的レジメン。版の特定は未了")
+    static let jastroHeadNeck = Citation(
+        id: "jastro_head_neck", shortLabel: "JASTRO 計画GL 2020 頭頸部",
+        guidelineNote: "放射線治療計画ガイドライン 2020 年版 頭頸部「70 Gy/35 回/7 週の通常分割照射が標準分割照射法である」")
 
     static let jastroProstate = Citation(
-        id: "jastro_prostate", shortLabel: "JASTRO 前立腺癌GL",
-        unsourcedNote: "JASTRO ガイドラインに基づく代表的レジメン。版の特定は未了")
+        id: "jastro_prostate", shortLabel: "JASTRO 計画GL 2020 泌尿器",
+        guidelineNote: "放射線治療計画ガイドライン 2020 年版 泌尿器「IMRT の場合には 74〜78 Gy が用いられることが多い」。分割数は同記載からは確認できない（1 回 2 Gy とすれば 39 回）")
 
-    static let breastConventional = Citation(
-        id: "breast_conventional", shortLabel: "従来標準",
-        unsourcedNote: "乳房温存術後の従来標準分割。特定の一次文献に基づかない")
+    static let jastroBreast = Citation(
+        id: "jastro_breast", shortLabel: "JASTRO 計画GL 2020 胸部",
+        guidelineNote: "放射線治療計画ガイドライン 2020 年版 胸部「通常分割照射（50 Gy/25 回/35 日）」")
+
+    static let jastroWholeBrain = Citation(
+        id: "jastro_whole_brain", shortLabel: "JASTRO 計画GL 2020 緩和",
+        guidelineNote: "放射線治療計画ガイドライン 2020 年版 緩和「全脳照射では、30 Gy/10 回/2 週が標準的である」")
+
+    static let jastroAcoustic = Citation(
+        id: "jastro_acoustic", shortLabel: "JASTRO 計画GL 2020 中枢神経",
+        guidelineNote: "放射線治療計画ガイドライン 2020 年版 中枢神経「SRS：辺縁線量 12〜13 Gy で行われることが多く」")
+
+    // MARK: - 一次文献が確定したもの（PubMed 照合済み・data-sources.md §B4.1）
 
     static let stupp = Citation(
         id: "stupp", shortLabel: "Stupp レジメン",
-        unsourcedNote: "Stupp レジメンに基づく。原著の書誌情報は未照合")
+        authors: "Stupp R, Mason WP, van den Bent MJ, et al.",
+        title: "Radiotherapy plus concomitant and adjuvant temozolomide for glioblastoma.",
+        journal: "N Engl J Med", year: 2005,
+        pmid: "15758009", doi: "10.1056/NEJMoa043330")
 
     static let bonePainTrial = Citation(
         id: "bone_pain_trial", shortLabel: "Bone Pain Trial",
-        unsourcedNote: "Bone Pain Trial Working Party に基づく。原著の書誌情報は未照合")
+        authors: "Bone Pain Trial Working Party.",
+        title: "8 Gy single fraction radiotherapy for the treatment of metastatic skeletal pain: randomised comparison with a multifraction schedule over 12 months of patient follow-up.",
+        journal: "Radiother Oncol", year: 1999,
+        pmid: "10577696")
 
-    // MARK: - 慣用レジメン（BL-1・2026-08-03 決定）
+    // MARK: - 品質指標の逸脱判定に用いるプロトコル
     //
-    // 単一の定義的試験を同定できなかった。推測で一次文献を付けない。
-    // JASTRO 放射線治療計画ガイドラインを典拠とする案をバックログ BL-1 で検討する。
+    // ここに置く 2 件は、線量分割プリセットの出典ではなく、品質タブの
+    // 逸脱判定表（ConformityCriteria）の背景にある試験である。
+    //
+    // **重要**: 判定に使う Table 1 は、下記の公表論文ではなく各試験の
+    // プロトコル文書に載っている。論文は試験の設計と結果を報告するもので、
+    // 適合性の表そのものは含まない。したがって「この論文を見れば表を
+    // 確認できる」と読めてはならない。表の出所は ConformityCriteria の
+    // 帰属表示と出典一覧の注記で別に示す（app/docs/data-sources.md §B2）。
 
-    static let conventionalRegimen = Citation(
-        id: "conventional_regimen", shortLabel: "慣用レジメン",
-        unsourcedNote: "広く用いられる慣用レジメン。特定の一次文献に基づかない")
+    static let rtog0915 = Citation(
+        id: "rtog0915", shortLabel: "RTOG 0915",
+        authors: "Videtic GM, Hu C, Singh AK, et al.",
+        title: "A Randomized Phase 2 Study Comparing 2 Stereotactic Body Radiation Therapy Schedules for Medically Inoperable Patients With Stage I Peripheral Non-Small Cell Lung Cancer: NRG Oncology RTOG 0915 (NCCTG N0927).",
+        journal: "Int J Radiat Oncol Biol Phys", year: 2015,
+        pmid: "26530743", doi: "10.1016/j.ijrobp.2015.07.2260")
+
+    static let rtog0813 = Citation(
+        id: "rtog0813", shortLabel: "RTOG 0813",
+        authors: "Bezjak A, Paulus R, Gaspar LE, et al.",
+        title: "Safety and Efficacy of a Five-Fraction Stereotactic Body Radiotherapy Schedule for Centrally Located Non-Small-Cell Lung Cancer: NRG Oncology/RTOG 0813 Trial.",
+        journal: "J Clin Oncol", year: 2019,
+        pmid: "30943123", doi: "10.1200/JCO.18.00622")
+
+    /// 逸脱判定に関わる文献。`all`（線量分割プリセットの出典）とは別に持つ。
+    /// 混ぜると、プリセットの出典一覧に判定用の文献が紛れ込む。
+    static let conformity: [Citation] = [rtog0915, rtog0813]
 
     static let all: [Citation] = [
         chhip, startB, fastForward, whelan, jcog0403, jrosg10_1, jcog0303, jcog0909, rtog9005, boneMetsMeta,
-        nccnHeadNeck, jastroProstate, breastConventional, stupp, bonePainTrial,
-        conventionalRegimen
+        jastroHeadNeck, jastroProstate, jastroBreast, jastroWholeBrain, jastroAcoustic,
+        stupp, bonePainTrial
     ]
 
+    /// id から引く。`all`（プリセットの出典）と `conformity`（判定表の背景）の
+    /// 両方を探す。片方だけを探すと、呼び出し元が増えたときに黙って nil を返す。
     static func byID(_ id: String) -> Citation? {
-        all.first { $0.id == id }
+        all.first { $0.id == id } ?? conformity.first { $0.id == id }
     }
 }

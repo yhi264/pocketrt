@@ -3,6 +3,7 @@ import SwiftUI
 struct ScheduleView: View {
     @State private var vm = ScheduleViewModel()
     @State private var showPresetSheet = false
+    @Environment(PresetStoreModel.self) private var presetStore
     @State private var showOverrideOnPicker = false
     @State private var showOverrideOffPicker = false
     @State private var newOverrideOnDate: Date = Date()
@@ -114,6 +115,11 @@ struct ScheduleView: View {
                                     }
                                     .foregroundStyle(.secondary)
                                 }
+                                if let name = vm.activeInstitutionalName {
+                                    Text("自施設のプロトコル: \(name)")
+                                        .font(.caption2)
+                                        .foregroundStyle(.tertiary)
+                                }
                             }
                         } else {
                             Text("入力を確認してください").font(.caption).foregroundStyle(.secondary)
@@ -195,9 +201,9 @@ struct ScheduleView: View {
             }
             .navigationTitle("スケジュール")
             .sheet(isPresented: $showPresetSheet) {
-                PresetSheet { preset in
-                    vm.apply(preset: preset)
-                }
+                PresetSheet(onSelect: { selection in
+                    vm.apply(selection)
+                }, model: presetStore)
             }
             .infoToolbarButton()
         }
@@ -212,7 +218,14 @@ struct ScheduleView: View {
         onAdd: @escaping (Date) -> Void,
         onRemove: @escaping (DateKey) -> Void
     ) -> some View {
-        DisclosureGroup("\(title) (\(keys.count))") {
+        // LocalizedStringKey を文字列補間に入れてはならない。専用の
+        // appendInterpolation オーバーロードが無いため汎用版に解決され、
+        // String(describing:) の結果——LocalizedStringKey(key: "強制照射日",
+        // hasFormatting: false, arguments: []) という内部表現——がそのまま
+        // 画面に出る。title が String だった頃はこれで正しく動いていたが、
+        // ローカライズ対応で LocalizedStringKey に変えたときに壊れた。
+        // Text を連結して、それぞれを独立したローカライズ単位として扱う。
+        DisclosureGroup {
             VStack(alignment: .leading, spacing: 8) {
                 ForEach(keys, id: \.self) { key in
                     HStack {
@@ -233,6 +246,8 @@ struct ScheduleView: View {
                 }
             }
             .padding(.top, 4)
+        } label: {
+            Text(title) + Text(" (\(keys.count))")
         }
         .sheet(isPresented: showPicker) {
             NavigationStack {

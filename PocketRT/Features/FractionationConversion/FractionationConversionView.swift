@@ -1,7 +1,7 @@
 import SwiftUI
 
-struct OARConversionView: View {
-    @State private var vm = OARConversionViewModel()
+struct FractionationConversionView: View {
+    @State private var vm = FractionationConversionViewModel()
 
     var body: some View {
         NavigationStack {
@@ -17,6 +17,28 @@ struct OARConversionView: View {
                             Spacer()
                             AlphaBetaPicker(value: $vm.alphaBetaText)
                         }
+
+                        // 換算は BED を保つように行う。元の値をここに出しておくと、
+                        // 換算後と一致しているかを目で確かめられる。1 回線量を
+                        // 指定した場合は分割数を丸めるため厳密には一致しないので、
+                        // そのずれもここに現れる。
+                        if let bed = vm.sourceBED, let eqd2 = vm.sourceEQD2, let ab = vm.alphaBeta {
+                            VStack(alignment: .leading, spacing: 6) {
+                                HStack {
+                                    Text("BED")
+                                    Spacer()
+                                    GySubscript(value: bed, alphaBeta: ab)
+                                }
+                                HStack {
+                                    Text("EQD2")
+                                    Spacer()
+                                    GySubscript(value: eqd2)
+                                }
+                            }
+                            .font(.callout)
+                            .foregroundStyle(.secondary)
+                            .padding(.top, 4)
+                        }
                     }
 
                     Divider()
@@ -24,8 +46,8 @@ struct OARConversionView: View {
                     Group {
                         Text("換算後の分割").font(.headline)
                         Picker("方式", selection: $vm.mode) {
-                            Text("分割数指定").tag(OARConversionMode.fractions)
-                            Text("1回線量指定").tag(OARConversionMode.dosePerFraction)
+                            Text("分割数指定").tag(FractionationConversionMode.fractions)
+                            Text("1回線量指定").tag(FractionationConversionMode.dosePerFraction)
                         }
                         .pickerStyle(.segmented)
 
@@ -74,7 +96,7 @@ struct OARConversionView: View {
                 }
                 .padding()
             }
-            .navigationTitle("OAR制約換算")
+            .navigationTitle("線量分割換算")
             .infoToolbarButton()
         }
     }

@@ -19,8 +19,7 @@ struct GySubscript: View {
             Text("Gy")
                 .font(.body)
             if let ab = alphaBeta {
-                let abStr = ab == ab.rounded() ? "\(Int(ab))" : String(format: "%.1f", ab)
-                Text(abStr)
+                Text(DoseFormat.alphaBetaString(ab))
                     .font(.caption2)
                     .baselineOffset(-4)
             }

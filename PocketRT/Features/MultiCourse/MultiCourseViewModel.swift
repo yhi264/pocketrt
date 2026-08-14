@@ -8,9 +8,9 @@ final class CourseInput: Identifiable {
     var alphaBetaText: String
 
     init(totalDose: Double = 60, fractions: Int = 30, alphaBeta: Double = 10) {
-        self.totalDoseText = totalDose == totalDose.rounded() ? "\(Int(totalDose))" : String(format: "%.2f", totalDose)
+        self.totalDoseText = DoseFormat.doseString(totalDose)
         self.fractionsText = "\(fractions)"
-        self.alphaBetaText = alphaBeta == alphaBeta.rounded() ? "\(Int(alphaBeta))" : String(format: "%.1f", alphaBeta)
+        self.alphaBetaText = DoseFormat.alphaBetaString(alphaBeta)
     }
 
     var totalDose: Double? { Double(totalDoseText) }
@@ -70,13 +70,14 @@ final class MultiCourseViewModel {
     func remove(_ course: CourseInput) {
         courses.removeAll { $0.id == course.id }
     }
-    func apply(preset: FractionationPreset, to course: CourseInput) {
-        course.totalDoseText = preset.totalDose == preset.totalDose.rounded()
-            ? "\(Int(preset.totalDose))"
-            : String(format: "%.2f", preset.totalDose)
-        course.fractionsText = "\(preset.fractions)"
-        course.alphaBetaText = preset.recommendedAlphaBeta == preset.recommendedAlphaBeta.rounded()
-            ? "\(Int(preset.recommendedAlphaBeta))"
-            : String(format: "%.1f", preset.recommendedAlphaBeta)
+    func apply(_ selection: PresetSelection, to course: CourseInput) {
+        // 自施設プリセットは読み込み経路を持つため、範囲外の巨大な値
+        // （例: 1e100）が totalDose に入りうる。DoseFormat は Int() 変換の
+        // トラップを避け、その場合でも文字列を返す。
+        course.totalDoseText = DoseFormat.doseString(selection.totalDose)
+        course.fractionsText = "\(selection.fractions)"
+        if let ab = selection.alphaBeta {
+            course.alphaBetaText = DoseFormat.alphaBetaString(ab)
+        }
     }
 }
