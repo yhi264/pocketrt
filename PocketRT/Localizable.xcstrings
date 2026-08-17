@@ -287,7 +287,7 @@
     "d = D / n" : {
 
     },
-    "https://yhi264.github.io/pocketrt/" : {
+    "https://yhi264.github.io/pocketrt/privacy/" : {
 
     },
     "n は分割回数、d は 1 回線量（= 総線量 ÷ n）、α/β は組織固有のパラメータです。\nLinear-Quadratic モデルに基づき、分割の違いを揃えて比較するための指標です。" : {

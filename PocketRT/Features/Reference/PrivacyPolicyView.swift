@@ -58,8 +58,10 @@ struct PrivacyPolicyView: View {
                     Text("公開されている原本はこちら:")
                         .font(.caption)
                         .foregroundStyle(.secondary)
-                    Link("https://yhi264.github.io/pocketrt/",
-                         destination: URL(string: "https://yhi264.github.io/pocketrt/")!)
+                    // 原本は /privacy/ に置いてある（2026-08-17 に移設）。
+                    // ルートは紹介ページで、App Store のマーケティング URL に使う。
+                    Link("https://yhi264.github.io/pocketrt/privacy/",
+                         destination: URL(string: "https://yhi264.github.io/pocketrt/privacy/")!)
                         .font(.caption)
                 }
                 .padding(.horizontal)
