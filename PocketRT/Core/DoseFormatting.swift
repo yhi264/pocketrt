@@ -34,6 +34,20 @@ enum DoseFormat {
         string(alphaBeta, decimalPlaces: 1)
     }
 
+    /// 値をそのまま表示用文字列にする。整数に見える値は整数表記、そうでなければ
+    /// `Double` の既定の文字列表現を使う（桁数を固定しない）。
+    ///
+    /// `doseString` / `alphaBetaString` と違い、決まった小数点以下の桁数を
+    /// 前提にできない値（例: 検証エラーメッセージに出す許容範囲の上下限）に使う。
+    /// `Int(exactly:)` を使い、変換できない場合は小数表記にフォールバックする
+    /// （素の `Int(Double)` は使わない。理由は本ファイル冒頭のコメントを参照）。
+    static func plainString(_ value: Double) -> String {
+        if value == value.rounded(), let i = Int(exactly: value) {
+            return "\(i)"
+        }
+        return String(value)
+    }
+
     /// 表示用: "60 Gy / 20 Fr"
     static func regimenLabel(totalDose: Double, fractions: Int) -> String {
         "\(doseString(totalDose)) Gy / \(fractions) Fr"

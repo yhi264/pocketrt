@@ -144,15 +144,63 @@ enum Citations {
     /// 混ぜると、プリセットの出典一覧に判定用の文献が紛れ込む。
     static let conformity: [Citation] = [rtog0915, rtog0813]
 
+    /// 頭部定位照射（Shaw 1993）の判定基準の出典。
+    ///
+    /// Radiation Therapy Oncology Group: radiosurgery quality assurance guidelines.
+    /// Int J Radiat Oncol Biol Phys. 1993;27(5):1231-1239. PMID 8262852 / DOI 10.1016/0360-3016(93)90548-a
+    ///
+    /// **`conformity`（肺 SBRT）とは別に持つ。** 判定基準の由来が違う（この論文の
+    /// 本文そのものに判定基準がある。0813 / 0915 はプロトコル文書にあり論文には
+    /// 無い）ため、出典一覧の注記も別にする必要があり、混ぜると食い違って見える
+    /// （app/docs/superpowers/plans/2026-08-15-pocketrt-cranial-srs-protocol.md）。
+    static let shaw1993 = Citation(
+        id: "shaw1993", shortLabel: "Shaw 1993（RTOG SRS QA guidelines）",
+        authors: "Shaw E, Kline R, Gillin M, Souhami L, Hirschfeld A, Dinapoli R, Martin L.",
+        title: "Radiation Therapy Oncology Group: radiosurgery quality assurance guidelines.",
+        journal: "Int J Radiat Oncol Biol Phys", year: 1993,
+        pmid: "8262852", doi: "10.1016/0360-3016(93)90548-a")
+
+    /// 頭部定位照射の逸脱判定に関わる文献。`conformity`（肺 SBRT）とは別に持つ
+    /// （理由は `shaw1993` のコメントを参照）。
+    static let cranialConformity: [Citation] = [shaw1993]
+
+    /// TROG SRS Technical Working Group の勧告。GI (Paddick) の限界（多発病変が
+    /// 近接する場合に計算できないことがある）についての根拠（仕様 §2.5）。
+    ///
+    /// **判定の根拠ではない。** Table 1〜5 は手順・文書化の勧告で判定の閾値を
+    /// 持たず、本アプリはこの文献を判定に使っていない。`shaw1993`（判定基準）
+    /// とは役割が違うので、`cranialConformity` には含めず別に持つ。混ぜると
+    /// 「頭部定位照射の判定基準の出典」に見えてしまい、Shaw 1993 と混同される
+    /// （app/docs/superpowers/plans/2026-08-15-pocketrt-cranial-srs-protocol.md、
+    /// data-sources.md §B6）。
+    ///
+    /// data-sources.md §B6 の逐字転記には論文の正式なタイトルが記録されておらず
+    /// （著者・誌名・巻号・DOI のみ）、**推測でタイトルを補わない**
+    /// （このファイル冒頭の原則）。`title` は空のまま残す。
+    static let trog2026SRSWorkingGroup = Citation(
+        id: "trog2026_srs_working_group", shortLabel: "TROG SRS Technical Working Group (2026)",
+        authors: "Shakeshaft J, et al.",
+        journal: "J Med Imaging Radiat Oncol", year: 2026,
+        doi: "10.1111/1754-9485.70064")
+
+    /// 指標の限界についての文献。`cranialConformity`（判定基準）とは別に持つ
+    /// （役割が違うため。`trog2026SRSWorkingGroup` のコメント参照）。
+    static let cranialLimitations: [Citation] = [trog2026SRSWorkingGroup]
+
     static let all: [Citation] = [
         chhip, startB, fastForward, whelan, jcog0403, jrosg10_1, jcog0303, jcog0909, rtog9005, boneMetsMeta,
         jastroHeadNeck, jastroProstate, jastroBreast, jastroWholeBrain, jastroAcoustic,
         stupp, bonePainTrial
     ]
 
-    /// id から引く。`all`（プリセットの出典）と `conformity`（判定表の背景）の
-    /// 両方を探す。片方だけを探すと、呼び出し元が増えたときに黙って nil を返す。
+    /// id から引く。`all`（プリセットの出典）・`conformity`（肺 SBRT の判定表の
+    /// 背景）・`cranialConformity`（頭部定位照射の判定基準の背景）・
+    /// `cranialLimitations`（頭部定位照射の指標の限界の根拠）のすべてを探す。
+    /// 一部だけを探すと、呼び出し元が増えたときに黙って nil を返す。
     static func byID(_ id: String) -> Citation? {
-        all.first { $0.id == id } ?? conformity.first { $0.id == id }
+        all.first { $0.id == id }
+            ?? conformity.first { $0.id == id }
+            ?? cranialConformity.first { $0.id == id }
+            ?? cranialLimitations.first { $0.id == id }
     }
 }

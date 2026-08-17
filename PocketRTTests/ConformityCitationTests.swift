@@ -1,4 +1,5 @@
 import Testing
+import Foundation
 @testable import PocketRT
 
 /// 品質指標の逸脱判定の帰属。
@@ -9,6 +10,15 @@ import Testing
 /// ことが判明したため追加した。
 @Suite("逸脱判定の帰属")
 struct ConformityCitationTests {
+
+    /// `.custom` は登録された利用者定義プロトコルという動的なデータなので、
+    /// 固定の一覧として列挙できない（できてもいけない。テストデータで
+    /// 代表させると「利用者定義にも citations 等が持てる」という誤った
+    /// 前提を持ち込みかねない）。ここでの「全プロトコル」は `.none` と
+    /// 内蔵（`BuiltInProtocol.allCases`）に限る。
+    private var allNonCustomSelections: [ProtocolSelection] {
+        [.none] + BuiltInProtocol.allCases.map(ProtocolSelection.builtIn)
+    }
 
     @Test("判定に使う両プロトコルが出典として登録されている")
     func bothProtocolsAreCited() {
@@ -25,11 +35,12 @@ struct ConformityCitationTests {
         }
     }
 
-    @Test("判定するプロトコルは必ず出典と説明を持つ")
+    @Test("内蔵プロトコルは必ず出典と説明を持つ")
     func judgingProtocolsCarryAttribution() {
-        for p in ProtocolSelection.allCases where p != .none {
+        // `summary` は `BuiltInProtocol` では非 Optional（型として必ず持つ）
+        // なので nil チェックは不要。ここでは citations だけを確認する。
+        for p in BuiltInProtocol.allCases {
             #expect(!p.citations.isEmpty, "\(p.rawValue) に出典がない")
-            #expect(p.summary != nil, "\(p.rawValue) に説明がない")
         }
     }
 
@@ -41,8 +52,21 @@ struct ConformityCitationTests {
 
     @Test("プロトコルの選択と出典の対応が入れ替わっていない")
     func protocolMapsToItsOwnCitation() {
-        #expect(ProtocolSelection.rtog0915.citations.map(\.id) == ["rtog0915"])
-        #expect(ProtocolSelection.rtog0813.citations.map(\.id) == ["rtog0813"])
+        #expect(ProtocolSelection.builtIn(.rtog0915).citations.map(\.id) == ["rtog0915"])
+        #expect(ProtocolSelection.builtIn(.rtog0813).citations.map(\.id) == ["rtog0813"])
+    }
+
+    @Test("利用者定義は出典を持てない（型として持てない。実行時のガードではない）")
+    func customCarriesNoAttribution() {
+        // .custom は id だけを持つ（値のコピーではない。外部レビュー指摘により変更。
+        // PlanQualityViewModel が customProtocols から都度 id で解決する）。
+        // この型単体では名前を解決できないため、displayName/menuLabel の
+        // 具体的な値はここでは検証しない（PlanQualityViewModelTests が担当）。
+        let selection = ProtocolSelection.custom("c1")
+        #expect(selection.citations.isEmpty)
+        #expect(selection.summary == nil)
+        #expect(selection.studiedSchedules == nil)
+        #expect(selection.selectionDetail == nil)
     }
 
     @Test("判定用の文献がプリセットの出典一覧に混ざっていない")
@@ -74,10 +98,10 @@ struct ConformityCitationTests {
     func selectionShowsSiteAndSchedule() {
         // 試験番号だけでは、どの部位のどの線量分割に対する基準なのかが
         // 選ぶ時点で分からない。部位は displayName に、線量分割はその下に出す。
-        #expect(ProtocolSelection.rtog0915.displayName.contains("末梢"))
-        #expect(ProtocolSelection.rtog0813.displayName.contains("中心"))
-        #expect(ProtocolSelection.rtog0915.selectionDetail == "34 Gy/1 Fr・48 Gy/4 Fr")
-        #expect(ProtocolSelection.rtog0813.selectionDetail == "50〜60 Gy/5 Fr")
+        #expect(ProtocolSelection.builtIn(.rtog0915).displayName.contains("末梢"))
+        #expect(ProtocolSelection.builtIn(.rtog0813).displayName.contains("中心"))
+        #expect(ProtocolSelection.builtIn(.rtog0915).selectionDetail == "34 Gy/1 Fr・48 Gy/4 Fr")
+        #expect(ProtocolSelection.builtIn(.rtog0813).selectionDetail == "50〜60 Gy/5 Fr")
     }
 
     @Test("判定しないは線量分割を出さない")
@@ -91,10 +115,16 @@ struct ConformityCitationTests {
     func menuLabelCarriesBothSiteAndSchedule() {
         // 畳んだときは displayName だけを出すので、行が長くても
         // 選択後の表示は短いままになる
-        for p in ProtocolSelection.allCases {
+        for p in allNonCustomSelections {
             #expect(p.menuLabel.hasPrefix(p.displayName))
-            guard let detail = p.selectionDetail else { continue }
-            #expect(p.menuLabel.contains(detail), "\(p.rawValue) の行に線量分割が無い")
+            // 頭部定位照射は検討された線量分割を持たない（仕様 §3.1）ので
+            // selectionDetail は空文字列になる（nil ではない。BuiltInProtocol.
+            // selectionDetail は非 Optional）。空文字列に対する contains の
+            // 主張は無意味なので、nil と同様にスキップする。
+            // （Foundation を import した String.contains("") は false を返す
+            // ため、素通しすると常にここで失敗する）
+            guard let detail = p.selectionDetail, !detail.isEmpty else { continue }
+            #expect(p.menuLabel.contains(detail), "\(p.displayName) の行に線量分割が無い")
         }
     }
 
@@ -102,7 +132,7 @@ struct ConformityCitationTests {
     func selectionDetailMatchesStudiedSchedules() {
         // selectionDetail は studiedSchedules から導く。別々に持つと、
         // 片方だけ直したときに表示と判定が食い違う。
-        for p in ProtocolSelection.allCases {
+        for p in allNonCustomSelections {
             guard let schedules = p.studiedSchedules else {
                 #expect(p.selectionDetail == nil)
                 continue
@@ -110,7 +140,7 @@ struct ConformityCitationTests {
             let detail = p.selectionDetail ?? ""
             for s in schedules {
                 #expect(detail.contains(s.compactLabel),
-                        "\(p.rawValue) の表示に \(s.compactLabel) が無い")
+                        "\(p.displayName) の表示に \(s.compactLabel) が無い")
                 // 分割数が表示に含まれること（判定が使う値と同じもの）
                 #expect(s.compactLabel.contains("/\(s.fractions) Fr"))
             }
@@ -161,5 +191,141 @@ struct ConformityCitationTests {
         // 黙って直すと、原典と突き合わせた人が食い違いに戸惑う
         let note = String(localized: ConformityCriteria.correctionNote)
         #expect(note.contains("誤植"))
+    }
+
+    // MARK: - 頭部定位照射（Shaw 1993）の出典（D4 Task 1）
+
+    @Test("Shaw 1993 が頭部定位照射の出典として登録されている")
+    func shaw1993IsCranialCitation() {
+        let ids = Set(Citations.cranialConformity.map(\.id))
+        #expect(ids == ["shaw1993"])
+    }
+
+    @Test("Shaw 1993 は一次文献として PMID つきで同定されている")
+    func shaw1993IsPrimaryWithPMID() {
+        let c = Citations.shaw1993
+        #expect(c.kind == .primary)
+        #expect(c.pmid == "8262852")
+        #expect(c.url != nil)
+    }
+
+    @Test("頭部定位照射（BuiltInProtocol.cranialSRS）の出典は Shaw 1993 のみ")
+    func cranialProtocolCitesOnlyShaw1993() {
+        #expect(ProtocolSelection.builtIn(.cranialSRS).citations.map(\.id) == ["shaw1993"])
+    }
+
+    @Test("頭部定位照射の出典が肺 SBRT の出典（Citations.conformity）に混入していない")
+    func shaw1993IsNotMixedWithLungSBRTCitations() {
+        // 0813 / 0915 の provenanceNote は「論文はこの表そのものを含まない」と
+        // 述べるが、Shaw 1993 は逆（論文本文に判定基準がある）。混ぜると
+        // provenanceNote の主張が Shaw 1993 について誤りになる。
+        let lungIDs = Set(Citations.conformity.map(\.id))
+        #expect(!lungIDs.contains("shaw1993"))
+    }
+
+    @Test("byID は頭部定位照射の出典も引ける")
+    func byIDFindsCranialCitation() {
+        #expect(Citations.byID("shaw1993")?.pmid == "8262852")
+    }
+
+    @Test("頭部定位照射は検討された線量分割を持たない（仕様 §3.1）")
+    func cranialProtocolHasNoStudiedSchedules() {
+        #expect(BuiltInProtocol.cranialSRS.studiedSchedules.isEmpty)
+        #expect(ProtocolSelection.builtIn(.cranialSRS).studiedSchedules == [])
+        #expect(ProtocolSelection.builtIn(.cranialSRS).expectedFractions == [])
+    }
+
+    @Test("頭部定位照射の summary は 1993 年の文書であることに触れている")
+    func cranialSummaryMentionsEra() {
+        let summary = String(localized: BuiltInProtocol.cranialSRS.summary)
+        #expect(summary.contains("1993"))
+    }
+
+    @Test("頭部定位照射のプルダウン表示に余計な空白が残らない（selectionDetail が空のため）")
+    func cranialMenuLabelHasNoTrailingWhitespaceArtifact() {
+        let label = BuiltInProtocol.cranialSRS.menuLabel
+        #expect(label == BuiltInProtocol.cranialSRS.displayName)
+    }
+
+    @Test("頭部定位照射の由来説明は、判定基準が論文本文そのものにあることを述べている")
+    func cranialProvenanceNoteStatesTableIsInThePaper() {
+        // 0813 / 0915（provenanceNote）とは逆に、Shaw 1993 は論文本文に基準がある。
+        let note = String(localized: ConformityCriteria.cranialProvenanceNote)
+        #expect(note.contains("本文そのものに"))
+    }
+
+    // MARK: - Task 2「判定していないものを明示する」
+
+    // UI 整理（判定パネルの注記過多への対応）で、単一の注記だったものを
+    // 常時表示側（cranialJudgesTwoOfThreeNote）と折りたたみ側
+    // （cranialCoverageDetailNote）に分割した。「2 つだけ判定している」という
+    // 事実は常時表示側に残さなければならない（黙って 2 基準だけ判定すると、
+    // 利用者は 3 基準すべてを満たしたと誤解しうるため）。
+
+    @Test("常時表示側: Coverage を含む 3 基準中、本アプリが判定するのは 2 つだけであることが述べられている")
+    func cranialJudgesTwoOfThreeNoteStatesTheCount() {
+        let note = String(localized: ConformityCriteria.cranialJudgesTwoOfThreeNote)
+        #expect(note.contains("Coverage"))
+        #expect(note.contains("3"))
+        #expect(note.contains("2"))
+    }
+
+    @Test("折りたたみ側: Coverage が何であり、なぜ判定できないかが説明されている")
+    func cranialCoverageDetailNoteExplainsWhy() {
+        let note = String(localized: ConformityCriteria.cranialCoverageDetailNote)
+        #expect(note.contains("Coverage"))
+        #expect(note.contains("判定していません") || note.contains("判定しません"))
+    }
+
+    @Test("境界を安全側に倒していることの明示が、原典が定めていない具体的な境界に触れている")
+    func cranialBoundarySafetyNoteNamesTheUndefinedBoundaries() {
+        let note = String(localized: ConformityCriteria.cranialBoundarySafetyNote)
+        #expect(note.contains("安全側"))
+        #expect(note.contains("2.5"))
+        #expect(note.contains("0.9"))
+    }
+
+    @Test("1993 年の文書であることの明示に、年と現在の実務との関係を利用者が判断する旨が含まれる")
+    func cranialEraNoteStatesTheYearAndImplication() {
+        let note = String(localized: ConformityCriteria.cranialEraNote)
+        #expect(note.contains("1993"))
+        #expect(note.contains("利用者が"))
+    }
+
+    @Test("GI の但し書きが、多発病変で意味をなさないことがある旨を述べている")
+    func giCaveatNoteStatesTheLimitation() {
+        let note = String(localized: ConformityCriteria.giCaveatNote)
+        #expect(note.contains("近接"))
+        #expect(note.contains("意味をなさない"))
+    }
+
+    // MARK: - TROG SRS Technical Working Group（GI の但し書きの根拠。判定の根拠ではない）
+
+    @Test("TROG が頭部定位照射の限界の根拠として登録されている")
+    func trogIsCranialLimitationCitation() {
+        let ids = Set(Citations.cranialLimitations.map(\.id))
+        #expect(ids == ["trog2026_srs_working_group"])
+    }
+
+    @Test("TROG は DOI を持ち一次文献として同定されている（PMID は無い）")
+    func trogIsPrimaryViaDOI() {
+        let c = Citations.trog2026SRSWorkingGroup
+        #expect(c.kind == .primary)
+        #expect(c.doi == "10.1111/1754-9485.70064")
+        #expect(c.pmid == nil)
+        #expect(c.url != nil)
+    }
+
+    @Test("TROG は判定基準の出典（cranialConformity）に混入していない。役割が違うため")
+    func trogIsNotMixedWithJudgementCriteriaCitations() {
+        let judgementIDs = Set(Citations.cranialConformity.map(\.id))
+        #expect(!judgementIDs.contains("trog2026_srs_working_group"))
+        let limitationIDs = Set(Citations.cranialLimitations.map(\.id))
+        #expect(!limitationIDs.contains("shaw1993"), "判定基準の出典が限界の根拠の節に混入している")
+    }
+
+    @Test("byID は頭部定位照射の限界の根拠（TROG）も引ける")
+    func byIDFindsCranialLimitationCitation() {
+        #expect(Citations.byID("trog2026_srs_working_group")?.doi == "10.1111/1754-9485.70064")
     }
 }

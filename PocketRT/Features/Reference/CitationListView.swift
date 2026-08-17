@@ -2,6 +2,7 @@ import SwiftUI
 
 struct CitationListView: View {
     @Environment(PresetStoreModel.self) private var model
+    @Environment(CustomProtocolStoreModel.self) private var customProtocolStoreModel
 
     var body: some View {
         List {
@@ -75,6 +76,41 @@ struct CitationListView: View {
             // プリセットの表示より強い臨床的な言明をする。この画面はアプリが
             // 何を根拠にしているかを確かめる場所なので、判定の根拠もここで
             // 確認できなければならない。プリセットの出典とは節を分ける。
+            //
+            // 自施設の基準（利用者定義）を先に、公表プロトコルの表を後に置く
+            // （上のプリセット節、PlanQualityView のプルダウンと同じ順）。
+            // loadFailure は hasStore == false（保存先が無い）のときも
+            // 立つので、同じ分岐でどちらも「登録が 0 件」ではなく
+            // 「確認できない」ことを示せる。「登録が無い」と「読めていない」
+            // を同じ見た目にしてはならない（プリセット節と同じ理由）。
+            if let err = customProtocolStoreModel.loadFailure {
+                Section {
+                    Label {
+                        Text(err)
+                    } icon: {
+                        Image(systemName: "exclamationmark.triangle.fill")
+                            .foregroundStyle(.orange)
+                    }
+                    .font(.caption)
+                } header: {
+                    Text("品質指標の逸脱判定（自施設の基準）")
+                }
+            } else if !customProtocolStoreModel.protocols.isEmpty {
+                Section {
+                    ForEach(customProtocolStoreModel.protocols) { p in
+                        VStack(alignment: .leading, spacing: 4) {
+                            Text(p.name)
+                            Text("出典なし。利用者が登録")
+                                .font(.caption2)
+                                .foregroundStyle(.orange)
+                        }
+                        .padding(.vertical, 2)
+                    }
+                } header: {
+                    Text("品質指標の逸脱判定（自施設の基準）")
+                }
+            }
+
             Section {
                 Text(ConformityCriteria.provenanceNote)
                     .font(.caption)
@@ -104,6 +140,60 @@ struct CitationListView: View {
                     .foregroundStyle(.tertiary)
             } header: {
                 Text("品質指標の逸脱判定")
+            }
+
+            // 頭部定位照射（Shaw 1993）は肺 SBRT（RTOG 0813 / 0915、上の節）とは
+            // 判定基準の由来が違う。上の節の provenanceNote は「論文はこの表そのものを
+            // 含まない」と述べており、Shaw 1993（論文本文に判定基準がある）に
+            // そのまま当てはめると誤りになる。節を分けて注記も別にする
+            // （app/docs/superpowers/plans/2026-08-15-pocketrt-cranial-srs-protocol.md）。
+            Section {
+                Text(ConformityCriteria.cranialProvenanceNote)
+                    .font(.caption)
+                    .foregroundStyle(.secondary)
+
+                ForEach(Citations.cranialConformity) { c in
+                    CitationRow(citation: c)
+                        .padding(.vertical, 2)
+                }
+
+                // 判定パネルでは常時表示/折りたたみに分けている 2 つの注記
+                // （`cranialJudgesTwoOfThreeNote` / `cranialCoverageDetailNote`）だが、
+                // この画面は出典・根拠をまとめて確認する場所なので分けずに続けて示す。
+                Text(ConformityCriteria.cranialJudgesTwoOfThreeNote)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+
+                Text(ConformityCriteria.cranialCoverageDetailNote)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+
+                Text(ConformityCriteria.cranialBoundarySafetyNote)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+
+                Text(ConformityCriteria.cranialEraNote)
+                    .font(.caption2)
+                    .foregroundStyle(.tertiary)
+            } header: {
+                Text("品質指標の逸脱判定（頭部定位照射）")
+            }
+
+            // GI (Paddick) の但し書きの根拠。上の節（判定基準の出典）とは役割が違う
+            // ため節を分ける。TROG SRS Technical Working Group は判定の根拠ではなく、
+            // 指標の限界についての根拠である。混ぜると「頭部定位照射の判定基準の
+            // 出典」に見えてしまい、Shaw 1993 と混同される（仕様 §2.5）。
+            Section {
+                Text(ConformityCriteria.giCaveatNote)
+                    .font(.caption2)
+                    .foregroundStyle(.secondary)
+
+                ForEach(Citations.cranialLimitations) { c in
+                    CitationRow(citation: c)
+                        .padding(.vertical, 2)
+                }
+            } header: {
+                Text("指標の限界（頭部定位照射・GI）")
             }
         }
         .navigationTitle("出典")

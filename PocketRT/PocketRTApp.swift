@@ -8,6 +8,9 @@ struct PocketRTApp: App {
     // 見える形で登録が消えかねない。失敗は PresetStoreModel 側で
     // loadFailure として扱う。
     @State private var presetStore = PresetStoreModel(store: try? InstitutionalPresetStore.default())
+    // 同じ理由で CustomProtocolStore（D2・自施設の判定基準）もフォールバックしない。
+    // 失敗は CustomProtocolStoreModel 側で loadFailure として扱う。
+    @State private var customProtocolStore = CustomProtocolStoreModel(store: try? CustomProtocolStore.default())
 
     var body: some Scene {
         WindowGroup {
@@ -28,6 +31,7 @@ struct PocketRTApp: App {
                     .tabItem { Label("品質", systemImage: "checkmark.seal") }
             }
             .environment(presetStore)
+            .environment(customProtocolStore)
             .fullScreenCover(isPresented: Binding(
                 get: { !hasAcceptedDisclaimer },
                 set: { hasAcceptedDisclaimer = !$0 }

@@ -1,6 +1,15 @@
 import Foundation
 
-enum InstitutionalPresetStoreError: Error, Equatable {
+/// 保存されるデータ全体
+struct CustomProtocolData: Codable, Sendable, Equatable {
+    var schemaVersion: Int
+    var protocols: [CustomProtocol]
+
+    static let empty = CustomProtocolData(
+        schemaVersion: CustomProtocolStore.currentSchemaVersion, protocols: [])
+}
+
+enum CustomProtocolStoreError: Error, Equatable {
     /// このバージョンのアプリが読めない形式
     case unsupportedSchemaVersion(Int)
     /// ファイルは存在するが内容を解釈できない（構文エラー・型不一致・
@@ -15,18 +24,23 @@ enum InstitutionalPresetStoreError: Error, Equatable {
     case unreadableFile
 }
 
-/// 自施設プリセットを JSON ファイルに保存する。
+/// 自施設の判定基準を JSON ファイルに保存する。
 ///
-/// **`Core/CustomProtocolStore.swift`（D2・自施設の判定基準）と構造が同一
-/// （データ構造とファイル名しか違わない）。片方でここに起因する欠陥が
-/// 見つかったら、もう片方も同じ欠陥を持っていないか必ず確認すること。**
-/// この store は過去に 5 件の欠陥（うち 1 件は復旧不能なクラッシュ）を
-/// 出した実績がある。共通化は G2 提出後に行う予定（ROADMAP）。それまでは
-/// 2 箇所を手で揃える。
+/// `InstitutionalPresetStore`（D1・自施設プリセット）と同じ方式にしている。
+/// D1 では永続化まわりで 5 件の欠陥（うち 1 件は復旧不能なクラッシュ）が出た。
+/// この store は同じ問題を二度作らないよう、その形をそのまま踏襲している
+/// （`InstitutionalPresetStore.swift` と実装は共有していない。理由は
+/// Task 2 報告を参照）。
+///
+/// **`InstitutionalPresetStore` と構造が同一（データ構造とファイル名しか
+/// 違わない）。片方でここに起因する欠陥が見つかったら、もう片方も同じ
+/// 欠陥を持っていないか必ず確認すること。** D1 はこの構造で実際に 5 件の
+/// 欠陥（うち 1 件は復旧不能なクラッシュ）を出した実績がある。共通化は
+/// G2 提出後に行う予定（ROADMAP）。それまでは 2 箇所を手で揃える。
 ///
 /// 保存先の URL を注入できるようにしてある。テストで実際のアプリの
 /// 保存先を触らずに検証するため。
-struct InstitutionalPresetStore {
+struct CustomProtocolStore {
     static let currentSchemaVersion = 1
 
     let fileURL: URL
@@ -40,7 +54,7 @@ struct InstitutionalPresetStore {
         let dir = try FileManager.default.url(
             for: .applicationSupportDirectory, in: .userDomainMask,
             appropriateFor: nil, create: true)
-        return dir.appendingPathComponent("institutional-presets.json")
+        return dir.appendingPathComponent("custom-protocols.json")
     }
 
     /// アプリが実際に使う保存先の store を作る。
@@ -51,8 +65,8 @@ struct InstitutionalPresetStore {
     /// OS が任意に消しうるため、利用者に「登録なし」に見える形で登録が
     /// 消えかねない。呼び出し側は `try?` で受け、失敗を `loadFailure` として
     /// 扱うこと。
-    static func `default`() throws -> InstitutionalPresetStore {
-        InstitutionalPresetStore(fileURL: try defaultURL())
+    static func `default`() throws -> CustomProtocolStore {
+        CustomProtocolStore(fileURL: try defaultURL())
     }
 
     /// 読み込む。
@@ -67,12 +81,12 @@ struct InstitutionalPresetStore {
     /// schemaVersion が既知だが未対応の場合は `.unsupportedSchemaVersion` を
     /// 投げる。将来の形式を空と誤認して上書き保存すると、その端末の登録が
     /// 消えるため。
-    func load() throws -> InstitutionalPresetData {
+    func load() throws -> CustomProtocolData {
         guard FileManager.default.fileExists(atPath: fileURL.path(percentEncoded: false)) else {
             return .empty
         }
         guard let raw = try? Data(contentsOf: fileURL) else {
-            throw InstitutionalPresetStoreError.unreadableFile
+            throw CustomProtocolStoreError.unreadableFile
         }
 
         // schemaVersion だけ先に読む。全体のデコードに失敗しても、
@@ -83,19 +97,23 @@ struct InstitutionalPresetStore {
         // 入っているため。
         struct VersionProbe: Decodable { let schemaVersion: Int }
         guard let probe = try? JSONDecoder().decode(VersionProbe.self, from: raw) else {
-            throw InstitutionalPresetStoreError.corruptedContent
+            throw CustomProtocolStoreError.corruptedContent
         }
         guard probe.schemaVersion == Self.currentSchemaVersion else {
-            throw InstitutionalPresetStoreError.unsupportedSchemaVersion(probe.schemaVersion)
+            throw CustomProtocolStoreError.unsupportedSchemaVersion(probe.schemaVersion)
         }
 
-        guard let decoded = try? JSONDecoder().decode(InstitutionalPresetData.self, from: raw) else {
-            throw InstitutionalPresetStoreError.corruptedContent
+        guard let decoded = try? JSONDecoder().decode(CustomProtocolData.self, from: raw) else {
+            throw CustomProtocolStoreError.corruptedContent
         }
+        // ここではデコードした値を検証していない。v1 は書き出し・読み込みを持たないため
+        // 到達経路が無いが、インポート機能を足すときは必ず CustomProtocolValidator の
+        // 数値版を通すこと。D1 では同じ見落としで範囲外の値が保存され、復旧不能な
+        // クラッシュに至った（レビュー指摘。ROADMAP に記録）。
         return decoded
     }
 
-    func save(_ data: InstitutionalPresetData) throws {
+    func save(_ data: CustomProtocolData) throws {
         let encoder = JSONEncoder()
         encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
         try encoder.encode(data).write(to: fileURL, options: .atomic)

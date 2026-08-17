@@ -65,6 +65,141 @@
 
 ---
 
+## B6. 頭部定位照射の逸脱判定基準（RTOG radiosurgery QA guidelines, Shaw 1993）
+
+**原典**: Shaw E, Kline R, Gillin M, Souhami L, Hirschfeld A, Dinapoli R, Martin L.
+"Radiation Therapy Oncology Group: radiosurgery quality assurance guidelines."
+*Int J Radiat Oncol Biol Phys.* 1993;27(5):1231-1239. PMID 8262852 / DOI 10.1016/0360-3016(93)90548-a
+
+**取得**: 利用者が PDF を提供（2026-08-14）。**本文 p.1235 の "Quality assurance review" 節から逐字転記。**
+
+抄録が目的の 3 番目に "To define minor and major deviations in protocol treatment" を挙げており、
+RTOG 0813 / 0915 の Table 1 と同じ機能を頭部定位照射に対して果たす。
+
+### 原典の記述（逐字）
+
+> **1. Coverage:** If the 90% of prescription isodose line completely encompasses the target, the case
+> is considered per protocol. If the 90% of prescription dose isodose line does not completely cover
+> the target, but the 80% of prescription dose isodose line does completely cover the target, this
+> shall be classified as a minor deviation. If the 80% of prescription dose isodose line does not
+> completely cover the target this shall be classified as a major acceptable deviation.
+
+> **2. Homogeneity index:** A figure of merit for dose homogeneity within the target volume shall be
+> determined as the maximum dose in the treatment volume divided by the prescription dose (ratio
+> MDPD). This ratio shall be less than or equal to 2.0, and if achieved, the case will be per protocol.
+> MDPD ratio greater than 2 but less than 2.5 shall be classified as minor deviation. MDPD ratio
+> greater than 2.5 shall be classified as a major acceptable deviation.
+
+> **3. Conformity index:** The volume of the prescription isodose surface shall be determined (this may
+> be obtained from the dose volume histogram, or by measuring the area of the prescription isodose on
+> sequential levels). A figure of merit for conformation of the prescription dose to the target shall be
+> determined as the volume of the prescription isodose surface divided by the target volume (ratio
+> PITV). This ratio shall be between 1.0 and 2.0; and if achieved, there will be no deviation from
+> protocol. PITV ratios less than 1.0 but greater than 0.9 shall be classified as minor deviations.
+> PITV ratios less than 0.9 shall be classified as major deviations. PITV ratios between 2.0 and 2.5
+> shall be classified as minor deviations, while PITV ratios greater than 2.5 shall be classified as
+> major acceptable deviations.
+
+### アプリの既存指標との対応
+
+**2 つの数値指標はいずれもアプリが既に計算している。**
+
+| 原典の指標 | 定義 | アプリの指標 |
+|---|---|---|
+| MDPD | 最大線量 ÷ 処方線量 | `hiRTOG`（`homogeneityIndexRTOG(maxDose:prescriptionDose:)`） |
+| PITV | 処方等線量体積 ÷ 標的体積 | `ciRTOG`（`conformityIndexRTOG(piv:tv:)`） |
+
+Coverage は数値指標ではなく「90% / 80% 等線量線が標的を完全に覆うか」という**真偽の判定**である。
+アプリは現在この入力を持たない。
+
+### 実装上の重大な差異: PITV は両側判定である
+
+**RTOG 0813 / 0915 の表はすべて「小さいほど良い」の片側判定だが、PITV は両側である。**
+
+```
+        < 0.9        major
+  0.9 〜 1.0        minor      ← 標的を覆いきれていない（under-coverage）
+  1.0 〜 2.0        per protocol
+  2.0 〜 2.5        minor
+        > 2.5        major
+```
+
+現行の `ConformityCriteria.judge(value:none:minor:)` は `value < none` の片側しか扱えない。
+**頭部定位照射を内蔵プロトコルとして入れるには、両側判定の仕組みが要る。**
+
+これは D2（利用者定義の基準）の設計にも影響する。D2 の仕様 §2.3 は「判定の向きは
+`value < none` に固定する」としているが、その根拠は「向きを選べると誤って反転させうる」で
+あった。両側判定は「向きを選ぶ」のとは別で、**下限と上限の両方を持つ**形である。
+
+### 原典の境界の不明確さ（実装時に判断が要る）
+
+0813 / 0915 の誤植とは違い、これらは**原典の記述がその値を明示的に扱っていない**箇所である。
+
+| 箇所 | 原典の記述 | 未定義の値 |
+|---|---|---|
+| MDPD | "less than or equal to 2.0" → per protocol、"greater than 2 but less than 2.5" → minor、"greater than 2.5" → major | **ちょうど 2.5**。「2.5 より大きい」でも「2.5 未満」でもない |
+| PITV 下側 | "less than 1.0 but greater than 0.9" → minor、"less than 0.9" → major | **ちょうど 0.9**。「0.9 未満」でも「0.9 より大きい」でもない |
+| PITV 上側 | "between 2.0 and 2.5" → minor、"greater than 2.5" → major | "between" が両端を含むかが不明。ただし 2.0 は "between 1.0 and 2.0" と重複する |
+
+**Appendix II の計算例が一部を裏づける**（p.1238-1239）。
+
+| 例 | 値 | 原典の分類 |
+|---|---|---|
+| Gamma Knife | MDPD = 2.0 | "acceptable"（≤2.0 が per protocol と整合） |
+| Gamma Knife | PITV = 2.1 | "minor deviation"（2.0〜2.5 が minor と整合） |
+| Linac | MDPD = 2.6 | "major acceptable deviation"（>2.5 が major と整合） |
+| Linac | PITV = 1.9 | "per protocol"（1.0〜2.0 が per protocol と整合） |
+
+計算例は境界そのものを踏んでいないため、上記 3 箇所の未定義は解消されない。
+**実装時にどう扱うかを決め、アプリ内に明示する。**（0813 / 0915 で誤植の補正を明示したのと同じ扱い）
+
+### 併せて入手した文書（照合済み・2026-08-14）
+
+利用者が同時に提供。**両方を通読した結果、どちらも逸脱判定の閾値を持たない。**
+Shaw 1993 が per protocol / minor / major の閾値を持つ唯一の文書である。
+次に同じ調査をする人が読み直さずに済むよう、何が書かれていたかを残す。
+
+#### Halvorsen PH, et al. AAPM-RSS Medical Physics Practice Guideline 9.a. for SRS-SBRT
+
+*J Appl Clin Med Phys.* 2017;18(5):10-21. DOI 10.1002/acm2.12146
+
+**判定基準は無い。** Table 1〜3 は**装置の QA 許容値**である（レーザー位置合わせ 1 mm、
+放射線アイソセントリシティ 1.0 mm、出力恒常性 ±3%、E2E 線量評価 ±5% 等）。
+機械の QA であって、計画の品質を段階分けする基準ではない。
+
+§4.b.g に「標的被覆・線量落ち・適合性指標・重要臓器の線量目標を明記し放射線腫瘍医が
+署名すべき」とあるが、数値の閾値は示されていない。
+
+#### Shakeshaft J, et al. TROG SRS Technical Working Group
+
+*J Med Imaging Radiat Oncol.* 2026;70(2):226-236. DOI 10.1111/1754-9485.70064
+
+**判定基準は無い。** Table 1〜5 はすべて手順・文書化の勧告（"Document…" "Confirm…"）、
+Table 6 は幾何学的精度の監査結果であって基準ではない。
+
+ただし **§3.3.7 Dose Distribution Metrics に、本アプリに関わる記述が 3 つある。**
+
+> Required dose metrics (such as near-max, near-min, conformity index) should be defined in the
+> trial protocol. Note that some dose metrics, for example, conformity index, have multiple
+> definitions and therefore the protocol should define the expected calculation method. ...
+> It is recommended that the ICRU 91 Conformity Index, Gradient Index, near-maximum, and
+> near-minimum doses are reported as a minimum requirement. As discussed in ICRU 91, where
+> multiple PTVs are close to each other are likely to be present (as is commonly the case with BM),
+> calculation of the gradient index may not be possible. Therefore, it may be helpful to include in
+> the trial protocol reporting of additional metrics which have clinical relevance, such as normal
+> brain V12Gy (or V10Gy) excluding CTVs.
+
+| 記述 | 本アプリへの意味 |
+|---|---|
+| 適合性指数には**複数の定義**があり、どの計算方法かを定めるべき | **既存の設計判断の裏づけ。** アプリは CI (RTOG) と CI (Paddick) を別ラベルで併記しており、`manual-tests.md` §1.1 に「ラベルのない数値は曖昧で危険」という理由付きの確認項目がある |
+| 標的が近接して複数ある場合、**gradient index は計算できないことがある** | **アプリの穴。** GI (Paddick) を無条件に計算・表示しており、この但し書きが無い。多発脳転移は頭部 SRS の主要な適応である |
+| 正常脳 **V12Gy**（または V10Gy、CTV 除く）が臨床的に意味を持つ | アプリは計算していない。将来の候補 |
+
+§3.3.8 は「処方と報告は ICRU Report 91 に従うことを強く推奨する」としている。
+ICRU 91 は本アプリで未参照。
+
+---
+
 ## B3. 既存プリセットの書誌情報
 
 `academic/references/bibliography.md` に既出のものは参照先を示す。
