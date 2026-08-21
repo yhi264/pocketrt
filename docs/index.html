@@ -270,11 +270,11 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
       </div>
       <div class="feature">
         <dt>複数コースの合算</dt>
-        <dd>再照射や多部位への照射で、複数のコースを臓器ごとに合算します。</dd>
+        <dd>複数のコースの BED と EQD2 を合算します。コースごとに α/β を指定できます。単純加算であり回復係数を考慮しないため、再照射計画には用いないでください。</dd>
       </div>
       <div class="feature">
         <dt>分割変更の換算</dt>
-        <dd>ある線量分割を別の分割回数に置き換えたときの線量を求めます。</dd>
+        <dd>分割回数または 1 回線量を指定して、別の線量分割に置き換えたときの線量を求めます。</dd>
       </div>
       <div class="feature">
         <dt>治療日程</dt>
@@ -298,14 +298,14 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
           <img src="./images/02-multi-course.webp" width="536" height="1164" alt="合算タブ" loading="lazy">
           <figcaption>
             <div class="fig-no">図 1｜合算</div>
-            <div class="fig-text">複数のコースを臓器ごとに合算する</div>
+            <div class="fig-text">コースごとの BED・EQD2 を合算する</div>
           </figcaption>
         </figure>
         <figure>
           <img src="./images/03-conversion.webp" width="536" height="1164" alt="換算タブ" loading="lazy">
           <figcaption>
             <div class="fig-no">図 2｜換算</div>
-            <div class="fig-text">分割回数を変えたときの線量を求める</div>
+            <div class="fig-text">分割回数または 1 回線量を指定して換算する</div>
           </figcaption>
         </figure>
         <figure>
