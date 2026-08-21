@@ -62,6 +62,11 @@
   }
 }
 
+/* 文字の大きさは px で固定しない。rem を使い、利用者がブラウザや OS で
+   文字を大きくしている場合に紙面全体が追随するようにしてある。読み手には
+   細かい字が読みにくい年代も多く、固定 px はその設定を無視してしまう。 */
+html { font-size: 100%; }
+
 * { box-sizing: border-box; }
 
 body {
@@ -94,8 +99,8 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   padding-top: 28px; padding-bottom: 28px;
   border-bottom: 1px solid var(--rule);
 }
-.site-name { font-family: var(--serif); font-size: 19px; font-weight: 600; letter-spacing: 0.04em; }
-.site-nav { display: flex; gap: 28px; font-size: 13px; }
+.site-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; letter-spacing: 0.04em; }
+.site-nav { display: flex; gap: 28px; font-size: 0.875rem; }
 .site-nav a { color: var(--muted); }
 
 /* ── ヒーロー ─────────────────────────────── */
@@ -106,19 +111,19 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   align-items: start;
   padding-top: 88px; padding-bottom: 72px;
 }
-.eyebrow { font-size: 11px; letter-spacing: 0.22em; color: var(--faint); margin-bottom: 28px; }
+.eyebrow { font-size: 0.75rem; letter-spacing: 0.22em; color: var(--faint); margin-bottom: 28px; }
 .hero h1 {
-  font-size: 46px; line-height: 1.45; letter-spacing: 0.01em;
+  font-size: 3rem; line-height: 1.45; letter-spacing: 0.01em;
   margin: 0 0 28px; text-wrap: pretty;
 }
-.lede { font-size: 15px; line-height: 2.1; color: var(--body); margin: 0 0 20px; max-width: 30em; text-wrap: pretty; }
-.sub { font-size: 14px; line-height: 2; color: var(--muted); margin: 0 0 40px; max-width: 30em; }
+.lede { font-size: 1.0625rem; line-height: 2.1; color: var(--body); margin: 0 0 20px; max-width: 30em; text-wrap: pretty; }
+.sub { font-size: 0.9375rem; line-height: 2; color: var(--muted); margin: 0 0 40px; max-width: 30em; }
 
 .cta-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 .cta {
   display: inline-flex; align-items: center; gap: 9px;
   background: var(--btn-bg); color: var(--btn-ink);
-  padding: 14px 26px; font-size: 14px; font-weight: 500; letter-spacing: 0.02em;
+  padding: 15px 28px; font-size: 0.9375rem; font-weight: 500; letter-spacing: 0.02em;
   min-height: 48px;
 }
 .cta:hover { text-decoration: none; opacity: 0.86; }
@@ -127,12 +132,12 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 .cta-pending {
   display: inline-flex; align-items: center; gap: 9px;
   border: 1px solid var(--rule); color: var(--muted);
-  padding: 14px 26px; font-size: 14px; letter-spacing: 0.02em; min-height: 48px;
+  padding: 15px 28px; font-size: 0.9375rem; letter-spacing: 0.02em; min-height: 48px;
 }
 
 .shot-hero { border: 1px solid var(--rule); box-shadow: 0 24px 60px rgba(22, 22, 26, 0.10); width: 268px; }
 .hero-figure { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
-.hero-figure figcaption { font-size: 11px; color: var(--faint); letter-spacing: 0.04em; }
+.hero-figure figcaption { font-size: 0.8125rem; color: var(--faint); letter-spacing: 0.04em; }
 
 /* ── 節の見出し ───────────────────────────── */
 .rule-head {
@@ -140,13 +145,13 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   padding-top: 18px;
   display: flex; align-items: baseline; gap: 16px; flex-wrap: wrap;
 }
-.rule-head h2 { font-size: 20px; margin: 0; }
-.rule-head .note { font-size: 12px; color: var(--faint); }
+.rule-head h2 { font-size: 1.375rem; margin: 0; }
+.rule-head .note { font-size: 0.8125rem; color: var(--faint); }
 
 /* ── 機能 ─────────────────────────────────── */
 .feature { display: grid; grid-template-columns: 152px minmax(0, 1fr); gap: 28px; padding: 26px 0; border-bottom: 1px solid var(--rule); }
-.feature dt { font-family: var(--serif); font-size: 15px; font-weight: 600; color: var(--accent); }
-.feature dd { margin: 0; font-size: 14px; line-height: 2; color: var(--body); text-wrap: pretty; }
+.feature dt { font-family: var(--serif); font-size: 1.0625rem; font-weight: 600; color: var(--accent); }
+.feature dd { margin: 0; font-size: 1rem; line-height: 1.95; color: var(--body); text-wrap: pretty; }
 .features { margin: 8px 0 0; }
 
 /* ── 図版（横スクロール） ──────────────────── */
@@ -161,17 +166,17 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
 }
-.plate > figure { width: 248px; flex-shrink: 0; scroll-snap-align: start; margin: 0; display: flex; flex-direction: column; gap: 12px; }
+.plate > figure { width: 16.5rem; flex-shrink: 0; scroll-snap-align: start; margin: 0; display: flex; flex-direction: column; gap: 12px; }
 .plate img { border: 1px solid var(--rule); width: 100%; }
 .plate figcaption { border-top: 1px solid var(--rule); padding-top: 10px; }
-.fig-no { font-size: 11px; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 5px; }
-.fig-text { font-size: 12px; line-height: 1.85; color: var(--muted); text-wrap: pretty; }
+.fig-label { font-size: 0.8125rem; letter-spacing: 0.06em; color: var(--accent); margin-bottom: 5px; }
+.fig-text { font-size: 0.875rem; line-height: 1.8; color: var(--muted); text-wrap: pretty; }
 
 /* ── 品質の節 ─────────────────────────────── */
 .quality { background: var(--panel); padding: 46px 48px; margin-top: 64px; }
 .quality-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 36px; align-items: start; }
-.quality h2 { font-size: 20px; margin: 0 0 14px; line-height: 1.6; }
-.quality p { font-size: 13px; line-height: 2.1; color: var(--body); margin: 0 0 18px; text-wrap: pretty; }
+.quality h2 { font-size: 1.375rem; margin: 0 0 14px; line-height: 1.6; }
+.quality p { font-size: 0.9375rem; line-height: 2; color: var(--body); margin: 0 0 18px; text-wrap: pretty; }
 .quality p:last-child { margin-bottom: 0; }
 .quality-figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; }
 .quality-figs figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -180,7 +185,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 
 /* ── 免責 ─────────────────────────────────── */
 .disclaimer { margin-top: 48px; border-left: 2px solid var(--accent); padding: 6px 0 6px 22px; }
-.disclaimer p { font-size: 13px; line-height: 2.1; color: var(--body); margin: 0; max-width: 44em; text-wrap: pretty; }
+.disclaimer p { font-size: 0.875rem; line-height: 2; color: var(--body); margin: 0; max-width: 44em; text-wrap: pretty; }
 
 /* ── フッター ─────────────────────────────── */
 .site-foot {
@@ -188,8 +193,8 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   border-top: 1px solid var(--rule);
   display: flex; justify-content: space-between; align-items: baseline; gap: 20px; flex-wrap: wrap;
 }
-.site-foot .copy { font-size: 12px; color: var(--faint); }
-.site-foot nav { display: flex; gap: 26px; font-size: 12px; flex-wrap: wrap; }
+.site-foot .copy { font-size: 0.8125rem; color: var(--faint); }
+.site-foot nav { display: flex; gap: 26px; font-size: 0.8125rem; flex-wrap: wrap; }
 
 /* ── 狭い画面 ─────────────────────────────── */
 @media (max-width: 860px) {
@@ -199,7 +204,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   .site-nav { gap: 20px; }
 
   .hero { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 52px; padding-bottom: 52px; }
-  .hero h1 { font-size: 32px; line-height: 1.5; }
+  .hero h1 { font-size: 2.125rem; line-height: 1.5; }
   .hero-figure { align-items: flex-start; }
   .shot-hero { width: min(268px, 72vw); }
 
@@ -297,21 +302,21 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
         <figure>
           <img src="./images/02-multi-course.webp" width="536" height="1164" alt="合算タブ" loading="lazy">
           <figcaption>
-            <div class="fig-no">図 1｜合算</div>
+            <div class="fig-label">合算</div>
             <div class="fig-text">コースごとの BED・EQD2 を合算する</div>
           </figcaption>
         </figure>
         <figure>
           <img src="./images/03-conversion.webp" width="536" height="1164" alt="換算タブ" loading="lazy">
           <figcaption>
-            <div class="fig-no">図 2｜換算</div>
+            <div class="fig-label">換算</div>
             <div class="fig-text">分割回数または 1 回線量を指定して換算する</div>
           </figcaption>
         </figure>
         <figure>
           <img src="./images/05-schedule-calendar.webp" width="536" height="1164" alt="予定タブのカレンダー。治療日、週末、祝日を色と記号で区別している" loading="lazy">
           <figcaption>
-            <div class="fig-no">図 3｜予定</div>
+            <div class="fig-label">予定</div>
             <div class="fig-text">祝日・週末・個別休止を色と記号で区別する</div>
           </figcaption>
         </figure>
@@ -331,14 +336,14 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
           <figure>
             <img src="./images/06-quality-lung-sbrt.webp" width="536" height="1164" alt="肺 SBRT の逸脱判定。R100% が Minor deviation、R50% と D2cm が Per protocol と表示されている" loading="lazy">
             <figcaption>
-              <div class="fig-no">図 4｜公表プロトコル</div>
+              <div class="fig-label">公表プロトコル</div>
               <div class="fig-text">RTOG 0813 の判定。出典と許容値を併記</div>
             </figcaption>
           </figure>
           <figure>
             <img src="./images/08-quality-institutional.webp" width="536" height="1164" alt="自施設の基準による判定。基準内、基準をやや超える、という段階名で表示されている" loading="lazy">
             <figcaption>
-              <div class="fig-no">図 5｜自施設の基準</div>
+              <div class="fig-label">自施設の基準</div>
               <div class="fig-text">用語を変え、注記を常時表示する</div>
             </figcaption>
           </figure>
