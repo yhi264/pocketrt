@@ -5,33 +5,69 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PocketRT プライバシーポリシー</title>
 <style>
-  :root { color-scheme: light dark; }
-  body {
-    font-family: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
-    line-height: 1.9;
-    max-width: 44rem;
-    margin: 0 auto;
-    padding: 2.5rem 1.2rem 4rem;
-    color: #1c1c1e;
-    background: #fff;
+/*
+  紹介ページ（../index.html）と同じ色と書体を使う。Web フォントは読まない
+  （理由は紹介ページの冒頭に書いた）。見出しだけ明朝にして、本文は角ゴシック。
+  この対比が 2 枚のページに共通する版面の骨格である。
+*/
+:root {
+  color-scheme: light dark;
+
+  --serif: "Hiragino Mincho ProN", "Yu Mincho", YuMincho, "Noto Serif JP", serif;
+  --sans: -apple-system, BlinkMacSystemFont, "Hiragino Sans", "Noto Sans JP", sans-serif;
+
+  --bg: #fcfcfa;
+  --ink: #16161a;
+  --body: #3d3d44;
+  --faint: #8a8578;
+  --rule: #e4e2dc;
+  --accent: #1f3a5f;
+  --panel: #f4f2ec;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #111114;
+    --ink: #e8e8ea;
+    --body: #c3c3c9;
+    --faint: #85837c;
+    --rule: #2a2a2e;
+    --accent: #93b4d8;
+    --panel: #17171b;
   }
-  h1 { font-size: 1.55rem; margin-bottom: 0.2rem; }
-  h2 { font-size: 1.1rem; margin-top: 2.2rem; }
-  .updated { color: #6b6b70; font-size: 0.9rem; margin-top: 0; }
-  .note {
-    border-left: 3px solid #2e6da4;
-    padding: 0.4rem 0 0.4rem 1rem;
-    margin: 1.6rem 0;
-    background: rgba(46, 109, 164, 0.06);
-  }
-  footer { margin-top: 3rem; font-size: 0.85rem; color: #6b6b70; }
-  a { color: #2e6da4; }
-  @media (prefers-color-scheme: dark) {
-    body { background: #111114; color: #e4e4e7; }
-    .updated, footer { color: #9a9aa0; }
-    .note { background: rgba(90, 160, 220, 0.12); border-left-color: #5aa0dc; }
-    a { color: #7ab4e8; }
-  }
+}
+
+* { box-sizing: border-box; }
+
+body {
+  font-family: var(--sans);
+  font-feature-settings: "palt";
+  line-height: 1.9;
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 2.5rem 1.5rem 4rem;
+  color: var(--body);
+  background: var(--bg);
+  -webkit-text-size-adjust: 100%;
+}
+
+h1, h2 { font-family: var(--serif); color: var(--ink); font-weight: 600; }
+h1 { font-size: 1.6rem; margin-bottom: 0.2rem; letter-spacing: 0.01em; }
+h2 { font-size: 1.1rem; margin-top: 2.4rem; }
+
+.updated { color: var(--faint); font-size: 0.9rem; margin-top: 0; }
+
+.note {
+  border-left: 2px solid var(--accent);
+  padding: 0.6rem 0 0.6rem 1.2rem;
+  margin: 1.8rem 0;
+  background: var(--panel);
+}
+
+footer { margin-top: 3.5rem; padding-top: 1.4rem; border-top: 1px solid var(--rule); font-size: 0.85rem; color: var(--faint); }
+
+a { color: var(--accent); text-decoration: none; }
+a:hover { text-decoration: underline; }
 </style>
 </head>
 <body>
