@@ -127,13 +127,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   min-height: 48px;
 }
 .cta:hover { text-decoration: none; opacity: 0.86; }
-/* 公開前の状態。App Store の URL が決まったら .cta-pending を .cta に戻し、
-   href を差し替え、文言を「App Store で入手」にする。 */
-.cta-pending {
-  display: inline-flex; align-items: center; gap: 9px;
-  border: 1px solid var(--rule); color: var(--muted);
-  padding: 15px 28px; font-size: 0.9375rem; letter-spacing: 0.02em; min-height: 48px;
-}
+.cta-note { font-size: 0.875rem; color: var(--muted); letter-spacing: 0.02em; }
 
 .shot-hero { border: 1px solid var(--rule); box-shadow: 0 24px 60px rgba(22, 22, 26, 0.10); width: 268px; }
 .hero-figure { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
@@ -246,15 +240,11 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
       <p class="lede">生物学的等価線量の計算、複数コースの合算、治療日程、プラン品質指標の逸脱判定。放射線治療に従事する医師・医学物理士・診療放射線技師のための計算ツールです。</p>
       <p class="sub">通信を一切行いません。入力した内容も計算結果も、端末の外に出ることはありません。</p>
       <div class="cta-row">
-        <!-- App Store 公開後にここを差し替える:
-             <a class="cta" href="https://apps.apple.com/jp/app/…">
-               <svg …></svg> App Store で入手
-             </a>
-        -->
-        <span class="cta-pending">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"></circle><path d="M12 7v5l3 2"></path></svg>
-          App Store 公開準備中
-        </span>
+        <a class="cta" href="https://apps.apple.com/app/id6796613655">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 11l5 5 5-5"></path><path d="M4 20h16"></path></svg>
+          App Store で入手
+        </a>
+        <span class="cta-note">無料・App 内課金なし</span>
       </div>
     </div>
     <figure class="hero-figure">
