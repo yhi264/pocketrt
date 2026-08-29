@@ -120,13 +120,13 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 .sub { font-size: 0.9375rem; line-height: 2; color: var(--muted); margin: 0 0 40px; max-width: 30em; }
 
 .cta-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-.cta {
-  display: inline-flex; align-items: center; gap: 9px;
-  background: var(--btn-bg); color: var(--btn-ink);
-  padding: 15px 28px; font-size: 0.9375rem; font-weight: 500; letter-spacing: 0.02em;
-  min-height: 48px;
-}
-.cta:hover { text-decoration: none; opacity: 0.86; }
+/* App Store のバッジは Apple 公式の配布物をそのまま置く。加工しない。
+   自作のリンゴマークは App Store Marketing Guidelines 違反にあたる。
+   画像は自前で持つ。この紹介ページは学会会場の回線で開かれるので、
+   外部への往復を 1 つでも減らす（Web フォントを読まないのと同じ理由）。 */
+.cta-badge { display: inline-flex; }
+.cta-badge:hover { opacity: 0.86; }
+.cta-badge img { display: block; width: 147px; height: 54px; }
 .cta-note { font-size: 0.875rem; color: var(--muted); letter-spacing: 0.02em; }
 
 .shot-hero { border: 1px solid var(--rule); box-shadow: 0 24px 60px rgba(22, 22, 26, 0.10); width: 268px; }
@@ -240,9 +240,8 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
       <p class="lede">生物学的等価線量の計算、複数コースの合算、治療日程、プラン品質指標の逸脱判定。放射線治療に従事する医師・医学物理士・診療放射線技師のための計算ツールです。</p>
       <p class="sub">通信を一切行いません。入力した内容も計算結果も、端末の外に出ることはありません。</p>
       <div class="cta-row">
-        <a class="cta" href="https://apps.apple.com/app/id6796613655">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3v12"></path><path d="M7 11l5 5 5-5"></path><path d="M4 20h16"></path></svg>
-          App Store で入手
+        <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
+          <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
         </a>
         <span class="cta-note">無料・App 内課金なし</span>
       </div>
