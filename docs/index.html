@@ -156,10 +156,16 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 /* App Store のバッジは Apple 公式の配布物をそのまま置く。加工しない。
    自作のリンゴマークは App Store Marketing Guidelines 違反にあたる。
    画像は自前で持つ。この紹介ページは学会会場の回線で開かれるので、
-   外部への往復を 1 つでも減らす（Web フォントを読まないのと同じ理由）。 */
+   外部への往復を 1 つでも減らす（Web フォントを読まないのと同じ理由）。
+
+   明暗で版を替える。Apple は黒版（blk）と白版（wht）の両方を配っており、
+   黒版を暗い地に置くと細い白フチだけの黒い箱になって沈む。picture の
+   media で切り替えれば JS も要らず、srcset に対応しない環境は img の
+   黒版に落ちる。 */
 .cta-badge { display: inline-flex; }
 .cta-badge:hover { opacity: 0.86; }
-.cta-badge img { display: block; width: 147px; height: 54px; }
+.cta-badge picture, .cta-badge img { display: block; }
+.cta-badge img { width: 147px; height: 54px; }
 .cta-note { font-size: 0.875rem; color: var(--muted); letter-spacing: 0.02em; }
 
 /* 読み終えた人の目の前にもう 1 つ置く。ページの目的はインストールだが、
@@ -292,7 +298,10 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
       <p class="sub">通信を一切行いません。入力した内容も計算結果も、端末の外に出ることはありません。</p>
       <div class="cta-row">
         <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
-          <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+          <picture>
+            <source srcset="./images/app-store-badge-ja-wht.svg" media="(prefers-color-scheme: dark)">
+            <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+          </picture>
         </a>
         <span class="cta-note">無料・App 内課金なし</span>
       </div>
@@ -393,7 +402,10 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 
     <div class="cta-repeat">
       <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
-        <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+        <picture>
+          <source srcset="./images/app-store-badge-ja-wht.svg" media="(prefers-color-scheme: dark)">
+          <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+        </picture>
       </a>
       <span class="cta-note">無料・App 内課金なし</span>
     </div>
