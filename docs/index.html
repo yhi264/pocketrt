@@ -12,6 +12,15 @@
 <meta property="og:description" content="線量計算、複数コースの合算、治療日程、プラン品質指標の逸脱判定。すべて端末内で完結し、通信を行いません。">
 <meta name="twitter:card" content="summary">
 
+<!-- アイコンはアプリの AppIcon-1024.png から起こしている。ブラウザは既定で
+     ドメイン直下の /favicon.ico を探すが、この配信は /pocketrt/ 配下なので
+     そこには置けない。明示するとその探索が起きない（404 が消える）。 -->
+<link rel="icon" href="./favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" href="./icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="./apple-touch-icon.png">
+<meta name="theme-color" content="#fcfcfa" media="(prefers-color-scheme: light)">
+<meta name="theme-color" content="#111114" media="(prefers-color-scheme: dark)">
+
 <style>
 /*
   書体は Web フォントを読まない。
@@ -84,6 +93,22 @@ body {
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
 
+/* 押した「瞬間」に返す。:hover だけでは足りない。
+   このページの主な入口は学会会場で QR を読んだ iPhone で、iOS の :hover は
+   タップしたあとに貼り付くだけなので、押下のフィードバックにならない。
+   つまり主戦場でだけ無反応になっていた。 */
+a:active { opacity: 0.55; }
+.cta-badge:active { opacity: 0.7; transform: scale(0.97); }
+.cta-badge { transition: transform 100ms ease-out; }
+
+/* キーボードで辿る人向け。text-decoration: none にしてあるぶん、
+   既定のリング頼みにせず自分で描く。 */
+a:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
 /* height: auto を必ず書く。width/height 属性は読み込み前に場所を確保する
    ために要るが、height を auto にしないと、その属性値が生のレイアウト高さ
    として効いてしまう。max-width で幅が縮んだとき、高さだけ元のままになり
@@ -91,6 +116,11 @@ a:hover { text-decoration: underline; }
 img { display: block; max-width: 100%; height: auto; }
 
 h1, h2 { font-family: var(--serif); font-weight: 600; }
+
+/* 行送りと字送りは、文字の大きさに反比例させる。大きい字は行が離れるほど
+   目が迷い、字も離れて見えるので詰める。小さい字は逆に開くほうが読める。
+   全体に palt（詰める）を効かせてあるので、見出しで letter-spacing を
+   正の値にすると打ち消し合っていた。 */
 
 /* ── ヘッダー ─────────────────────────────── */
 .site-head {
@@ -102,6 +132,9 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 .site-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; letter-spacing: 0.04em; }
 .site-nav { display: flex; gap: 28px; font-size: 0.875rem; }
 .site-nav a { color: var(--muted); }
+/* 実測で高さ 21 px しかなかった（Apple の最小は 44 x 44 pt）。負のマージンで
+   見た目の位置を保ったまま、触れる範囲だけ上下に広げる。 */
+.site-nav a { display: inline-block; padding: 12px 0; margin: -12px 0; }
 
 /* ── ヒーロー ─────────────────────────────── */
 .hero {
@@ -113,11 +146,11 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 }
 .eyebrow { font-size: 0.75rem; letter-spacing: 0.22em; color: var(--faint); margin-bottom: 28px; }
 .hero h1 {
-  font-size: 3rem; line-height: 1.45; letter-spacing: 0.01em;
+  font-size: 3rem; line-height: 1.3; letter-spacing: -0.01em;
   margin: 0 0 28px; text-wrap: pretty;
 }
-.lede { font-size: 1.0625rem; line-height: 2.1; color: var(--body); margin: 0 0 20px; max-width: 30em; text-wrap: pretty; }
-.sub { font-size: 0.9375rem; line-height: 2; color: var(--muted); margin: 0 0 40px; max-width: 30em; }
+.lede { font-size: 1.0625rem; line-height: 1.85; color: var(--body); margin: 0 0 20px; max-width: 30em; text-wrap: pretty; }
+.sub { font-size: 0.9375rem; line-height: 1.85; color: var(--muted); margin: 0 0 40px; max-width: 30em; }
 
 .cta-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 /* App Store のバッジは Apple 公式の配布物をそのまま置く。加工しない。
@@ -128,6 +161,16 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 .cta-badge:hover { opacity: 0.86; }
 .cta-badge img { display: block; width: 147px; height: 54px; }
 .cta-note { font-size: 0.875rem; color: var(--muted); letter-spacing: 0.02em; }
+
+/* 読み終えた人の目の前にもう 1 つ置く。ページの目的はインストールだが、
+   バッジは最初の 1 画面にしか無く、スクロールすると画面から消えていた。
+   「できること」「判定と根拠」を読んで納得した人ほど、上へ戻らないと押せない。
+   紙面の性格は変えたくないので、囲みも色も付けず中央に静かに置く。 */
+.cta-repeat {
+  display: flex; align-items: center; justify-content: center;
+  gap: 14px; flex-wrap: wrap;
+  margin-top: 52px;
+}
 
 .shot-hero { border: 1px solid var(--rule); box-shadow: 0 24px 60px rgba(22, 22, 26, 0.10); width: 268px; }
 .hero-figure { display: flex; flex-direction: column; align-items: flex-end; gap: 12px; }
@@ -145,7 +188,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 /* ── 機能 ─────────────────────────────────── */
 .feature { display: grid; grid-template-columns: 152px minmax(0, 1fr); gap: 28px; padding: 26px 0; border-bottom: 1px solid var(--rule); }
 .feature dt { font-family: var(--serif); font-size: 1.0625rem; font-weight: 600; color: var(--accent); }
-.feature dd { margin: 0; font-size: 1rem; line-height: 1.95; color: var(--body); text-wrap: pretty; }
+.feature dd { margin: 0; font-size: 1rem; line-height: 1.85; color: var(--body); text-wrap: pretty; }
 .features { margin: 8px 0 0; }
 
 /* ── 図版（横スクロール） ──────────────────── */
@@ -157,7 +200,6 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   overflow-x: auto;
   padding-bottom: 8px;
   scroll-snap-type: x proximity;
-  -webkit-overflow-scrolling: touch;
   scrollbar-width: thin;
 }
 .plate > figure { width: 16.5rem; flex-shrink: 0; scroll-snap-align: start; margin: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -169,8 +211,8 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 /* ── 品質の節 ─────────────────────────────── */
 .quality { background: var(--panel); padding: 46px 48px; margin-top: 64px; }
 .quality-grid { display: grid; grid-template-columns: 5fr 7fr; gap: 36px; align-items: start; }
-.quality h2 { font-size: 1.375rem; margin: 0 0 14px; line-height: 1.6; }
-.quality p { font-size: 0.9375rem; line-height: 2; color: var(--body); margin: 0 0 18px; text-wrap: pretty; }
+.quality h2 { font-size: 1.375rem; margin: 0 0 14px; line-height: 1.5; }
+.quality p { font-size: 0.9375rem; line-height: 1.85; color: var(--body); margin: 0 0 18px; text-wrap: pretty; }
 .quality p:last-child { margin-bottom: 0; }
 .quality-figs { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 26px; }
 .quality-figs figure { margin: 0; display: flex; flex-direction: column; gap: 12px; }
@@ -188,7 +230,10 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   display: flex; justify-content: space-between; align-items: baseline; gap: 20px; flex-wrap: wrap;
 }
 .site-foot .copy { font-size: 0.8125rem; color: var(--faint); }
-.site-foot nav { display: flex; gap: 26px; font-size: 0.8125rem; flex-wrap: wrap; }
+/* フッターは折り返す。ここで負のマージンを使うと、折り返した行どうしで
+   当たり判定が重なって取り違えが起きる。素直に高さを足す。 */
+.site-foot nav { display: flex; column-gap: 26px; row-gap: 0; font-size: 0.8125rem; flex-wrap: wrap; }
+.site-foot nav a { display: inline-block; padding: 12px 0; }
 
 /* ── 狭い画面 ─────────────────────────────── */
 @media (max-width: 860px) {
@@ -198,7 +243,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   .site-nav { gap: 20px; }
 
   .hero { grid-template-columns: minmax(0, 1fr); gap: 40px; padding-top: 52px; padding-bottom: 52px; }
-  .hero h1 { font-size: 2.125rem; line-height: 1.5; }
+  .hero h1 { font-size: 2.125rem; line-height: 1.4; }
   .hero-figure { align-items: flex-start; }
   .shot-hero { width: min(268px, 72vw); }
 
@@ -210,6 +255,12 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   .quality-figs figure { max-width: 320px; }
 
   .site-foot { flex-direction: column; align-items: flex-start; gap: 14px; }
+}
+
+/* 高コントラストを求めている人には、薄い階調を畳んで本文の濃さに寄せる。
+   色そのものは配色ごとの変数に任せてあるので、明暗どちらでも成り立つ。 */
+@media (prefers-contrast: more) {
+  :root { --muted: var(--body); --faint: var(--body); --rule: var(--body); }
 }
 
 /* 図版の横スクロールは、紙面の余白ぶんだけ内側に持つ。
@@ -287,7 +338,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
       <span class="note">iPhone 17 Pro Max</span>
     </div>
     <div class="plate-wrap">
-      <div class="plate">
+      <div class="plate" tabindex="0" role="group" aria-label="画面の一覧。横にスクロールします">
         <figure>
           <img src="./images/02-multi-course.webp" width="536" height="1164" alt="合算タブ" loading="lazy">
           <figcaption>
@@ -338,6 +389,13 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
           </figure>
         </div>
       </div>
+    </div>
+
+    <div class="cta-repeat">
+      <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
+        <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+      </a>
+      <span class="cta-note">無料・App 内課金なし</span>
     </div>
 
     <div class="disclaimer">
