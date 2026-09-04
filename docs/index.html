@@ -267,14 +267,27 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
    画像は自前で持つ。この紹介ページは学会会場の回線で開かれるので、
    外部への往復を 1 つでも減らす（Web フォントを読まないのと同じ理由）。
 
-   明暗で版を替える。Apple は黒版（blk）と白版（wht）の両方を配っており、
-   黒版を暗い地に置くと細い白フチだけの黒い箱になって沈む。picture の
-   media で切り替えれば JS も要らず、srcset に対応しない環境は img の
-   黒版に落ちる。 */
+   版は 2 つの軸で替わる。明暗と、言語である。
+
+   明暗: Apple は黒版（blk）と白版（wht）の両方を配っており、黒版を暗い地に
+   置くと細い白フチだけの黒い箱になって沈む。picture の media で切り替えれば
+   JS も要らず、srcset に対応しない環境は img の黒版に落ちる。
+
+   言語: 日本語版と英語版でバッジそのものを替える。a 要素ごと lang で複製し、
+   本文と同じ規則で出し分ける（JS を足さずに済む）。 */
 .cta-badge { display: inline-flex; }
 .cta-badge:hover { opacity: 0.86; }
 .cta-badge picture, .cta-badge img { display: block; }
 .cta-badge img { width: 147px; height: 54px; }
+
+/* 英語版バッジは縦横比が違う。Apple の配布物は JP が 108.85 x 40（2.721）、
+   US-UK が 119.66 x 40（2.992）で、147 x 54 をそのまま当てると横に潰れる。
+   バッジの変形は App Store Marketing Guidelines が禁じている。
+
+   高さだけ 54px で揃え、幅は SVG の固有比から導かせる。数字を書き込むと
+   丸めのぶんだけ必ず歪むので、width は auto にして browser に計算させる
+   （実測 161.5px）。 */
+html[data-lang="en"] .cta-badge img { width: auto; height: 54px; }
 .cta-note { font-size: 0.875rem; color: var(--muted); letter-spacing: 0.02em; }
 
 /* 読み終えた人の目の前にもう 1 つ置く。ページの目的はインストールだが、
@@ -429,13 +442,16 @@ html[data-lang="en"] .feature dt { line-height: 1.5; }
         <p class="ui-note">The app’s interface is in Japanese only, and it is not localized into English. Every screenshot on this page shows the Japanese interface.</p>
       </div>
       <div class="cta-row">
-        <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
+        <a class="cta-badge" lang="ja" href="https://apps.apple.com/app/id6796613655">
           <picture>
             <source srcset="./images/app-store-badge-ja-wht.svg" media="(prefers-color-scheme: dark)">
-            <img src="./images/app-store-badge-ja.svg" width="147" height="54"
-                 alt="App Store でダウンロード"
-                 data-alt-ja="App Store でダウンロード"
-                 data-alt-en="Download on the App Store">
+            <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+          </picture>
+        </a>
+        <a class="cta-badge" lang="en" href="https://apps.apple.com/app/id6796613655">
+          <picture>
+            <source srcset="./images/app-store-badge-en-wht.svg" media="(prefers-color-scheme: dark)">
+            <img src="./images/app-store-badge-en.svg" width="162" height="54" alt="Download on the App Store">
           </picture>
         </a>
         <span class="cta-note" lang="ja">無料・App 内課金なし</span>
@@ -584,13 +600,16 @@ html[data-lang="en"] .feature dt { line-height: 1.5; }
     </div>
 
     <div class="cta-repeat">
-      <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
+      <a class="cta-badge" lang="ja" href="https://apps.apple.com/app/id6796613655">
         <picture>
           <source srcset="./images/app-store-badge-ja-wht.svg" media="(prefers-color-scheme: dark)">
-          <img src="./images/app-store-badge-ja.svg" width="147" height="54"
-               alt="App Store でダウンロード"
-               data-alt-ja="App Store でダウンロード"
-               data-alt-en="Download on the App Store">
+          <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+        </picture>
+      </a>
+      <a class="cta-badge" lang="en" href="https://apps.apple.com/app/id6796613655">
+        <picture>
+          <source srcset="./images/app-store-badge-en-wht.svg" media="(prefers-color-scheme: dark)">
+          <img src="./images/app-store-badge-en.svg" width="162" height="54" alt="Download on the App Store">
         </picture>
       </a>
       <span class="cta-note" lang="ja">無料・App 内課金なし</span>
