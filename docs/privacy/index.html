@@ -5,6 +5,15 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PocketRT プライバシーポリシー</title>
 
+<!-- 紹介ページと同じアイコンを明示する。パスは 1 階層上（../）。
+
+     書かないとブラウザが既定でドメイン直下の /favicon.ico を探しに行くが、
+     この配信は /pocketrt/ 配下なのでそこには何も無く、404 が 1 件出ていた。
+     紹介ページは同じ理由で最初から明示してあり、こちらだけ抜けていた。 -->
+<link rel="icon" href="../favicon.ico" sizes="16x16 32x32 48x48">
+<link rel="icon" type="image/png" href="../icon-192.png" sizes="192x192">
+<link rel="apple-touch-icon" href="../apple-touch-icon.png">
+
 <!--
   紹介ページ（../index.html）と同じ仕掛けで日英を出し分ける。選択は
   localStorage の同じ鍵に入れてあるので、あちらで EN にした人はこの
