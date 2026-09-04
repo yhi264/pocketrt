@@ -4,6 +4,53 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>PocketRT プライバシーポリシー</title>
+
+<!--
+  紹介ページ（../index.html）と同じ仕掛けで日英を出し分ける。選択は
+  localStorage の同じ鍵に入れてあるので、あちらで EN にした人はこの
+  ページも英語で開く。描画より先に決めるので、切り替わる瞬間は無い。
+-->
+<script>
+(function () {
+  var TITLE = { ja: 'PocketRT プライバシーポリシー', en: 'PocketRT Privacy Policy' };
+  var root = document.documentElement;
+
+  function pick() {
+    try {
+      var q = new URLSearchParams(location.search).get('lang');
+      if (q === 'ja' || q === 'en') return q;
+      var saved = localStorage.getItem('pocketrt-lang');
+      if (saved === 'ja' || saved === 'en') return saved;
+    } catch (e) {}
+    return /^ja/i.test(navigator.language || 'ja') ? 'ja' : 'en';
+  }
+
+  function apply(lang) {
+    root.dataset.lang = lang;
+    root.lang = lang;
+    document.title = TITLE[lang];
+    document.querySelectorAll('[data-aria-ja]').forEach(function (el) {
+      el.setAttribute('aria-label', el.getAttribute('data-aria-' + lang));
+    });
+  }
+
+  var lang = pick();
+  apply(lang);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    apply(lang);
+    var btn = document.getElementById('lang-toggle');
+    if (!btn) return;
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      lang = lang === 'ja' ? 'en' : 'ja';
+      apply(lang);
+      try { localStorage.setItem('pocketrt-lang', lang); } catch (e) {}
+    });
+  });
+})();
+</script>
+
 <style>
 /*
   紹介ページ（../index.html）と同じ色と書体を使う。Web フォントは読まない
@@ -19,6 +66,7 @@
   --bg: #fcfcfa;
   --ink: #16161a;
   --body: #3d3d44;
+  --muted: #6a6a72;
   --faint: #8a8578;
   --rule: #e4e2dc;
   --accent: #1f3a5f;
@@ -30,6 +78,7 @@
     --bg: #111114;
     --ink: #e8e8ea;
     --body: #c3c3c9;
+    --muted: #9a9aa2;
     --faint: #85837c;
     --rule: #2a2a2e;
     --accent: #93b4d8;
@@ -38,6 +87,11 @@
 }
 
 * { box-sizing: border-box; }
+
+/* 出し分けは紹介ページと同じ否定形。JS が動かなければ日本語だけが残る。 */
+html:not([data-lang="en"]) [lang="en"] { display: none; }
+html[data-lang="en"] [lang="ja"] { display: none; }
+[hidden] { display: none !important; }
 
 body {
   font-family: var(--sans);
@@ -57,6 +111,27 @@ h2 { font-size: 1.1rem; margin-top: 2.4rem; }
 
 .updated { color: var(--faint); font-size: 0.9rem; margin-top: 0; }
 
+/* 紹介ページへ戻る道と言語の切り替え。これまでこのページには戻り道が
+   無く、英語に切り替えた人は紹介ページへ帰れなかった。 */
+.topbar {
+  display: flex; justify-content: space-between; align-items: center;
+  gap: 16px; flex-wrap: wrap;
+  font-size: 0.85rem;
+  margin-bottom: 2.2rem;
+}
+/* line-height を固定する理由は紹介ページの .site-nav a に書いた。
+   既定のままだと欧字で 41 px に縮み、44 x 44 pt を割る。 */
+.topbar a, .lang-toggle { display: inline-block; padding: 12px 0; margin: -12px 0; line-height: 21px; }
+
+.lang-toggle {
+  font-family: inherit; font-size: 0.85rem; letter-spacing: 0.04em;
+  color: var(--muted);
+  background: none; border: 0;
+  cursor: pointer;
+}
+.lang-toggle:hover { color: var(--ink); text-decoration: underline; }
+.lang-toggle:active { opacity: 0.55; }
+
 .note {
   border-left: 2px solid var(--accent);
   padding: 0.6rem 0 0.6rem 1.2rem;
@@ -68,34 +143,72 @@ footer { margin-top: 3.5rem; padding-top: 1.4rem; border-top: 1px solid var(--ru
 
 a { color: var(--accent); text-decoration: none; }
 a:hover { text-decoration: underline; }
+a:active { opacity: 0.55; }
+
+a:focus-visible,
+.lang-toggle:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 3px;
+  border-radius: 3px;
+}
+
+@media (prefers-contrast: more) {
+  :root { --muted: var(--body); --faint: var(--body); --rule: var(--body); }
+}
 </style>
 </head>
 <body>
 
-<h1>PocketRT プライバシーポリシー</h1>
-<p class="updated">最終更新日: 2026年7月31日</p>
+<div class="topbar">
+  <a href="../">← PocketRT</a>
+  <button type="button" id="lang-toggle" class="lang-toggle" hidden
+          data-aria-ja="English に切り替える" data-aria-en="Switch to Japanese"
+          aria-label="English に切り替える">
+    <span lang="ja">EN</span><span lang="en">日本語</span>
+  </button>
+</div>
 
-<h2>収集する情報</h2>
-<p>PocketRT は、利用者の個人情報を一切収集しません。</p>
-<p>本アプリに入力された線量、分割回数、治療開始日などの情報は、すべて利用者の端末内でのみ処理されます。開発者を含むいかなる第三者にも送信されることはありません。</p>
+<h1 lang="ja">PocketRT プライバシーポリシー</h1>
+<h1 lang="en">PocketRT Privacy Policy</h1>
+<p class="updated" lang="ja">最終更新日: 2026年7月31日</p>
+<p class="updated" lang="en">Last updated: July 31, 2026</p>
 
-<h2>ネットワーク通信</h2>
-<p>本アプリはネットワーク通信を行いません。すべての計算は端末内で完結します。</p>
+<h2 lang="ja">収集する情報</h2>
+<h2 lang="en">Information collected</h2>
+<p lang="ja">PocketRT は、利用者の個人情報を一切収集しません。</p>
+<p lang="en">PocketRT collects no personal information of any kind.</p>
+<p lang="ja">本アプリに入力された線量、分割回数、治療開始日などの情報は、すべて利用者の端末内でのみ処理されます。開発者を含むいかなる第三者にも送信されることはありません。</p>
+<p lang="en">Doses, numbers of fractions, treatment start dates and any other values entered into the app are processed solely on the user’s own device. They are never transmitted to any third party, the developer included.</p>
 
-<h2>第三者への提供</h2>
-<p>収集する情報が存在しないため、第三者への提供は行いません。解析ツール、広告 SDK、クラッシュレポート収集ツールのいずれも組み込んでいません。</p>
+<h2 lang="ja">ネットワーク通信</h2>
+<h2 lang="en">Network communication</h2>
+<p lang="ja">本アプリはネットワーク通信を行いません。すべての計算は端末内で完結します。</p>
+<p lang="en">The app performs no network communication. Every calculation is completed on the device.</p>
 
-<h2>本アプリの位置づけ</h2>
-<div class="note">
+<h2 lang="ja">第三者への提供</h2>
+<h2 lang="en">Disclosure to third parties</h2>
+<p lang="ja">収集する情報が存在しないため、第三者への提供は行いません。解析ツール、広告 SDK、クラッシュレポート収集ツールのいずれも組み込んでいません。</p>
+<p lang="en">Since no information is collected, none is disclosed to third parties. The app embeds no analytics tools, no advertising SDKs and no crash reporting tools.</p>
+
+<h2 lang="ja">本アプリの位置づけ</h2>
+<h2 lang="en">What this app is</h2>
+<div class="note" lang="ja">
 <p>PocketRT は、放射線治療に従事する医療従事者向けの教育および参考用ツールです。診断または治療の判断を行うものではありません。</p>
 <p>臨床上の判断は、各施設のプロトコルおよび担当医の責任において行われる必要があります。</p>
 </div>
+<div class="note" lang="en">
+<p>PocketRT is an educational and reference tool for healthcare professionals working in radiation therapy. It does not make diagnostic or treatment decisions.</p>
+<p>Clinical decisions must be made in accordance with each institution’s protocols and under the responsibility of the attending physician.</p>
+</div>
 
-<h2>お問い合わせ</h2>
-<p>本ポリシーに関するお問い合わせは、App Store Connect に登録された開発者連絡先までお願いします。</p>
+<h2 lang="ja">お問い合わせ</h2>
+<h2 lang="en">Contact</h2>
+<p lang="ja">本ポリシーに関するお問い合わせは、App Store Connect に登録された開発者連絡先までお願いします。</p>
+<p lang="en">For inquiries about this policy, please use the developer contact details registered with App Store Connect.</p>
 
 <footer>
-<p>PocketRT は個人が開発したアプリケーションです。ソースコードは <a href="https://github.com/yhi264/pocketrt">GitHub</a> で公開しています。</p>
+<p lang="ja">PocketRT は個人が開発したアプリケーションです。ソースコードは <a href="https://github.com/yhi264/pocketrt">GitHub</a> で公開しています。</p>
+<p lang="en">PocketRT is an application developed by an individual. Its source code is published on <a href="https://github.com/yhi264/pocketrt">GitHub</a>.</p>
 </footer>
 
 </body>

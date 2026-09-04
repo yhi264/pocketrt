@@ -6,6 +6,9 @@
 <title>PocketRT — 放射線治療の BED・EQD2 計算</title>
 <meta name="description" content="生物学的等価線量の計算、複数コースの合算、治療日程、プラン品質指標の逸脱判定。放射線治療に従事する医師・医学物理士・診療放射線技師のための iOS アプリです。通信を一切行いません。">
 
+<!-- OG は日本語で固定する。クローラは JS を実行する前の状態を読むので、
+     言語を切り替えても共有カードには反映されない。実行されない差し替えを
+     書くより、既定の言語に揃っているほうが正しい。 -->
 <meta property="og:type" content="website">
 <meta property="og:url" content="https://yhi264.github.io/pocketrt/">
 <meta property="og:title" content="PocketRT — 放射線治療の BED・EQD2 計算">
@@ -20,6 +23,75 @@
 <link rel="apple-touch-icon" href="./apple-touch-icon.png">
 <meta name="theme-color" content="#fcfcfa" media="(prefers-color-scheme: light)">
 <meta name="theme-color" content="#111114" media="(prefers-color-scheme: dark)">
+
+<!--
+  言語の決定は描画より先に済ませる。body の末尾に置くと、英語の読み手には
+  日本語の紙面が一瞬映ってから入れ替わる。ここに置けばその瞬間が無い。
+
+  本文の訳は HTML 側に lang 付きの要素として並べてあり、この script は
+  触らない。ここで面倒を見るのは、要素として複製できないもの（title、
+  description、alt、aria-label）だけである。
+-->
+<script>
+(function () {
+  var TEXT = {
+    ja: {
+      title: 'PocketRT — 放射線治療の BED・EQD2 計算',
+      desc: '生物学的等価線量の計算、複数コースの合算、治療日程、プラン品質指標の逸脱判定。放射線治療に従事する医師・医学物理士・診療放射線技師のための iOS アプリです。通信を一切行いません。'
+    },
+    en: {
+      title: 'PocketRT — BED and EQD2 for radiation oncology',
+      desc: 'Biologically equivalent dose, cumulative dose across courses, treatment scheduling, and deviation assessment for plan quality metrics. An iOS app for radiation oncologists, medical physicists, and radiation therapists. It performs no network communication. The interface is in Japanese.'
+    }
+  };
+
+  var root = document.documentElement;
+
+  /* ?lang= を最優先にする。英語の紙面をそのまま人に渡せる URL になる。
+     次に前回の選択、最後にブラウザの言語。 */
+  function pick() {
+    try {
+      var q = new URLSearchParams(location.search).get('lang');
+      if (q === 'ja' || q === 'en') return q;
+      var saved = localStorage.getItem('pocketrt-lang');
+      if (saved === 'ja' || saved === 'en') return saved;
+    } catch (e) {}
+    return /^ja/i.test(navigator.language || 'ja') ? 'ja' : 'en';
+  }
+
+  /* body の解析前にも呼ぶ。そのときは querySelectorAll が空を返すだけで
+     害が無く、DOMContentLoaded でもう一度呼べば属性が揃う。 */
+  function apply(lang) {
+    root.dataset.lang = lang;
+    root.lang = lang;
+    document.title = TEXT[lang].title;
+    var meta = document.querySelector('meta[name="description"]');
+    if (meta) meta.content = TEXT[lang].desc;
+    document.querySelectorAll('[data-alt-ja]').forEach(function (el) {
+      el.alt = el.getAttribute('data-alt-' + lang);
+    });
+    document.querySelectorAll('[data-aria-ja]').forEach(function (el) {
+      el.setAttribute('aria-label', el.getAttribute('data-aria-' + lang));
+    });
+  }
+
+  var lang = pick();
+  apply(lang);
+
+  document.addEventListener('DOMContentLoaded', function () {
+    apply(lang);
+    var btn = document.getElementById('lang-toggle');
+    if (!btn) return;
+    /* JS が動く環境でだけ見せる。動かない環境では押しても何も起きない。 */
+    btn.hidden = false;
+    btn.addEventListener('click', function () {
+      lang = lang === 'ja' ? 'en' : 'ja';
+      apply(lang);
+      try { localStorage.setItem('pocketrt-lang', lang); } catch (e) {}
+    });
+  });
+})();
+</script>
 
 <style>
 /*
@@ -78,6 +150,14 @@ html { font-size: 100%; }
 
 * { box-sizing: border-box; }
 
+/* ── 日英の出し分け ───────────────────────── */
+/* 否定形で書くのが要点。JS が動かなければ data-lang が付かず、この規則が
+   英語だけを隠して日本語の紙面が丸ごと成立する。肯定形（[data-lang="ja"]）
+   で書くと、JS 無効時に日英が両方出てしまう。 */
+html:not([data-lang="en"]) [lang="en"] { display: none; }
+html[data-lang="en"] [lang="ja"] { display: none; }
+[hidden] { display: none !important; }
+
 body {
   margin: 0;
   background: var(--bg);
@@ -103,7 +183,8 @@ a:active { opacity: 0.55; }
 
 /* キーボードで辿る人向け。text-decoration: none にしてあるぶん、
    既定のリング頼みにせず自分で描く。 */
-a:focus-visible {
+a:focus-visible,
+.lang-toggle:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 3px;
   border-radius: 3px;
@@ -130,11 +211,29 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   border-bottom: 1px solid var(--rule);
 }
 .site-name { font-family: var(--serif); font-size: 1.25rem; font-weight: 600; letter-spacing: 0.04em; }
-.site-nav { display: flex; gap: 28px; font-size: 0.875rem; }
+.site-nav { display: flex; gap: 28px; font-size: 0.875rem; align-items: center; }
 .site-nav a { color: var(--muted); }
 /* 実測で高さ 21 px しかなかった（Apple の最小は 44 x 44 pt）。負のマージンで
-   見た目の位置を保ったまま、触れる範囲だけ上下に広げる。 */
-.site-nav a { display: inline-block; padding: 12px 0; margin: -12px 0; }
+   見た目の位置を保ったまま、触れる範囲だけ上下に広げる。
+
+   line-height を固定するのが要点。既定（normal）のままだと行高が書字系に
+   依存し、和字で 21 px、欧字で 17 px になる。パディングを足しても欧字は
+   41 px にしか届かず、日本語版でも「GitHub」だけが 44 px を割っていた。
+   21 px に固定すれば、どちらの言語でも 45 px で揃う。 */
+.site-nav a { display: inline-block; padding: 12px 0; margin: -12px 0; line-height: 21px; }
+
+/* 言語の切り替えはナビの一員として置く。囲みも背景も付けない。
+   ここだけボタンらしく見せると、静かな版面の中で浮いて主役を奪う。
+   触れる範囲はナビのリンクと同じ作りで揃える。 */
+.lang-toggle {
+  font-family: inherit; font-size: 0.875rem; letter-spacing: 0.04em;
+  color: var(--muted);
+  background: none; border: 0;
+  padding: 12px 0; margin: -12px 0; line-height: 21px;
+  cursor: pointer;
+}
+.lang-toggle:hover { color: var(--ink); text-decoration: underline; }
+.lang-toggle:active { opacity: 0.55; }
 
 /* ── ヒーロー ─────────────────────────────── */
 .hero {
@@ -151,6 +250,16 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 }
 .lede { font-size: 1.0625rem; line-height: 1.85; color: var(--body); margin: 0 0 20px; max-width: 30em; text-wrap: pretty; }
 .sub { font-size: 0.9375rem; line-height: 1.85; color: var(--muted); margin: 0 0 40px; max-width: 30em; }
+.sub.tight { margin-bottom: 14px; }
+
+/* アプリの画面が日本語であることは、英語の読み手にとって購入前に知る必要の
+   ある事実である。薄い注記にはしない。免責と同じ罫の引き方にして、
+   「読み飛ばさずに読むところ」であることを紙面の作法で示す。 */
+.ui-note {
+  font-size: 0.875rem; line-height: 1.85; color: var(--body);
+  margin: 0 0 40px; max-width: 30em; text-wrap: pretty;
+  border-left: 2px solid var(--accent); padding-left: 16px;
+}
 
 .cta-row { display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
 /* App Store のバッジは Apple 公式の配布物をそのまま置く。加工しない。
@@ -197,6 +306,12 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 .feature dd { margin: 0; font-size: 1rem; line-height: 1.85; color: var(--body); text-wrap: pretty; }
 .features { margin: 8px 0 0; }
 
+/* 英語の見出し語は日本語より長い。152 px 固定では「Cumulative dose across
+   courses」が 3 行になって、右の本文と行頭が揃わなくなる。英語のときだけ
+   1 列目を広げる。 */
+html[data-lang="en"] .feature { grid-template-columns: 190px minmax(0, 1fr); }
+html[data-lang="en"] .feature dt { line-height: 1.5; }
+
 /* ── 図版（横スクロール） ──────────────────── */
 /* 狭い画面では図を縮めず、そのまま横へ送る。左右の余白はスクロール領域の
    内側（padding）に持たせている。外側に置くと、端まで送ったときに図が
@@ -239,7 +354,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 /* フッターは折り返す。ここで負のマージンを使うと、折り返した行どうしで
    当たり判定が重なって取り違えが起きる。素直に高さを足す。 */
 .site-foot nav { display: flex; column-gap: 26px; row-gap: 0; font-size: 0.8125rem; flex-wrap: wrap; }
-.site-foot nav a { display: inline-block; padding: 12px 0; }
+.site-foot nav a { display: inline-block; padding: 12px 0; line-height: 21px; }
 
 /* ── 狭い画面 ─────────────────────────────── */
 @media (max-width: 860px) {
@@ -254,6 +369,7 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   .shot-hero { width: min(268px, 72vw); }
 
   .feature { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 22px 0; }
+  html[data-lang="en"] .feature { grid-template-columns: minmax(0, 1fr); }
 
   .quality { padding: 32px 24px; margin-top: 48px; }
   .quality-grid { grid-template-columns: minmax(0, 1fr); gap: 28px; }
@@ -281,10 +397,18 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 <header class="wrap pad site-head">
   <div class="site-name">PocketRT</div>
   <nav class="site-nav">
-    <a href="#features">機能</a>
-    <a href="#screens">画面</a>
-    <a href="./privacy/">プライバシー</a>
+    <a href="#features" lang="ja">機能</a>
+    <a href="#features" lang="en">Features</a>
+    <a href="#screens" lang="ja">画面</a>
+    <a href="#screens" lang="en">Screens</a>
+    <a href="./privacy/" lang="ja">プライバシー</a>
+    <a href="./privacy/" lang="en">Privacy</a>
     <a href="https://github.com/yhi264/pocketrt">GitHub</a>
+    <button type="button" id="lang-toggle" class="lang-toggle" hidden
+            data-aria-ja="English に切り替える" data-aria-en="Switch to Japanese"
+            aria-label="English に切り替える">
+      <span lang="ja">EN</span><span lang="en">日本語</span>
+    </button>
   </nav>
 </header>
 
@@ -293,80 +417,126 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
   <section class="wrap pad hero">
     <div>
       <p class="eyebrow">RADIATION ONCOLOGY · iOS</p>
-      <h1>線量の計算と、<br>その根拠を、手元に。</h1>
-      <p class="lede">生物学的等価線量の計算、複数コースの合算、治療日程、プラン品質指標の逸脱判定。放射線治療に従事する医師・医学物理士・診療放射線技師のための計算ツールです。</p>
-      <p class="sub">通信を一切行いません。入力した内容も計算結果も、端末の外に出ることはありません。</p>
+      <h1 lang="ja">線量の計算と、<br>その根拠を、手元に。</h1>
+      <h1 lang="en">Dose calculations,<br>and the evidence,<br>at hand.</h1>
+      <p class="lede" lang="ja">生物学的等価線量の計算、複数コースの合算、治療日程、プラン品質指標の逸脱判定。放射線治療に従事する医師・医学物理士・診療放射線技師のための計算ツールです。</p>
+      <p class="lede" lang="en">Biologically equivalent dose, cumulative dose across courses, treatment scheduling, and deviation assessment for plan quality metrics. A calculation tool for radiation oncologists, medical physicists, and radiation therapists.</p>
+      <div lang="ja">
+        <p class="sub">通信を一切行いません。入力した内容も計算結果も、端末の外に出ることはありません。</p>
+      </div>
+      <div lang="en">
+        <p class="sub tight">It performs no network communication. Neither what you enter nor what it computes ever leaves the device.</p>
+        <p class="ui-note">The app’s interface is in Japanese only, and it is not localized into English. Every screenshot on this page shows the Japanese interface.</p>
+      </div>
       <div class="cta-row">
         <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
           <picture>
             <source srcset="./images/app-store-badge-ja-wht.svg" media="(prefers-color-scheme: dark)">
-            <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+            <img src="./images/app-store-badge-ja.svg" width="147" height="54"
+                 alt="App Store でダウンロード"
+                 data-alt-ja="App Store でダウンロード"
+                 data-alt-en="Download on the App Store">
           </picture>
         </a>
-        <span class="cta-note">無料・App 内課金なし</span>
+        <span class="cta-note" lang="ja">無料・App 内課金なし</span>
+        <span class="cta-note" lang="en">Free · No in-app purchases · Japanese UI</span>
       </div>
     </div>
     <figure class="hero-figure">
-      <img class="shot-hero" src="./images/01-simple-calc.webp" width="536" height="1164" alt="計算タブ。総線量 60 Gy、30 回、α/β 10 に対して BED 72.0 Gy10、EQD2 60.0 Gy を表示している">
-      <figcaption>計算タブ｜60 Gy / 30 回、α/β 10</figcaption>
+      <img class="shot-hero" src="./images/01-simple-calc.webp" width="536" height="1164"
+           alt="計算タブ。総線量 60 Gy、30 回、α/β 10 に対して BED 72.0 Gy10、EQD2 60.0 Gy を表示している"
+           data-alt-ja="計算タブ。総線量 60 Gy、30 回、α/β 10 に対して BED 72.0 Gy10、EQD2 60.0 Gy を表示している"
+           data-alt-en="Calculation tab, showing BED 72.0 Gy10 and EQD2 60.0 Gy for 60 Gy in 30 fractions at α/β 10">
+      <figcaption>
+        <span lang="ja">計算タブ｜60 Gy / 30 回、α/β 10</span>
+        <span lang="en">Calculation tab · 60 Gy in 30 fractions, α/β 10</span>
+      </figcaption>
     </figure>
   </section>
 
   <section class="wrap pad" id="features">
     <div class="rule-head">
-      <h2>できること</h2>
-      <span class="note">5 つのタブ</span>
+      <h2 lang="ja">できること</h2>
+      <h2 lang="en">Features</h2>
+      <span class="note" lang="ja">5 つのタブ</span>
+      <span class="note" lang="en">Five tabs</span>
     </div>
     <dl class="features">
       <div class="feature">
-        <dt>BED・EQD2</dt>
-        <dd>線量と分割回数から生物学的等価線量を求めます。α/β 比は組織ごとに変更でき、プリセットからも選べます。</dd>
+        <dt lang="ja">BED・EQD2</dt>
+        <dt lang="en">BED and EQD2</dt>
+        <dd lang="ja">線量と分割回数から生物学的等価線量を求めます。α/β 比は組織ごとに変更でき、プリセットからも選べます。</dd>
+        <dd lang="en">Computes biologically equivalent dose from total dose and number of fractions. The α/β ratio can be set per tissue, or chosen from presets.</dd>
       </div>
       <div class="feature">
-        <dt>複数コースの合算</dt>
-        <dd>複数のコースの BED と EQD2 を合算します。評価する組織の α/β を 1 つ選び、すべてのコースをその α/β で評価します。単純加算であり回復係数を考慮しないため、再照射計画には用いないでください。</dd>
+        <dt lang="ja">複数コースの合算</dt>
+        <dt lang="en">Cumulative dose across courses</dt>
+        <dd lang="ja">複数のコースの BED と EQD2 を合算します。評価する組織の α/β を 1 つ選び、すべてのコースをその α/β で評価します。単純加算であり回復係数を考慮しないため、再照射計画には用いないでください。</dd>
+        <dd lang="en">Sums BED and EQD2 over several courses. You select a single α/β for the tissue under evaluation, and every course is evaluated at that α/β. This is a plain sum that applies no recovery factor, so do not use it for re-irradiation planning.</dd>
       </div>
       <div class="feature">
-        <dt>分割変更の換算</dt>
-        <dd>分割回数または 1 回線量を指定して、別の線量分割に置き換えたときの線量を求めます。</dd>
+        <dt lang="ja">分割変更の換算</dt>
+        <dt lang="en">Fractionation conversion</dt>
+        <dd lang="ja">分割回数または 1 回線量を指定して、別の線量分割に置き換えたときの線量を求めます。</dd>
+        <dd lang="en">Specify either the number of fractions or the dose per fraction, and obtain the dose that an alternative fractionation would require.</dd>
       </div>
       <div class="feature">
-        <dt>治療日程</dt>
-        <dd>開始日と分割回数から終了予定日を求めます。日本の祝日、週末、個別の休止日を反映したカレンダーを表示します。</dd>
+        <dt lang="ja">治療日程</dt>
+        <dt lang="en">Treatment schedule</dt>
+        <dd lang="ja">開始日と分割回数から終了予定日を求めます。日本の祝日、週末、個別の休止日を反映したカレンダーを表示します。</dd>
+        <dd lang="en">Derives the expected completion date from the start date and the number of fractions, and shows a calendar that accounts for Japanese public holidays, weekends, and individually entered days off.</dd>
       </div>
       <div class="feature">
-        <dt>品質指標の判定</dt>
-        <dd>肺 SBRT では R100%・R50%・D2cm を PTV 体積に応じて、頭部定位照射では均一性指数と適合性指数を判定します。自施設で用いている基準を登録して判定することもできます。</dd>
+        <dt lang="ja">品質指標の判定</dt>
+        <dt lang="en">Plan quality assessment</dt>
+        <dd lang="ja">肺 SBRT では R100%・R50%・D2cm を PTV 体積に応じて、頭部定位照射では均一性指数と適合性指数を判定します。自施設で用いている基準を登録して判定することもできます。</dd>
+        <dd lang="en">For lung SBRT, R100%, R50% and D2cm are assessed against PTV volume; for intracranial stereotactic irradiation, the homogeneity index and the conformity index are assessed. Constraints used at your own institution can be registered and assessed as well.</dd>
       </div>
     </dl>
   </section>
 
   <section id="screens" style="padding-top: 64px;">
     <div class="wrap pad rule-head" style="margin-bottom: 34px;">
-      <h2>画面</h2>
-      <span class="note">iPhone 17 Pro Max</span>
+      <h2 lang="ja">画面</h2>
+      <h2 lang="en">Screens</h2>
+      <span class="note" lang="ja">iPhone 17 Pro Max</span>
+      <span class="note" lang="en">iPhone 17 Pro Max · Japanese interface</span>
     </div>
     <div class="plate-wrap">
-      <div class="plate" tabindex="0" role="group" aria-label="画面の一覧。横にスクロールします">
+      <div class="plate" tabindex="0" role="group"
+           aria-label="画面の一覧。横にスクロールします"
+           data-aria-ja="画面の一覧。横にスクロールします"
+           data-aria-en="Gallery of app screens, scrolls horizontally">
         <figure>
-          <img src="./images/02-multi-course.webp" width="536" height="1164" alt="合算タブ" loading="lazy">
+          <img src="./images/02-multi-course.webp" width="536" height="1164" loading="lazy"
+               alt="合算タブ" data-alt-ja="合算タブ" data-alt-en="Summation tab">
           <figcaption>
-            <div class="fig-label">合算</div>
-            <div class="fig-text">コースごとの BED・EQD2 を合算する</div>
+            <div class="fig-label" lang="ja">合算</div>
+            <div class="fig-label" lang="en">Summation</div>
+            <div class="fig-text" lang="ja">コースごとの BED・EQD2 を合算する</div>
+            <div class="fig-text" lang="en">Sums BED and EQD2 across courses</div>
           </figcaption>
         </figure>
         <figure>
-          <img src="./images/03-conversion.webp" width="536" height="1164" alt="換算タブ" loading="lazy">
+          <img src="./images/03-conversion.webp" width="536" height="1164" loading="lazy"
+               alt="換算タブ" data-alt-ja="換算タブ" data-alt-en="Conversion tab">
           <figcaption>
-            <div class="fig-label">換算</div>
-            <div class="fig-text">分割回数または 1 回線量を指定して換算する</div>
+            <div class="fig-label" lang="ja">換算</div>
+            <div class="fig-label" lang="en">Conversion</div>
+            <div class="fig-text" lang="ja">分割回数または 1 回線量を指定して換算する</div>
+            <div class="fig-text" lang="en">Converts by number of fractions or dose per fraction</div>
           </figcaption>
         </figure>
         <figure>
-          <img src="./images/05-schedule-calendar.webp" width="536" height="1164" alt="予定タブのカレンダー。治療日、週末、祝日を色と記号で区別している" loading="lazy">
+          <img src="./images/05-schedule-calendar.webp" width="536" height="1164" loading="lazy"
+               alt="予定タブのカレンダー。治療日、週末、祝日を色と記号で区別している"
+               data-alt-ja="予定タブのカレンダー。治療日、週末、祝日を色と記号で区別している"
+               data-alt-en="Calendar in the schedule tab, distinguishing treatment days, weekends and holidays by color and symbol">
           <figcaption>
-            <div class="fig-label">予定</div>
-            <div class="fig-text">祝日・週末・個別休止を色と記号で区別する</div>
+            <div class="fig-label" lang="ja">予定</div>
+            <div class="fig-label" lang="en">Schedule</div>
+            <div class="fig-text" lang="ja">祝日・週末・個別休止を色と記号で区別する</div>
+            <div class="fig-text" lang="en">Holidays, weekends and days off, by color and symbol</div>
           </figcaption>
         </figure>
       </div>
@@ -377,23 +547,36 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
     <div class="quality">
       <div class="quality-grid">
         <div>
-          <h2>判定と、その根拠を<br>同じ画面に</h2>
-          <p>判定が出るときは、必ず出典と許容値も同じ画面に表示します。何を根拠にした判定なのかを、画面を離れずに確かめられます。</p>
-          <p>自施設の基準を選んでいる間は、段階名を「基準内 / 基準をやや超える」に変え、公表されたプロトコルへの適合を示すものではないことを常時表示します。</p>
+          <h2 lang="ja">判定と、その根拠を<br>同じ画面に</h2>
+          <h2 lang="en">The assessment and<br>its basis, on one screen</h2>
+          <p lang="ja">判定が出るときは、必ず出典と許容値も同じ画面に表示します。何を根拠にした判定なのかを、画面を離れずに確かめられます。</p>
+          <p lang="en">Whenever an assessment appears, the source and the tolerance values appear with it. You can confirm what the assessment rests on without leaving the screen.</p>
+          <p lang="ja">自施設の基準を選んでいる間は、段階名を「基準内 / 基準をやや超える」に変え、公表されたプロトコルへの適合を示すものではないことを常時表示します。</p>
+          <p lang="en">While institutional constraints are selected, the category names change to “Within constraint” and “Slightly above constraint”, and a note stating that the result does not indicate compliance with any published protocol stays on screen.</p>
         </div>
         <div class="quality-figs">
           <figure>
-            <img src="./images/06-quality-lung-sbrt.webp" width="536" height="1164" alt="肺 SBRT の逸脱判定。R100% が Minor deviation、R50% と D2cm が Per protocol と表示されている" loading="lazy">
+            <img src="./images/06-quality-lung-sbrt.webp" width="536" height="1164" loading="lazy"
+                 alt="肺 SBRT の逸脱判定。R100% が Minor deviation、R50% と D2cm が Per protocol と表示されている"
+                 data-alt-ja="肺 SBRT の逸脱判定。R100% が Minor deviation、R50% と D2cm が Per protocol と表示されている"
+                 data-alt-en="Lung SBRT deviation assessment, showing R100% as Minor deviation and R50% and D2cm as Per protocol">
             <figcaption>
-              <div class="fig-label">公表プロトコル</div>
-              <div class="fig-text">RTOG 0813 の判定。出典と許容値を併記</div>
+              <div class="fig-label" lang="ja">公表プロトコル</div>
+              <div class="fig-label" lang="en">Published protocol</div>
+              <div class="fig-text" lang="ja">RTOG 0813 の判定。出典と許容値を併記</div>
+              <div class="fig-text" lang="en">Assessed per RTOG 0813, with source and tolerances shown</div>
             </figcaption>
           </figure>
           <figure>
-            <img src="./images/08-quality-institutional.webp" width="536" height="1164" alt="自施設の基準による判定。基準内、基準をやや超える、という段階名で表示されている" loading="lazy">
+            <img src="./images/08-quality-institutional.webp" width="536" height="1164" loading="lazy"
+                 alt="自施設の基準による判定。基準内、基準をやや超える、という段階名で表示されている"
+                 data-alt-ja="自施設の基準による判定。基準内、基準をやや超える、という段階名で表示されている"
+                 data-alt-en="Assessment against institutional constraints, labeled Within constraint and Slightly above constraint">
             <figcaption>
-              <div class="fig-label">自施設の基準</div>
-              <div class="fig-text">用語を変え、注記を常時表示する</div>
+              <div class="fig-label" lang="ja">自施設の基準</div>
+              <div class="fig-label" lang="en">Institutional constraints</div>
+              <div class="fig-text" lang="ja">用語を変え、注記を常時表示する</div>
+              <div class="fig-text" lang="en">Different terminology, with a note kept on screen</div>
             </figcaption>
           </figure>
         </div>
@@ -404,14 +587,19 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
       <a class="cta-badge" href="https://apps.apple.com/app/id6796613655">
         <picture>
           <source srcset="./images/app-store-badge-ja-wht.svg" media="(prefers-color-scheme: dark)">
-          <img src="./images/app-store-badge-ja.svg" width="147" height="54" alt="App Store でダウンロード">
+          <img src="./images/app-store-badge-ja.svg" width="147" height="54"
+               alt="App Store でダウンロード"
+               data-alt-ja="App Store でダウンロード"
+               data-alt-en="Download on the App Store">
         </picture>
       </a>
-      <span class="cta-note">無料・App 内課金なし</span>
+      <span class="cta-note" lang="ja">無料・App 内課金なし</span>
+      <span class="cta-note" lang="en">Free · No in-app purchases · Japanese UI</span>
     </div>
 
     <div class="disclaimer">
-      <p>本アプリは放射線治療の専門知識を持つ医療従事者を対象とした計算補助ツールです。医療機器ではなく、診断や治療方針の決定を行うものではありません。計算結果および判定は、必ず利用者ご自身の専門的判断により検証してください。</p>
+      <p lang="ja">本アプリは放射線治療の専門知識を持つ医療従事者を対象とした計算補助ツールです。医療機器ではなく、診断や治療方針の決定を行うものではありません。計算結果および判定は、必ず利用者ご自身の専門的判断により検証してください。</p>
+      <p lang="en">PocketRT is a calculation aid intended for healthcare professionals with specialist knowledge of radiation therapy. It is not a medical device, and it does not make diagnostic or treatment decisions. Every result and every assessment must be verified by the user’s own professional judgment.</p>
     </div>
   </section>
 
@@ -420,9 +608,12 @@ h1, h2 { font-family: var(--serif); font-weight: 600; }
 <footer class="wrap pad site-foot">
   <div class="copy">2026 Yoshiki Hiraki</div>
   <nav>
-    <a href="./privacy/">プライバシーポリシー</a>
-    <a href="https://github.com/yhi264/pocketrt">ソースコード</a>
-    <a href="https://github.com/yhi264/pocketrt/issues">不具合・ご要望（GitHub Issues）</a>
+    <a href="./privacy/" lang="ja">プライバシーポリシー</a>
+    <a href="./privacy/" lang="en">Privacy Policy</a>
+    <a href="https://github.com/yhi264/pocketrt" lang="ja">ソースコード</a>
+    <a href="https://github.com/yhi264/pocketrt" lang="en">Source code</a>
+    <a href="https://github.com/yhi264/pocketrt/issues" lang="ja">不具合・ご要望（GitHub Issues）</a>
+    <a href="https://github.com/yhi264/pocketrt/issues" lang="en">Bugs and requests (GitHub Issues)</a>
   </nav>
 </footer>
 
