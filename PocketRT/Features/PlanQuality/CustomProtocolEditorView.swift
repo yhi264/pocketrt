@@ -1,4 +1,24 @@
 import SwiftUI
+import UniformTypeIdentifiers
+
+/// 書き出すファイル。
+///
+/// **`ShareLink(item:)` に `Data` をそのまま渡してはならない。** `Data` の
+/// `Transferable` 表現は content type が `public.data` で、「ファイルに保存」
+/// を選ぶと拡張子の付かないファイルとして書き出される。そのファイルは
+/// `.fileImporter(allowedContentTypes: [.json])` の一覧に現れないため、
+/// **自分で書き出したファイルを自分で読み込めない。**書き出しと読み込みは
+/// 対で意味を持つ機能であり、片道になっていては用をなさない。
+///
+/// content type と拡張子を明示するために `Transferable` を自前で用意する。
+struct CustomProtocolExportFile: Transferable {
+    let data: Data
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .json) { $0.data }
+            .suggestedFileName("pocketrt-custom-protocols.json")
+    }
+}
 
 /// 自施設の判定基準（利用者定義プロトコル）の管理画面。
 ///
@@ -11,6 +31,17 @@ struct CustomProtocolEditorView: View {
     @State private var showAdd = false
     @State private var pendingDeletion: CustomProtocol?
     @State private var pendingDiscard = false
+    @State private var showImporter = false
+    @State private var importMessage: String?
+    @State private var pendingImport: PendingImport?
+
+    /// 取り込み前の確認に使う、検証済みの内容。
+    private struct PendingImport {
+        let data: CustomProtocolData
+        /// true: `corruptedContent` からの復旧（置き換え）。
+        /// false: 通常の合流（id が一致するものだけ上書き）。
+        let willReplace: Bool
+    }
 
     var body: some View {
         NavigationStack {
@@ -64,9 +95,100 @@ struct CustomProtocolEditorView: View {
             .navigationTitle("自施設の基準の管理")
             .navigationBarTitleDisplayMode(.inline)
             .toolbar {
+                // 書き出しも読み込みも出せない状態（保存先が無い、データは
+                // 無事だが読めない）では、メニューごと出さない。中身が空の
+                // メニューを開かせると、何が使えないのかが分からない。
+                if model.canExport || model.canImport {
+                    ToolbarItem(placement: .topBarLeading) {
+                        Menu {
+                            // exportData() は canExport を自分で確認し、
+                            // 満たさなければ nil を返す。
+                            if let data = model.exportData() {
+                                ShareLink(
+                                    item: CustomProtocolExportFile(data: data),
+                                    preview: SharePreview("PocketRT の自施設基準")
+                                ) {
+                                    Label("書き出す", systemImage: "square.and.arrow.up")
+                                }
+                            }
+                            if model.canImport {
+                                Button {
+                                    showImporter = true
+                                } label: {
+                                    Label("読み込む", systemImage: "square.and.arrow.down")
+                                }
+                            }
+                        } label: {
+                            Image(systemName: "ellipsis.circle")
+                        }
+                    }
+                }
                 ToolbarItem(placement: .topBarTrailing) {
                     Button("閉じる") { dismiss() }
                 }
+            }
+            .fileImporter(isPresented: $showImporter, allowedContentTypes: [.json]) { result in
+                switch result {
+                case .failure:
+                    // SwiftUI の fileImporter は、キャンセル時にこのクロージャを
+                    // 呼ばない（後の SDK に onCancellation: が別途追加されたことが
+                    // その裏付けになる）。したがって .failure は iCloud 未ダウンロード
+                    // などの本物の失敗である。ここでキャンセルを除外する判定を
+                    // 入れてはならない。本物の失敗を無言で握りつぶすことになる。
+                    importMessage = String(localized: "ファイルを読み込めませんでした")
+                case .success(let url):
+                    guard url.startAccessingSecurityScopedResource() else {
+                        importMessage = String(localized: "ファイルにアクセスできませんでした")
+                        return
+                    }
+                    defer { url.stopAccessingSecurityScopedResource() }
+                    guard let data = try? Data(contentsOf: url) else {
+                        importMessage = String(localized: "ファイルを読めませんでした")
+                        return
+                    }
+                    // ここでは適用しない。他人が書き出した JSON を読み込むと、
+                    // それが自施設の基準として判定に使われる。判定パネルには
+                    // 「利用者が登録した基準による」と出たまま、実際には別の
+                    // 施設の基準で判定することになる。何が起きるかを確認して
+                    // から適用できるよう、検証だけ行って結果を確認ダイアログに渡す。
+                    switch model.previewImport(data) {
+                    case .success(let preview):
+                        pendingImport = PendingImport(
+                            data: preview.data, willReplace: preview.willReplace)
+                    case .failure(let result):
+                        presentImportResult(result)
+                    }
+                }
+            }
+            .alert("読み込み", isPresented: Binding(
+                get: { importMessage != nil },
+                set: { if !$0 { importMessage = nil } }
+            )) {
+                Button("OK") { importMessage = nil }
+            } message: {
+                Text(importMessage ?? "")
+            }
+            .confirmationDialog(
+                "基準を読み込みますか",
+                isPresented: Binding(
+                    get: { pendingImport != nil },
+                    set: { if !$0 { pendingImport = nil } }
+                ),
+                titleVisibility: .visible,
+                presenting: pendingImport
+            ) { pending in
+                Button("取り込む") {
+                    let result = model.applyImport(pending.data)
+                    pendingImport = nil
+                    presentImportResult(result)
+                }
+                // 「やめる」で何も出さない。ダイアログが閉じること自体が
+                // 「取り込まなかった」合図であり、利用者が自分で選んだ結果と
+                // して自明である。ここでアラートを重ねると、やめたのに何かが
+                // 起きたように見える。
+                Button("やめる", role: .cancel) { pendingImport = nil }
+            } message: { pending in
+                Text(importConfirmationMessage(for: pending))
             }
             .sheet(isPresented: $showAdd) {
                 CustomProtocolFormView(existing: nil) { draft in
@@ -143,6 +265,9 @@ struct CustomProtocolEditorView: View {
                 case .unsupportedSchemaVersion:
                     EmptyView()
                 case .corruptedContent:
+                    // 読み込みを先に出す。破棄は登録を失うが、読み込みは
+                    // 書き出しておいた内容を取り戻せる。失うものが少ない順に並べる。
+                    Button("書き出したファイルから読み込む") { showImporter = true }
                     Button("保存データを破棄", role: .destructive) { pendingDiscard = true }
                 }
             }
@@ -166,6 +291,55 @@ struct CustomProtocolEditorView: View {
     /// 実は保存されない」ボタンを触らせないため、ここで無効化する。
     private var isOperationDisabled: Bool {
         !model.hasStore || model.loadFailure != nil
+    }
+
+    /// 取り込みの結果をアラートで伝える。
+    private func presentImportResult(_ result: CustomProtocolImportResult) {
+        switch result {
+        case .success(let added, let updated):
+            importMessage = String(localized: "\(added) 件を追加、\(updated) 件を更新しました")
+        case .replaced(let count):
+            importMessage = String(localized: "保存データを読めなかったため、読み込んだ \(count) 件で置き換えました")
+        case .unsupportedVersion:
+            importMessage = String(localized: "このアプリが対応していない形式です")
+        case .invalidFormat:
+            importMessage = String(localized: "ファイルの形式が正しくありません")
+        case .invalidProtocolValues(let names):
+            importMessage = String(localized: "値が範囲外の基準があるため、何も取り込みませんでした: \(names.joined(separator: "、"))")
+        case .storeUnavailable:
+            // 通常はここに到達しない（保存先が無いときは読み込みの導線自体を
+            // 出していない）。到達した場合も「復旧した」ように見せてはならない。
+            importMessage = String(localized: "保存先を用意できないため、読み込んでも保存できません。")
+        case .blockedByIntactData(let kind):
+            // データが無事なまま読めていない状態。置き換えると無事なものを失う。
+            // 何が使えないかではなく、先に何をすべきかを伝える。
+            switch kind {
+            case .unreadableFile:
+                importMessage = String(localized: "保存データは端末に残っています。先に「再読み込み」をお試しください。読み込んで置き換えると、読めるようになったはずの登録を失います。")
+            case .unsupportedSchemaVersion:
+                importMessage = String(localized: "保存データは新しい形式のまま残っています。アプリを更新すると読めます。読み込んで置き換えると、その登録を失います。")
+            case .corruptedContent:
+                // この種別は読み込みを許す状態なので、ここには到達しない。
+                importMessage = String(localized: "読み込めませんでした")
+            }
+        case .blockedByUnknownFailure:
+            importMessage = String(localized: "保存データを読めない原因を特定できていません。読み込んで置き換えると、残っているかもしれない登録を失います。アプリを再起動してからお試しください。")
+        }
+    }
+
+    /// 取り込み前の確認ダイアログの本文。件数・合流か置き換えか・
+    /// 自施設の基準として判定に使われることの 3 点を必ず含める。
+    ///
+    /// D1（プリセット）の文言に「判定に使われます」を足してある。プリセットは
+    /// 計算の入力値だが、判定基準は「基準内 / 基準を超える」という臨床的な
+    /// 言明を直接生む。他施設の基準を取り込んだことを忘れたまま使う害が大きい。
+    private func importConfirmationMessage(for pending: PendingImport) -> String {
+        let count = pending.data.protocols.count
+        if pending.willReplace {
+            return String(localized: "\(count) 件の基準を読み込みます。保存データを読めなかったため、既存の内容を置き換えます。読み込んだ内容は自施設の基準として扱われ、判定に使われます。")
+        } else {
+            return String(localized: "\(count) 件の基準を読み込みます。id が一致するものは上書きされ、それ以外は追加されます。読み込んだ内容は自施設の基準として扱われ、判定に使われます。")
+        }
     }
 
     /// 一覧の 1 行に出す閾値の要約。「R100% 1.20 / R50% 4.50」のように、

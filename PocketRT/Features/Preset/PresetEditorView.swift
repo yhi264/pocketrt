@@ -1,6 +1,27 @@
 import SwiftUI
 import UniformTypeIdentifiers
 
+/// 書き出すファイル。
+///
+/// **`ShareLink(item:)` に `Data` をそのまま渡してはならない。** `Data` の
+/// `Transferable` 表現は JSON を名乗らない（`ExportContentTypeTests` で実測）。
+/// 「ファイルに保存」で拡張子の付かないファイルとして書き出され、そのファイルは
+/// `.fileImporter(allowedContentTypes: [.json])` の一覧に現れないため、
+/// **自分で書き出したファイルを自分で読み込めない。**書き出しと読み込みは対で
+/// 意味を持つ機能であり、片道になっていては用をなさない。
+///
+/// D2 の `CustomProtocolExportFile` と同じ形。ROADMAP 順位 14（2 つの store の
+/// 共通化）と同じ理由で、いまは共通化せず 2 箇所を手で揃える。**片方を直したら
+/// もう片方も確認すること。**
+struct InstitutionalPresetExportFile: Transferable {
+    let data: Data
+
+    static var transferRepresentation: some TransferRepresentation {
+        DataRepresentation(exportedContentType: .json) { $0.data }
+            .suggestedFileName("pocketrt-presets.json")
+    }
+}
+
 /// 自施設プリセットの管理と、内蔵プリセットの表示切り替え。
 struct PresetEditorView: View {
     let model: PresetStoreModel
@@ -116,7 +137,10 @@ struct PresetEditorView: View {
                         // 読み込みに失敗している間は書き出さない。空の内容を書き出しても
                         // 意味がなく、それを後で読み込むと本当に空になる。
                         if model.loadFailure == nil, let data = model.exportData() {
-                            ShareLink(item: data, preview: SharePreview("PocketRT のプリセット")) {
+                            ShareLink(
+                                item: InstitutionalPresetExportFile(data: data),
+                                preview: SharePreview("PocketRT のプリセット")
+                            ) {
                                 Label("書き出す", systemImage: "square.and.arrow.up")
                             }
                         }

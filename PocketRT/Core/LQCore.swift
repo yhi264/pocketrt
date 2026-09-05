@@ -16,18 +16,23 @@ enum LQCore {
         return BED / (1.0 + 2.0 / alphaBeta)
     }
 
-    /// 多コースの BED 合算
-    static func cumulativeBED(courses: [Course]) -> Double {
+    /// 多コースの BED 合算。**α/β は全コース共通で 1 つだけ受け取る。**
+    ///
+    /// BED は組織ごとの量なので、和が意味を持つのは「ある 1 つの組織に対する
+    /// 累積」を求めるときに限られる。コースごとに別の α/β を渡せる形にすると、
+    /// 対応する組織の無い数を作れてしまう。引数で 1 つに縛る。
+    static func cumulativeBED(courses: [Course], alphaBeta: Double) -> Double {
         courses.reduce(0.0) { sum, c in
-            sum + bed(totalDose: c.totalDose, fractions: c.fractions, alphaBeta: c.alphaBeta)
+            sum + bed(totalDose: c.totalDose, fractions: c.fractions, alphaBeta: alphaBeta)
         }
     }
 
-    /// 多コースの EQD2 合算（各コースの BED → EQD2 を加算）
-    static func cumulativeEQD2(courses: [Course]) -> Double {
+    /// 多コースの EQD2 合算（各コースの BED → EQD2 を加算）。
+    /// α/β を 1 つに縛る理由は `cumulativeBED` と同じ。
+    static func cumulativeEQD2(courses: [Course], alphaBeta: Double) -> Double {
         courses.reduce(0.0) { sum, c in
-            let b = bed(totalDose: c.totalDose, fractions: c.fractions, alphaBeta: c.alphaBeta)
-            return sum + eqd2(bed: b, alphaBeta: c.alphaBeta)
+            let b = bed(totalDose: c.totalDose, fractions: c.fractions, alphaBeta: alphaBeta)
+            return sum + eqd2(bed: b, alphaBeta: alphaBeta)
         }
     }
 

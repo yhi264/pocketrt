@@ -88,6 +88,7 @@ struct SimpleCalcView: View {
                 .padding()
             }
             .navigationTitle("単純計算")
+            .dismissibleKeyboard()
             .sheet(isPresented: $showPresetSheet) {
                 PresetSheet(onSelect: { selection in
                     vm.apply(selection)

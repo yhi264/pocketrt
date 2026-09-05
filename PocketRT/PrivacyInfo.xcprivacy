@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!--
+  プライバシーマニフェスト。
+
+  App Store は、理由の申告が必要な API（Required Reason API）を使うアプリに
+  このファイルを求める。無いまま提出すると ITMS-91053 で弾かれる。
+
+  本アプリが該当するのは UserDefaults だけである（`@AppStorage` 経由。
+  免責への同意状態 `hasAcceptedDisclaimer` を保存している）。ファイルの
+  タイムスタンプ・ディスク空き容量・システム起動時刻・端末モデル名は
+  いずれも使っていない。
+
+  収集するデータは無い。通信を行うコードが 1 行も無く、解析・広告・
+  クラッシュレポートの SDK も入れていない。出典一覧から PubMed / DOI を
+  開くリンクはあるが、開く先は利用者の Safari であって、アプリが何かを
+  送るわけではない。
+
+  **App Store Connect の「App のプライバシー」の回答は、このファイルと
+  一致していなければならない。** 片方だけ更新すると食い違う。
+-->
+<plist version="1.0">
+<dict>
+	<!-- トラッキング（App Tracking Transparency の意味での）を行わない -->
+	<key>NSPrivacyTracking</key>
+	<false/>
+	<key>NSPrivacyTrackingDomains</key>
+	<array/>
+
+	<!-- 収集するデータは無い -->
+	<key>NSPrivacyCollectedDataTypes</key>
+	<array/>
+
+	<!-- 理由の申告が必要な API -->
+	<key>NSPrivacyAccessedAPITypes</key>
+	<array>
+		<dict>
+			<key>NSPrivacyAccessedAPIType</key>
+			<string>NSPrivacyAccessedAPICategoryUserDefaults</string>
+			<key>NSPrivacyAccessedAPITypeReasons</key>
+			<array>
+				<!--
+				  CA92.1: アプリ自身の情報にアクセスするため。
+				  他アプリや他社と共有しない、自アプリ内の設定の読み書き。
+				  免責への同意状態がこれにあたる。
+				-->
+				<string>CA92.1</string>
+			</array>
+		</dict>
+	</array>
+</dict>
+</plist>

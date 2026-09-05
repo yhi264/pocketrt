@@ -97,6 +97,7 @@ struct FractionationConversionView: View {
                 .padding()
             }
             .navigationTitle("線量分割換算")
+            .dismissibleKeyboard()
             .infoToolbarButton()
         }
     }

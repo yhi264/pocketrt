@@ -106,10 +106,25 @@ struct CustomProtocolStore {
         guard let decoded = try? JSONDecoder().decode(CustomProtocolData.self, from: raw) else {
             throw CustomProtocolStoreError.corruptedContent
         }
-        // ここではデコードした値を検証していない。v1 は書き出し・読み込みを持たないため
-        // 到達経路が無いが、インポート機能を足すときは必ず CustomProtocolValidator の
-        // 数値版を通すこと。D1 では同じ見落としで範囲外の値が保存され、復旧不能な
-        // クラッシュに至った（レビュー指摘。ROADMAP に記録）。
+        // デコードできただけでは中身を信頼しない。範囲外の値を持つ基準が
+        // 1 件でもあれば corruptedContent として扱う（ROADMAP 順位 15）。
+        //
+        // 読み込み（インポート）経路も CustomProtocolStoreModel 側で同じ
+        // 数値版検証を通しており、そちらで弾かれた内容がここへ到達すること
+        // はない。したがってこれは二重の防御である。それでも置く理由は、
+        // 書き込み経路が 1 つ増えるたびに検証を足し忘れる余地が生まれる
+        // ためで、D1 は実際にその見落としで範囲外の値を保存し、復旧不能な
+        // クラッシュに至った。
+        //
+        // 検証を通った値をそのまま返す（draft で置き換えない）。ここは保存
+        // データを読む場所であり、読むついでに内容を書き換えると、保存されて
+        // いる値と画面に出る値が食い違う。整形（トリム）は書き込み側の責任。
+        for p in decoded.protocols {
+            guard case .success = CustomProtocolValidator.validate(
+                name: p.name, note: p.note, thresholds: p.thresholds) else {
+                throw CustomProtocolStoreError.corruptedContent
+            }
+        }
         return decoded
     }
 

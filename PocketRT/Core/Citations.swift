@@ -41,7 +41,7 @@ enum Citations {
 
     /// 中心型肺 SBRT 60 Gy/8 Fr の出典。
     /// 初版は JCOG0702 と誤記していた。JCOG0702 は末梢型 T2・4 分割であり別物。
-    /// JASTRO 放射線治療計画ガイドライン 2020 胸部章も JROSG10-1 を中枢型の推奨線量として挙げている。
+    /// JASTRO 放射線治療計画ガイドライン 2024 胸部章も JROSG10-1 を中枢型の推奨線量として挙げている。
     static let jrosg10_1 = Citation(
         id: "jrosg10_1", shortLabel: "JROSG10-1",
         authors: "Kimura T, Nagata Y, Harada H, et al.",
@@ -77,27 +77,27 @@ enum Citations {
         journal: "Radiother Oncol", year: 2018,
         pmid: "29397209", doi: "10.1016/j.radonc.2018.01.003")
 
-    // MARK: - ガイドラインに明記されているもの（JASTRO 放射線治療計画ガイドライン 2020）
+    // MARK: - ガイドラインに明記されているもの（JASTRO 放射線治療計画ガイドライン 2024）
 
     static let jastroHeadNeck = Citation(
-        id: "jastro_head_neck", shortLabel: "JASTRO 計画GL 2020 頭頸部",
-        guidelineNote: "放射線治療計画ガイドライン 2020 年版 頭頸部「70 Gy/35 回/7 週の通常分割照射が標準分割照射法である」")
+        id: "jastro_head_neck", shortLabel: "JASTRO 計画GL 2024 頭頸部",
+        guidelineNote: "放射線治療計画ガイドライン 2024 年版 頭頸部「70 Gy/35 回/7 週の通常分割照射が標準分割照射法である」")
 
     static let jastroProstate = Citation(
-        id: "jastro_prostate", shortLabel: "JASTRO 計画GL 2020 泌尿器",
-        guidelineNote: "放射線治療計画ガイドライン 2020 年版 泌尿器「IMRT の場合には 74〜78 Gy が用いられることが多い」。分割数は同記載からは確認できない（1 回 2 Gy とすれば 39 回）")
+        id: "jastro_prostate", shortLabel: "JASTRO 計画GL 2024 泌尿器",
+        guidelineNote: "放射線治療計画ガイドライン 2024 年版 泌尿器「IMRT の場合には 74〜78 Gy が用いられることが多い」。分割数は同記載からは確認できない（1 回 2 Gy とすれば 39 回）")
 
     static let jastroBreast = Citation(
-        id: "jastro_breast", shortLabel: "JASTRO 計画GL 2020 胸部",
-        guidelineNote: "放射線治療計画ガイドライン 2020 年版 胸部「通常分割照射（50 Gy/25 回/35 日）」")
+        id: "jastro_breast", shortLabel: "JASTRO 計画GL 2024 胸部",
+        guidelineNote: "放射線治療計画ガイドライン 2024 年版 胸部「通常分割照射（50 Gy/25 回/35 日）」")
 
     static let jastroWholeBrain = Citation(
-        id: "jastro_whole_brain", shortLabel: "JASTRO 計画GL 2020 緩和",
-        guidelineNote: "放射線治療計画ガイドライン 2020 年版 緩和「全脳照射では、30 Gy/10 回/2 週が標準的である」")
+        id: "jastro_whole_brain", shortLabel: "JASTRO 計画GL 2024 緩和",
+        guidelineNote: "放射線治療計画ガイドライン 2024 年版 緩和「全脳照射では、30 Gy/10 回/2 週が標準的である」")
 
     static let jastroAcoustic = Citation(
-        id: "jastro_acoustic", shortLabel: "JASTRO 計画GL 2020 中枢神経",
-        guidelineNote: "放射線治療計画ガイドライン 2020 年版 中枢神経「SRS：辺縁線量 12〜13 Gy で行われることが多く」")
+        id: "jastro_acoustic", shortLabel: "JASTRO 計画GL 2024 中枢神経",
+        guidelineNote: "放射線治療計画ガイドライン 2024 年版 中枢神経「SRS：辺縁線量 12〜13 Gy で行われることが多く」")
 
     // MARK: - 一次文献が確定したもの（PubMed 照合済み・data-sources.md §B4.1）
 

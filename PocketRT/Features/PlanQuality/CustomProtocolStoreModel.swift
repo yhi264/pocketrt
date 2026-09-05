@@ -31,15 +31,22 @@ enum CustomProtocolLoadFailureKind: Equatable, Sendable {
 /// 失われる経路ができた。失敗を成功として見せる点で、無言で終わるより悪い。
 /// 最初から分ける。
 ///
-/// D2 の v1 は書き出し・読み込み（インポート/エクスポート）機能を持たない
-/// （仕様 §6）。D1 の設計メモには「読み込みは、壊れた保存ファイルを置き換える
-/// 唯一の復旧手段でもある。禁止すると行き止まりになる」とある。D2 v1 はその
-/// 手段を持たないため、代わりに失敗の種類ごとに専用の復旧経路を持つ（仕様 §4.4）。
+/// 書き出しと読み込みを持つ（v2 で追加。v1 は持たなかった。仕様 §6 と
+/// ROADMAP 順位 16）。失敗の種類ごとの復旧経路は v1 のまま残し、そこに
+/// 読み込みを重ねている（仕様 §4.4）。
 ///
-/// - `unreadableFile` → `reload()`（保存データの読み直し）
+/// - `unreadableFile` → `reload()`（保存データの読み直し）。
+///   **読み込みは出さない。** データは無事であり、置き換えれば無事なものを失う
 /// - `unsupportedSchemaVersion` → 復旧経路なし。アプリの更新を待つ
-///   （`reload()` も `discardCorruptedData()` も、この種別のときは何もしない）
-/// - `corruptedContent` → `discardCorruptedData()`（破棄して作り直す）
+///   （`reload()` も `discardCorruptedData()` も、この種別のときは何もしない）。
+///   **読み込みも出さない。** 理由は上と同じ
+/// - `corruptedContent` → `discardCorruptedData()`（破棄して作り直す）、
+///   または**読み込み**（書き出しておいた内容を取り戻す）。読み込みの方が
+///   失うものが無いため、UI では先に出す
+///
+/// この出し分けが D1 との最大の違いである。D1 は失敗状態を 1 つしか持たない
+/// ので「読めなかった＝置き換えてよい」と単純化できた。D2 で同じ単純化を
+/// すると、無事なデータを読み込みで消せてしまう。
 @Observable
 final class CustomProtocolStoreModel {
     private(set) var protocols: [CustomProtocol] = []
@@ -180,6 +187,196 @@ final class CustomProtocolStoreModel {
             lastSaveError = nil
         } catch {
             lastSaveError = String(localized: "保存に失敗しました")
+        }
+    }
+}
+
+// MARK: - 書き出しと読み込み
+
+/// 読み込み（インポート）の結果。
+///
+/// `Error` に準拠しているのは実際に `throw` されるからではなく、
+/// `decodeAndValidate` の戻り値 `Result<CustomProtocolData, CustomProtocolImportResult>`
+/// の失敗側の型として使うため（`Result` の `Failure` は `Error` 制約を持つ）。
+/// この型が実際に `throw`/`catch` される経路はない。
+///
+/// D1（`ImportResult`）と似ているが同じではない。**`blockedByIntactData` は
+/// D1 に存在しない。** D1 は失敗状態を 1 つしか持たないため「読めなかった＝
+/// 置き換えてよい」と単純化できたが、D2 は失敗の種類を区別しており、
+/// そのうち 2 種（`unreadableFile` / `unsupportedSchemaVersion`）は
+/// **データが無事である**。無事なデータを読み込みで置き換えるのは、
+/// 仕様 §4.4 が禁じている「破棄」と実質的に同じ行為になる。
+enum CustomProtocolImportResult: Error, Equatable, Sendable {
+    case success(added: Int, updated: Int)
+    /// 壊れた保存ファイル（`corruptedContent`）を、読み込んだ内容で置き換えた
+    case replaced(count: Int)
+    case unsupportedVersion(Int)
+    case invalidFormat
+    /// デコードはできたが、範囲外の値を持つ基準があった。
+    /// 1 件でも不正なら取り込みを行わない（部分的に取り込むと、
+    /// 利用者が「何が入って何が入らなかったか」を確認できないため）。
+    case invalidProtocolValues(names: [String])
+    /// 保存先そのものが無い（`hasStore == false`）。読み込んでも保存
+    /// できないので、取り込みを行わない。
+    case storeUnavailable
+    /// 保存データを読めていないが、**そのデータは無事である**
+    /// （`unreadableFile` / `unsupportedSchemaVersion`）。
+    ///
+    /// 合流もできない（既存の内容が分からないため、id が一致するかを
+    /// 判定できない）。置き換えもできない（無事なデータを消すことになる）。
+    /// したがって何もしない。利用者には、まず表示中の復旧手段
+    /// （再読み込み、またはアプリの更新）を先に行うよう伝える。
+    case blockedByIntactData(CustomProtocolLoadFailureKind)
+    /// 保存データを読めておらず、その原因も特定できていない
+    /// （`loadFailure != nil` かつ `loadFailureKind == nil`）。
+    /// 破棄してよいか判断できないので、置き換えない。
+    case blockedByUnknownFailure
+}
+
+extension CustomProtocolStoreModel {
+
+    /// 書き出しの導線を出してよいか。
+    ///
+    /// 読み込みに失敗している間は出さない。そのとき `protocols` は空であり、
+    /// 空の内容を書き出しても意味がないうえ、それを後で読み込むと本当に
+    /// 空になる。「バックアップを取った」と思わせて中身が無いのが最も悪い。
+    var canExport: Bool { hasStore && loadFailure == nil }
+
+    /// 読み込みの導線を出してよいか。
+    ///
+    /// 通常時に加えて、`corruptedContent`（二度と読めない）のときだけ許す。
+    /// これは破棄（`discardCorruptedData()`）より good な復旧手段である——
+    /// 破棄は登録を失うが、読み込みは書き出しておいた内容を取り戻せる。
+    ///
+    /// `unreadableFile` と `unsupportedSchemaVersion` では出さない。
+    /// どちらもデータは無事で、置き換えれば無事なものを失う。
+    var canImport: Bool {
+        guard hasStore else { return false }
+        guard loadFailure != nil else { return true }
+        return loadFailureKind == .corruptedContent
+    }
+
+    /// 現在の内容を JSON にする。保存ファイルと同じ形式・同じ整形にする
+    /// （書き出したファイルが、そのまま保存ファイルの代わりになる）。
+    func exportData() -> Data? {
+        guard canExport else { return nil }
+        let data = CustomProtocolData(
+            schemaVersion: CustomProtocolStore.currentSchemaVersion, protocols: protocols)
+        let encoder = JSONEncoder()
+        encoder.outputFormatting = [.prettyPrinted, .sortedKeys]
+        return try? encoder.encode(data)
+    }
+
+    /// 現在の状態で読み込みを行ってよいかを判定する。
+    /// 判定できない状態を `CustomProtocolImportResult` として返す。
+    private func importBlocker() -> CustomProtocolImportResult? {
+        guard hasStore else { return .storeUnavailable }
+        guard loadFailure != nil else { return nil }
+        if let kind = loadFailureKind {
+            return kind == .corruptedContent ? nil : .blockedByIntactData(kind)
+        }
+        return .blockedByUnknownFailure
+    }
+
+    /// デコードと範囲検証だけを行い、状態を変更しない。
+    ///
+    /// **必ず `CustomProtocolValidator` の数値版を通す。** D1 では取り込み経路が
+    /// 検証を迂回し、範囲外の値が保存されて復旧不能なクラッシュに至った
+    /// （ROADMAP 順位 15・16 に記録）。文字列に戻して文字列版に通してはならない。
+    /// 書式化を経由する分、値が変わる余地を作る。
+    ///
+    /// 1 件でも不正なら、ファイル全体を取り込まない。部分的に取り込むと
+    /// 利用者が「何が入って何が入らなかったか」を確認できず、臨床判断に
+    /// 関わる閾値としては「一部だけ入った」より「何も変えていない」方が安全。
+    private func decodeAndValidate(_ raw: Data) -> Result<CustomProtocolData, CustomProtocolImportResult> {
+        struct VersionProbe: Decodable { let schemaVersion: Int }
+        if let probe = try? JSONDecoder().decode(VersionProbe.self, from: raw),
+           probe.schemaVersion != CustomProtocolStore.currentSchemaVersion {
+            return .failure(.unsupportedVersion(probe.schemaVersion))
+        }
+        guard let decoded = try? JSONDecoder().decode(CustomProtocolData.self, from: raw) else {
+            return .failure(.invalidFormat)
+        }
+
+        var invalidNames: [String] = []
+        var validated: [CustomProtocol] = []
+        for p in decoded.protocols {
+            switch CustomProtocolValidator.validate(
+                name: p.name, note: p.note, thresholds: p.thresholds) {
+            case .success(let draft):
+                validated.append(CustomProtocol(
+                    id: p.id, name: draft.name, note: draft.note,
+                    thresholds: draft.thresholds, createdAt: p.createdAt))
+            case .failure:
+                // 名前が空の基準も弾かれる。そのまま並べると空文字が
+                // 区切り文字だけになって何件あるか分からないので、
+                // place holder を置いて件数が読めるようにする。
+                invalidNames.append(p.name.trimmingCharacters(in: .whitespacesAndNewlines).isEmpty
+                                    ? String(localized: "（名前なし）") : p.name)
+            }
+        }
+        guard invalidNames.isEmpty else {
+            return .failure(.invalidProtocolValues(names: invalidNames))
+        }
+        return .success(CustomProtocolData(
+            schemaVersion: decoded.schemaVersion, protocols: validated))
+    }
+
+    /// 取り込む前に内容を確かめる。状態は変更しない。
+    ///
+    /// 他人が書き出した JSON を読み込むと、それが自施設の基準として扱われ、
+    /// 判定パネルに「利用者が登録した基準による」と表示されたまま、実際には
+    /// 別の施設の基準で判定することになる。プリセット（D1）より強い臨床的
+    /// 言明を生むため、取り込み前の確認は省けない。ここでは検証だけを行い、
+    /// 確認ダイアログに必要な情報を返す。
+    func previewImport(_ raw: Data) -> Result<(data: CustomProtocolData, willReplace: Bool), CustomProtocolImportResult> {
+        if let blocker = importBlocker() { return .failure(blocker) }
+        // ここに来た時点で、loadFailure != nil なら種別は corruptedContent に限られる。
+        return decodeAndValidate(raw).map { ($0, loadFailure != nil) }
+    }
+
+    /// 検証済みの内容を実際に適用する。`previewImport` で確認を取った後に呼ぶ。
+    ///
+    /// 通常は既存を消さず、id が一致するものだけ上書きする。
+    /// `corruptedContent` のときだけ、読み込んだ内容で置き換えて保存を再開する。
+    ///
+    /// 呼び出し側（UI）のガードに頼らず、ここでも `importBlocker()` を通す。
+    /// D1 では「UI がガードしているから大丈夫」という前提が、呼び出し元が
+    /// 増えたときに破れた。
+    @discardableResult
+    func applyImport(_ decoded: CustomProtocolData) -> CustomProtocolImportResult {
+        if let blocker = importBlocker() { return blocker }
+
+        if loadFailure != nil {
+            protocols = decoded.protocols
+            loadFailure = nil
+            loadFailureKind = nil
+            persist()
+            return .replaced(count: decoded.protocols.count)
+        }
+
+        var added = 0, updated = 0
+        for p in decoded.protocols {
+            if let i = protocols.firstIndex(where: { $0.id == p.id }) {
+                protocols[i] = p
+                updated += 1
+            } else {
+                protocols.append(p)
+                added += 1
+            }
+        }
+        persist()
+        return .success(added: added, updated: updated)
+    }
+
+    /// 確認を挟まない版。`previewImport` と `applyImport` を続けて呼ぶ。
+    /// 取り込み前の確認 UI を持たないテストから使う。
+    @discardableResult
+    func importData(_ raw: Data) -> CustomProtocolImportResult {
+        if let blocker = importBlocker() { return blocker }
+        switch decodeAndValidate(raw) {
+        case .success(let decoded): return applyImport(decoded)
+        case .failure(let result): return result
         }
     }
 }

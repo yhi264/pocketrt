@@ -304,6 +304,7 @@ struct PlanQualityView: View {
                 .padding()
             }
             .navigationTitle("品質指標")
+            .dismissibleKeyboard()
             .navigationBarTitleDisplayMode(.inline)
             .infoToolbarButton()
         }

@@ -1,17 +1,24 @@
 import Foundation
 
-/// 1コース分の処方
+/// 1コース分の処方。
+///
+/// **α/β を持たない。** BED は組織ごとの量で、α/β を選ぶ行為が「どの組織の
+/// 生物効果を見ているか」を決めている。コースごとに別の α/β を持たせると、
+/// 腫瘍の BED と晩期反応組織の BED を足すような操作ができてしまい、その和が
+/// 生物効果を表す組織は存在しない（摂氏と華氏を足すのと同じ）。
+///
+/// 合算が意味を持つのは評価対象の組織を 1 つ決めたときだけなので、α/β は
+/// コースではなく合算そのものに属する（`LQCore.cumulativeBED(courses:alphaBeta:)`）。
+/// 型から外して、混ざった和を作れないようにしてある。
 struct Course: Hashable, Identifiable {
     let id: UUID
     var totalDose: Double      // Gy
     var fractions: Int
-    var alphaBeta: Double      // Gy
 
-    init(id: UUID = UUID(), totalDose: Double, fractions: Int, alphaBeta: Double) {
+    init(id: UUID = UUID(), totalDose: Double, fractions: Int) {
         self.id = id
         self.totalDose = totalDose
         self.fractions = fractions
-        self.alphaBeta = alphaBeta
     }
 
     var dosePerFraction: Double {

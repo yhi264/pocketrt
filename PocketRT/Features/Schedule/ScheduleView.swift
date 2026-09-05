@@ -200,6 +200,7 @@ struct ScheduleView: View {
                 .padding()
             }
             .navigationTitle("スケジュール")
+            .dismissibleKeyboard()
             .sheet(isPresented: $showPresetSheet) {
                 PresetSheet(onSelect: { selection in
                     vm.apply(selection)

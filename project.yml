@@ -11,8 +11,8 @@ settings:
     # String Catalog への抽出には .stringsdata の生成が要る。
     # 既定は NO で、無効のままだと Text("リテラル") すらカタログに入らない。
     SWIFT_EMIT_LOC_STRINGS: YES
-    MARKETING_VERSION: "0.10.0"
-    CURRENT_PROJECT_VERSION: "3"
+    MARKETING_VERSION: "1.0.0"
+    CURRENT_PROJECT_VERSION: "10"
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
 targets:
@@ -57,3 +57,41 @@ targets:
         # ビルドに失敗する。アプリ本体は明示的な Info.plist を使うが
         # （GENERATE_INFOPLIST_FILE: NO）、テストバンドルは自動生成でよい。
         GENERATE_INFOPLIST_FILE: YES
+  PocketRTUITests:
+    type: bundle.ui-testing
+    platform: iOS
+    sources:
+      - PocketRTUITests
+    dependencies:
+      - target: PocketRT
+    settings:
+      base:
+        # 単体テストと同じ理由（Info.plist が無いと署名で落ちる）。
+        GENERATE_INFOPLIST_FILE: YES
+    # App Store 提出用スクリーンショットの撮影に使う。通常の
+    # `xcodebuild test` には含めない（起動と画面遷移で時間がかかり、
+    # CI の単体テストを遅くするため）。撮影は tools/screenshots.sh から
+    # -only-testing で明示的に呼ぶ。
+schemes:
+  # CI と日常の `xcodebuild test` はこちら。単体テストだけを走らせる。
+  PocketRT:
+    build:
+      targets:
+        PocketRT: all
+        PocketRTTests: [test]
+    test:
+      targets:
+        - PocketRTTests
+    run:
+      config: Debug
+  # App Store 提出用スクリーンショットの撮影専用。
+  # 上のスキームに混ぜると、起動と画面遷移で CI が遅くなる。
+  # tools/screenshots.sh がこちらを使う。
+  PocketRT-Screenshots:
+    build:
+      targets:
+        PocketRT: all
+        PocketRTUITests: [test]
+    test:
+      targets:
+        - PocketRTUITests

@@ -64,38 +64,38 @@ struct LQCoreCumulativeTests {
     @Test("2コース合算: 60Gy/30Fr + 30Gy/10Fr (α/β=10) → ΣBED=111.0")
     func twoCoursesBED() {
         let courses = [
-            Course(totalDose: 60.0, fractions: 30, alphaBeta: 10.0),
-            Course(totalDose: 30.0, fractions: 10, alphaBeta: 10.0)
+            Course(totalDose: 60.0, fractions: 30),
+            Course(totalDose: 30.0, fractions: 10)
         ]
-        let sum = LQCore.cumulativeBED(courses: courses)
+        let sum = LQCore.cumulativeBED(courses: courses, alphaBeta: 10.0)
         #expect(abs(sum - 111.0) < 0.01)
     }
 
     @Test("2コース合算 EQD2: 60Gy/30Fr + 30Gy/10Fr (α/β=10) → ΣEQD2=92.5")
     func twoCoursesEQD2() {
         let courses = [
-            Course(totalDose: 60.0, fractions: 30, alphaBeta: 10.0),
-            Course(totalDose: 30.0, fractions: 10, alphaBeta: 10.0)
+            Course(totalDose: 60.0, fractions: 30),
+            Course(totalDose: 30.0, fractions: 10)
         ]
-        let sum = LQCore.cumulativeEQD2(courses: courses)
+        let sum = LQCore.cumulativeEQD2(courses: courses, alphaBeta: 10.0)
         #expect(abs(sum - 92.5) < 0.01)
     }
 
     @Test("3コース合算 BED: 50/25 + 30/10 + 20/5 (α/β=10) → ΣBED=127.0")
     func threeCoursesBED() {
         let courses = [
-            Course(totalDose: 50.0, fractions: 25, alphaBeta: 10.0),
-            Course(totalDose: 30.0, fractions: 10, alphaBeta: 10.0),
-            Course(totalDose: 20.0, fractions: 5,  alphaBeta: 10.0)
+            Course(totalDose: 50.0, fractions: 25),
+            Course(totalDose: 30.0, fractions: 10),
+            Course(totalDose: 20.0, fractions: 5)
         ]
-        let sum = LQCore.cumulativeBED(courses: courses)
+        let sum = LQCore.cumulativeBED(courses: courses, alphaBeta: 10.0)
         #expect(abs(sum - 127.0) < 0.01)
     }
 
     @Test("空配列 → 0")
     func empty() {
-        #expect(LQCore.cumulativeBED(courses: []) == 0.0)
-        #expect(LQCore.cumulativeEQD2(courses: []) == 0.0)
+        #expect(LQCore.cumulativeBED(courses: [], alphaBeta: 10.0) == 0.0)
+        #expect(LQCore.cumulativeEQD2(courses: [], alphaBeta: 10.0) == 0.0)
     }
 }
 
