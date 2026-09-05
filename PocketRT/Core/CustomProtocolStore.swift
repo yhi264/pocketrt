@@ -36,7 +36,7 @@ enum CustomProtocolStoreError: Error, Equatable {
 /// 違わない）。片方でここに起因する欠陥が見つかったら、もう片方も同じ
 /// 欠陥を持っていないか必ず確認すること。** D1 はこの構造で実際に 5 件の
 /// 欠陥（うち 1 件は復旧不能なクラッシュ）を出した実績がある。共通化は
-/// G2 提出後に行う予定（ROADMAP）。それまでは 2 箇所を手で揃える。
+/// G2 提出後に行う予定。それまでは 2 箇所を手で揃える。
 ///
 /// 保存先の URL を注入できるようにしてある。テストで実際のアプリの
 /// 保存先を触らずに検証するため。
@@ -107,7 +107,7 @@ struct CustomProtocolStore {
             throw CustomProtocolStoreError.corruptedContent
         }
         // デコードできただけでは中身を信頼しない。範囲外の値を持つ基準が
-        // 1 件でもあれば corruptedContent として扱う（ROADMAP 順位 15）。
+        // 1 件でもあれば corruptedContent として扱う（別途課題として記録した）。
         //
         // 読み込み（インポート）経路も CustomProtocolStoreModel 側で同じ
         // 数値版検証を通しており、そちらで弾かれた内容がここへ到達すること

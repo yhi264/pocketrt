@@ -202,7 +202,7 @@ ICRU 91 は本アプリで未参照。
 
 ## B3. 既存プリセットの書誌情報
 
-`academic/references/bibliography.md` に既出のものは参照先を示す。
+参考文献台帳（非公開）に既出のものは、その番号で示す。
 
 ### 確認済み
 
@@ -216,7 +216,8 @@ ICRU 91 は本アプリで未参照。
 | 早期肺癌 末梢 48/4 | JCOG0403: Nagata Y, et al. *Int J Radiat Oncol Biol Phys.* 2015;93(5):989-96. PMID 26581137 | bibliography [15] |
 | 食道癌 60/30 | JCOG0303 (PMID 25640628) / JCOG0909 (PMID 35932949) | bibliography [17][18]。**2 試験に依拠するため、アプリでは 2 件の `Citation` として保持する**（下記） |
 | 脳転移 分割SRT 27/3 | JLGK0901: Yamamoto M, et al. *Lancet Oncol.* 2014;15(4):387-95. PMID 24621620 | bibliography [19] |
-| 脳転移 SRS 20/1・24/1 | RTOG 90-05: Shaw E, et al. *Int J Radiat Oncol Biol Phys.* 2000;47(2):291-8. PMID 10802351 | bibliography [20] |
+| 脳転移 SRS 24/1 | RTOG 90-05: Shaw E, et al. *Int J Radiat Oncol Biol Phys.* 2000;47(2):291-8. PMID 10802351 | bibliography [20]。**最大径 20 mm 以下**に対する最大耐容線量。対象は再発・既照射例 |
+| 脳転移 SRS 20/1 | JLGK0901: Yamamoto M, et al. *Lancet Oncol.* 2014;15(4):387-95. PMID 24621620 | bibliography [19]。**腫瘍体積 4〜10 mL** の辺縁線量（4 mL 未満は 22 Gy）。**2026-09-05 に RTOG 90-05 から付け替えた**（下記「訂正した誤り」4） |
 
 ### データモデル上の決定: 1 プリセット = 複数出典（2026-08-03）
 
@@ -247,23 +248,48 @@ ICRU 91 は本アプリで未参照。
 
 **処方点に注意**: JROSG10-1 は**アイソセンタ処方**。同ガイドラインは「アイソセンタ処方で 48 Gy は PTV D95% 処方で 42 Gy とほぼ同等」とも述べており、処方点の違いは BED 計算に影響する。**プリセットの注記に処方点を明示する。**
 
-#### 2. PACE-B の掲載誌を確定（`bibliography.md` [11] の未解決事項を解消）
+#### 2. PACE-B の掲載誌を確定（参考文献台帳 [11] の未解決事項を解消）
 
-`bibliography.md` [11] は掲載誌を「IJROBP 2023 抄録 / NEJM 2024 のいずれか未確定」としていた。PubMed で確認し確定した。
+参考文献台帳 [11] は掲載誌を「IJROBP 2023 抄録 / NEJM 2024 のいずれか未確定」としていた。PubMed で確認し確定した。
 
 - **主要有効性論文（プリセットが依拠すべきもの）**: van As N, Griffin C, Tree A, et al. "Phase 3 Trial of Stereotactic Body Radiotherapy in Localized Prostate Cancer." *N Engl J Med.* 2024;391(15):1413-25. **PMID 39413377. DOI 10.1056/NEJMoa2403365**
   抄録に **"SBRT (36.25 Gy in 5 fractions over a period of 1 or 2 weeks)"** とあり、プリセットと完全一致。5 年 FFBCF 95.8% vs 94.6%（HR 0.73、非劣性 p=0.004）
 - **急性期毒性の別報**（混同しやすいので併記）: Brand DH, Tree AC, Ostler P, et al. *Lancet Oncol.* 2019;20(11):1531-43. PMID 31540791. DOI 10.1016/S1470-2045(19)30569-8
 
-**STATUS.md の未解決事項「PACE-B [11] の引用情報の最終確認」はこれで解消する。**
+**未解決事項「PACE-B [11] の引用情報の最終確認」はこれで解消する。**
 
-#### 3. `bibliography.md` [16] の著者名が誤り
+#### 3. 参考文献台帳 [16] の著者名が誤り
 
 同エントリは JCOG0702 の著者を「Hamamoto Y, Kataoka M, Nogami N, Yamamoto N, Doi Y, Saito M, et al.」としているが、**PubMed の PMID 30277519 の著者は Onimaru R, Onishi H, Ogawa G, Hiraoka M, Ishikura S, Karasawa K, Matsuo Y, Kokubo M, Shioyama Y, Matsushita H, Ito Y, Shirato H** である。
 
 また同エントリの注釈は「recommending 55 Gy / 4 fractions」とするが、**抄録に推奨線量の記載はない**（40/45/50/55/60 Gy の各群の患者数と生存を報告するのみ）。
 
-**論文側（`academic/papers/draft01.md`、`bibliography.md`）の修正も必要。**STATUS.md の未解決事項「JCOG0702 [16] の引用情報の最終確認」はこれで解消する。
+**準備中の原稿と参考文献台帳の側の修正も必要。**未解決事項「JCOG0702 [16] の引用情報の最終確認」はこれで解消する。
+
+#### 4. 「脳転移 SRS 単発・標準 20 Gy/1 Fr」の出典は RTOG 90-05 ではない（2026-09-05）
+
+**誤り**: `Core/Presets.swift` は 20 Gy/1 Fr と 24 Gy/1 Fr の両方を `Citations.rtog9005` に紐付けていた（2026-08-03 の Phase 2b 実装以来）。
+
+**発見**: 2026-09-05、出典の再点検で見つかった。PubMed の抄録（PMID 10802351）と突き合わせて確認している。
+
+**事実**（PubMed の抄録で確認。PMID 10802351）: RTOG 90-05 の開始線量は最大径 ≤20 mm に 18 Gy、21-30 mm に 15 Gy、31-40 mm に 12 Gy であり、**3 Gy 刻み**で増量した。すなわち同試験が用いた線量段階は 12 / 15 / 18 / 21 / 24 / 27 Gy であって、**20 Gy という段階は存在しない**。最大耐容線量は径ごとに 24 / 18 / 15 Gy と報告されている。
+
+- 24 Gy は同試験の **≤20 mm における最大耐容線量**として実在する。ただし対象は再発・既照射例であり、無条件の推奨線量ではない
+- 20 Gy は同試験に無い。したがって RTOG 90-05 は 20 Gy の出典になりえない
+
+**正しい出典** = JLGK0901: Yamamoto M, Serizawa T, Shuto T, et al. "Stereotactic radiosurgery for patients with multiple brain metastases (JLGK0901): a multi-institutional prospective observational study." *Lancet Oncol.* 2014;15(4):387-95. PMID 24621620. DOI 10.1016/S1470-2045(14)70061-0
+→ 抄録に **"tumour volumes smaller than 4 mL were irradiated with 22 Gy at the lesion periphery and those that were 4-10 mL with 20 Gy"** とあり、20 Gy/1 回の前向き研究上の根拠はここにある。
+
+**採らなかった選択肢**:
+
+- **`unsourcedNote`（根拠を同定できていない）**: 事実に反する。JLGK0901 という一次文献が存在する
+- **プリセットの削除**: 20 Gy/1 回は臨床で広く用いられる線量であり、一次文献があるのに一覧から落とす理由がない
+
+**併せて行ったこと**: 20 Gy・24 Gy とも腫瘍の大きさで条件が付くため、プリセットの `note` に条件を明示した（20 Gy は体積 4〜10 mL、24 Gy は最大径 20 mm 以下・再発既照射例）。線量だけを出すと条件のない推奨に読めるため。
+
+**残る論点**: 「標準 / 高線量」というラベルは、実態がサイズによる層別であるのに線量選択の強弱に読める（大きい腫瘍に 24 Gy を選ばせうる）。**今回は出典の修正に留め、ラベルは変更していない。**
+
+`jlgk0901` の `Citation` 定義は 2026-08-06 に「参照するプリセットが無くなった」として削除されていた（本文書 §B5）。今回そのプリセットとの対応が復活したため、定義を復元し `Citations.all` に加えた。
 
 ### 未確認
 
@@ -408,6 +434,8 @@ DOI は Stupp のみ付与されている。Bone Pain Trial は PMID のみ。
 `jlgk0901`（JLGK0901）と `paceB`（PACE-B）は参照するプリセットがなくなったため定義ごと削除した。書誌情報は本文書 §B1 に残る。
 
 **副次的に見つかった不整合**: `jlgk0901` は `Citations.all` に元から列挙されておらず、`CitationTests` の網羅検査（id の一意性、根拠の有無）の対象外だった。表示は `PresetSheet` 経由だったため気づかれていなかった。削除後、`Citations.all` は定義済み 16 件すべてを網羅する。
+
+> **追記（2026-09-05）**: `jlgk0901` は、脳転移 SRS 20 Gy/1 Fr の出典として復元した（§B3「訂正した誤り」4）。今回は `Citations.all` にも列挙しているため、上記の網羅検査の対象に入る。
 
 ### 結果
 

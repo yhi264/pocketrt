@@ -110,7 +110,7 @@ struct ScheduleView: View {
                                     HStack(spacing: 4) {
                                         Image(systemName: "text.book.closed")
                                             .font(.caption2)
-                                        Text("線量分割の出典: \(vm.activeCitations.map(\.shortLabel).joined(separator: " / "))")
+                                        Text("線量分割の出典: \(vm.activeCitations.map { String(localized: $0.shortLabel) }.joined(separator: " / "))")
                                             .font(.caption2)
                                     }
                                     .foregroundStyle(.secondary)

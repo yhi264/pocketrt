@@ -8,19 +8,111 @@
 
     },
     " (%lld)" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " (%lld)"
+          }
+        }
+      }
+    },
+    " / < %@（基準をやや超える）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : " / < %@ (slightly exceeds criteria)"
+          }
+        }
+      }
     },
     "%" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%"
+          }
+        }
+      }
+    },
+    "%@ < %@（基準内）" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ < %2$@（基準内）"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ < %2$@ (within criteria)"
+          }
+        }
+      }
+    },
+    "%@ Gy/%lld Fr" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Gy/%2$lld Fr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Gy/%2$lld Fr"
+          }
+        }
+      }
+    },
+    "%@ Gy（%@ Gy/回）" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@ Gy（%2$@ Gy/回）"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Gy (%2$@ Gy/fraction)"
+          }
+        }
+      }
     },
     "%@ の「基準をやや超える」だけでは判定に使えません。「基準内」も入力してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ cannot be assessed from “Slightly exceeds criteria” alone. Enter “Within criteria” as well."
+          }
+        }
+      }
     },
     "%@ の「基準をやや超える」の閾値は「基準内」より大きい値にしてください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The “Slightly exceeds criteria” threshold for %@ must be greater than the “Within criteria” threshold."
+          }
+        }
+      }
     },
     "%@ の閾値は %@ で入力してください" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the threshold for %1$@ in %2$@."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -30,31 +122,93 @@
       }
     },
     "%@ を削除します。取り消せません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ will be deleted. This cannot be undone."
+          }
+        }
+      }
     },
     "%@ 個別休止" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Individual break"
+          }
+        }
+      }
     },
     "%@ 土曜" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Saturday"
+          }
+        }
+      }
     },
     "%@ 基準内" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ within criteria"
+          }
+        }
+      }
     },
     "%@ 日曜" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Sunday"
+          }
+        }
+      }
     },
     "%@ 治療期間外" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Outside treatment course"
+          }
+        }
+      }
     },
     "%@ 照射なし" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ No treatment"
+          }
+        }
+      }
     },
     "%@ 祝日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ Holiday"
+          }
+        }
+      }
     },
     "%@ 第%lld回" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ Fraction %2$lld"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -64,10 +218,55 @@
       }
     },
     "%@ 許容" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%@ acceptable"
+          }
+        }
+      }
+    },
+    "%@〜%@ Gy/%lld Fr" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@〜%2$@ Gy/%3$lld Fr"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@–%2$@ Gy/%3$lld Fr"
+          }
+        }
+      }
+    },
+    "%@〜%@ Gy（%@〜%@ Gy/回）" : {
+      "localizations" : {
+        "ja" : {
+          "stringUnit" : {
+            "state" : "new",
+            "value" : "%1$@〜%2$@ Gy（%3$@〜%4$@ Gy/回）"
+          }
+        },
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@–%2$@ Gy (%3$@–%4$@ Gy/fraction)"
+          }
+        }
+      }
     },
     "%@（%@）を削除します。取り消せません。" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$@ (%2$@) will be deleted. This cannot be undone."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -77,13 +276,33 @@
       }
     },
     "%lld" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld"
+          }
+        }
+      }
     },
     "%lld Fr" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld Fr"
+          }
+        }
+      }
     },
     "%lld Fr / %lld Fr" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld Fr / %2$lld Fr"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -93,19 +312,53 @@
       }
     },
     "%lld 件のプリセットを読み込みます。id が一致するものは上書きされ、それ以外は追加されます。読み込んだ内容は自施設のプロトコルとして扱われます。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld presets will be imported. Entries with a matching id are overwritten; the rest are added. Imported entries are treated as institutional protocols."
+          }
+        }
+      }
     },
     "%lld 件のプリセットを読み込みます。保存データを読めなかったため、既存の内容を置き換えます。読み込んだ内容は自施設のプロトコルとして扱われます。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld presets will be imported. Because the saved data could not be read, the existing contents will be replaced. Imported entries are treated as institutional protocols."
+          }
+        }
+      }
     },
     "%lld 件の基準を読み込みます。id が一致するものは上書きされ、それ以外は追加されます。読み込んだ内容は自施設の基準として扱われ、判定に使われます。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld criteria sets will be imported. Entries with a matching id are overwritten; the rest are added. Imported entries are treated as institutional criteria and are used for assessment."
+          }
+        }
+      }
     },
     "%lld 件の基準を読み込みます。保存データを読めなかったため、既存の内容を置き換えます。読み込んだ内容は自施設の基準として扱われ、判定に使われます。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%lld criteria sets will be imported. Because the saved data could not be read, the existing contents will be replaced. Imported entries are treated as institutional criteria and are used for assessment."
+          }
+        }
+      }
     },
     "%lld 件を追加、%lld 件を更新しました" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Added %1$lld, updated %2$lld."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -116,6 +369,12 @@
     },
     "%lld 日（照射 %lld + 休止 %lld）" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "%1$lld days (%2$lld treatment + %3$lld break)"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -125,109 +384,513 @@
       }
     },
     "0.1〜200 Gy" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0.1–200 Gy"
+          }
+        }
+      }
     },
     "0.1〜30 Gy" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0.1–30 Gy"
+          }
+        }
+      }
     },
     "0.5〜30 Gy" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "0.5–30 Gy"
+          }
+        }
+      }
     },
     "1〜99 Fr" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "1–99 Fr"
+          }
+        }
+      }
     },
     "1回線量" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dose per fraction"
+          }
+        }
+      }
     },
     "1回線量指定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specify dose per fraction"
+          }
+        }
+      }
     },
     "50% 等線量体積が処方等線量体積より小さくなっています" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The 50% isodose volume is smaller than the prescription isodose volume."
+          }
+        }
+      }
     },
     "BED" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BED"
+          }
+        }
+      }
     },
     "BED = n · d · (1 + d / (α/β))" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BED = n · d · (1 + d / (α/β))"
+          }
+        }
+      }
     },
     "BED を「1 回 2 Gy の通常分割で照射した場合の総線量」に換算した値です。\n臨床で慣用される線量感覚に近いため、BED より解釈しやすい場面があります。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BED expressed as the total dose that would be delivered with conventional 2 Gy fractions.\nBecause it is closer to the dose scale used in daily practice, it is often easier to interpret than BED."
+          }
+        }
+      }
     },
     "BED（生物学的等価線量）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BED (biologically effective dose)"
+          }
+        }
+      }
+    },
+    "Bone Pain Trial" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bone Pain Trial"
+          }
+        }
+      }
+    },
+    "CHHiP" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CHHiP"
+          }
+        }
+      }
+    },
+    "CI(RTOG) = PIV / TV\nCI(Paddick) = TV_PIV² / (TV × PIV)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "CI(RTOG) = PIV / TV\nCI(Paddick) = TV_PIV² / (TV × PIV)"
+          }
+        }
+      }
     },
     "Coverage（90% / 80% 等線量線が標的を完全に覆うかの判定）は真偽の判定であり数値指標ではないため、本アプリはこの入力を持たず判定していません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coverage (whether the 90% / 80% isodose line fully encloses the target) is a yes/no determination rather than a numerical index, so this app does not take that input and does not assess it."
+          }
+        }
+      }
     },
     "D2%" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D2%"
+          }
+        }
+      }
     },
     "D2cm" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D2cm"
+          }
+        }
+      }
     },
     "D50%" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D50%"
+          }
+        }
+      }
     },
     "D50% が D98%〜D2% の範囲外です" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D50% is outside the range D98%–D2%."
+          }
+        }
+      }
     },
     "D98%" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D98%"
+          }
+        }
+      }
     },
     "D98% が D2% を超えています" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "D98% exceeds D2%."
+          }
+        }
+      }
     },
     "Dmax" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dmax"
+          }
+        }
+      }
     },
     "EQD2" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EQD2"
+          }
+        }
+      }
     },
     "EQD2 = BED / (1 + 2 / (α/β))" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EQD2 = BED / (1 + 2 / (α/β))"
+          }
+        }
+      }
     },
     "EQD2（2 Gy 等価線量）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "EQD2 (2 Gy equivalent dose)"
+          }
+        }
+      }
+    },
+    "FAST-Forward" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "FAST-Forward"
+          }
+        }
+      }
     },
     "Fr" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fr"
+          }
+        }
+      }
     },
     "Glioblastoma" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Glioblastoma"
+          }
+        }
+      }
     },
     "Gy" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Gy"
+          }
+        }
+      }
+    },
+    "HI(RTOG) = Dmax / Rx\nHI(ICRU-83) = (D2% − D98%) / D50%" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "HI(RTOG) = Dmax / Rx\nHI(ICRU-83) = (D2% − D98%) / D50%"
+          }
+        }
+      }
+    },
+    "JASTRO 計画GL 2024 中枢神経" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Planning GL 2024, CNS"
+          }
+        }
+      }
+    },
+    "JASTRO 計画GL 2024 泌尿器" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Planning GL 2024, Genitourinary"
+          }
+        }
+      }
+    },
+    "JASTRO 計画GL 2024 緩和" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Planning GL 2024, Palliative"
+          }
+        }
+      }
+    },
+    "JASTRO 計画GL 2024 胸部" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Planning GL 2024, Thorax"
+          }
+        }
+      }
+    },
+    "JASTRO 計画GL 2024 頭頸部" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Planning GL 2024, Head & Neck"
+          }
+        }
+      }
+    },
+    "JCOG0303" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JCOG0303"
+          }
+        }
+      }
+    },
+    "JCOG0403" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JCOG0403"
+          }
+        }
+      }
+    },
+    "JCOG0909" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JCOG0909"
+          }
+        }
+      }
+    },
+    "JLGK0901" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JLGK0901"
+          }
+        }
+      }
+    },
+    "JLGK0901 は腫瘍体積 4〜10 mL に辺縁線量 20 Gy を処方した（4 mL 未満は 22 Gy）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JLGK0901 prescribed 20 Gy to the lesion periphery for tumor volumes of 4–10 mL (22 Gy for volumes under 4 mL)."
+          }
+        }
+      }
+    },
+    "JROSG10-1" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JROSG10-1"
+          }
+        }
+      }
     },
     "Major deviation" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Major deviation"
+          }
+        }
+      }
     },
     "Minor deviation" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Minor deviation"
+          }
+        }
+      }
     },
     "OAR 既定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OAR default"
+          }
+        }
+      }
     },
     "OK" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "OK"
+          }
+        }
+      }
     },
     "PIV" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIV"
+          }
+        }
+      }
     },
     "PIV は処方線量以上を受ける全体積、PTV∩PIV は PTV のうち処方線量以上を受ける体積、V50% は処方線量の 50% 以上を受ける体積。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PIV is the total volume receiving at least the prescription dose, PTV∩PIV is the part of the PTV receiving at least the prescription dose, and V50% is the volume receiving at least 50% of the prescription dose."
+          }
+        }
+      }
     },
     "PMID %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PMID %@"
+          }
+        }
+      }
     },
     "PTV 体積" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PTV volume"
+          }
+        }
+      }
     },
     "PTV 体積が未入力です" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PTV volume has not been entered."
+          }
+        }
+      }
     },
     "PTV 体積が表の範囲（%.1f〜%.1f cc）外のため判定できません" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The PTV volume is outside the range of the table (%1$.1f–%2$.1f cc), so no assessment can be made."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -237,124 +900,534 @@
       }
     },
     "PTV 内で処方線量以上の体積が PTV 体積を超えています" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The volume within the PTV receiving at least the prescription dose exceeds the PTV volume."
+          }
+        }
+      }
     },
     "PTV 内で処方線量以上の体積が処方等線量体積を超えています" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The volume within the PTV receiving at least the prescription dose exceeds the prescription isodose volume."
+          }
+        }
+      }
     },
     "PTV∩PIV" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PTV∩PIV"
+          }
+        }
+      }
     },
     "Per protocol" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Per protocol"
+          }
+        }
+      }
     },
     "PocketRT のプリセット" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PocketRT presets"
+          }
+        }
+      }
     },
     "PocketRT の自施設基準" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PocketRT institutional criteria"
+          }
+        }
+      }
     },
     "PocketRT は、利用者の個人情報を一切収集しません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PocketRT collects no personal information of any kind."
+          }
+        }
+      }
     },
     "PocketRT は、放射線治療に従事する医療従事者向けの教育および参考用ツールです。診断または治療の判断を行うものではありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PocketRT is an educational and reference tool for healthcare professionals working in radiation therapy. It does not make diagnostic or treatment decisions."
+          }
+        }
+      }
     },
     "PocketRT プライバシーポリシー" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PocketRT Privacy Policy"
+          }
+        }
+      }
+    },
+    "R50% = V50%Rx / TV\nGI(Paddick) = V50%Rx / PIV\nD2cm = (PTV から 2 cm 外側の最大線量) / Rx × 100" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "R50% = V50%Rx / TV\nGI(Paddick) = V50%Rx / PIV\nD2cm = (max dose 2 cm outside the PTV) / Rx × 100"
+          }
+        }
+      }
     },
     "R50% の定義は原典間で食い違っています。RTOG 0813 は「処方線量の 50% の等線量体積 ÷ PTV 体積」と定義していますが、RTOG 0915 は同じ箇所を「34 Gy または 12 Gy の等線量体積」と記しており、これは第 1 群の全線量と第 2 群の 1 回線量にあたり、いずれも処方線量の 50% になりません。本アプリは、両プロトコルの表の見出し（Ratio of 50% Prescription Isodose Volume to the PTV Volume）と RTOG 0813 の記述に従い、「処方線量の 50% の等線量体積 ÷ PTV 体積」として計算します。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The source protocols define R50% differently. RTOG 0813 defines it as “the isodose volume of 50% of the prescription dose ÷ PTV volume,” whereas RTOG 0915 describes the same quantity as “the isodose volume of 34 Gy or 12 Gy” — the total dose of arm 1 and the fraction dose of arm 2, neither of which is 50% of the prescription dose. This app follows the table heading used in both protocols (Ratio of 50% Prescription Isodose Volume to the PTV Volume) and the wording of RTOG 0813, and computes R50% as the isodose volume of 50% of the prescription dose ÷ PTV volume."
+          }
+        }
+      }
+    },
+    "RTOG 0813" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RTOG 0813"
+          }
+        }
+      }
     },
     "RTOG 0813（中心型肺）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RTOG 0813 (central lung)"
+          }
+        }
+      }
+    },
+    "RTOG 0915" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RTOG 0915"
+          }
+        }
+      }
     },
     "RTOG 0915（末梢型肺）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RTOG 0915 (peripheral lung)"
+          }
+        }
+      }
+    },
+    "RTOG 90-05" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "RTOG 90-05"
+          }
+        }
+      }
+    },
+    "RTOG 90-05 が最大径 20 mm 以下に定めた最大耐容線量。対象は再発・既照射例" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The maximum tolerated dose defined by RTOG 90-05 for tumors 20 mm or less in maximum diameter. The trial population was recurrent, previously irradiated tumors."
+          }
+        }
+      }
+    },
+    "Rich/Chow 2018 メタ解析" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rich/Chow 2018 meta-analysis"
+          }
+        }
+      }
     },
     "Rx は処方線量、Dmax は最大線量、Dx% は標的の x% が受ける線量です。\nどちらも値が小さいほど均一で、RTOG 型は 1、ICRU-83 型は 0 が下限です。\nSBRT では意図的に標的内を不均一にするため、値が大きいことが\nただちに問題を意味するわけではありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Rx is the prescription dose, Dmax the maximum dose, and Dx% the dose received by x% of the target.\nFor both indices a smaller value means greater homogeneity; the lower bound is 1 for the RTOG form and 0 for the ICRU-83 form.\nSBRT deliberately makes the dose inside the target inhomogeneous, so a large value does not\nby itself indicate a problem."
+          }
+        }
+      }
     },
     "SBRT（体幹部）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SBRT (body)"
+          }
+        }
+      }
     },
     "SRT（頭蓋内）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "SRT (intracranial)"
+          }
+        }
+      }
+    },
+    "START-B" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "START-B"
+          }
+        }
+      }
+    },
+    "Shaw 1993（RTOG SRS QA guidelines）" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Shaw 1993 (RTOG SRS QA guidelines)"
+          }
+        }
+      }
+    },
+    "Stupp レジメン" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Stupp regimen"
+          }
+        }
+      }
+    },
+    "TROG SRS Technical Working Group (2026)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TROG SRS Technical Working Group (2026)"
+          }
+        }
+      }
     },
     "TV は標的体積（PTV）、PIV は処方線量以上を受ける全体積、\nTV_PIV は PTV のうち処方線量以上を受ける体積です。\nRTOG 型は標的外への広がりを区別できませんが、Paddick 型は\n標的の被覆不足と標的外への漏れの両方を反映します。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "TV is the target volume (PTV), PIV the total volume receiving at least the prescription dose, and\nTV_PIV the part of the PTV receiving at least the prescription dose.\nThe RTOG form cannot distinguish spill outside the target, whereas the Paddick form\nreflects both under-coverage of the target and spill outside it."
+          }
+        }
+      }
     },
     "V50%" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "V50%"
+          }
+        }
+      }
     },
     "V50%Rx は処方線量の 50% 以上を受ける体積です。\nいずれも標的の外側で線量がどれだけ速く落ちるかを表し、\n値が小さいほど勾配が急です。\n\nR50% と D2cm は RTOG 0813 / 0915 が PTV 体積ごとの許容値を定めています。\n本アプリの逸脱判定はその表を参照するもので、推奨や指示ではありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "V50%Rx is the volume receiving at least 50% of the prescription dose.\nAll of these describe how quickly the dose falls off outside the target;\na smaller value means a steeper gradient.\n\nRTOG 0813 / 0915 define tolerance values for R50% and D2cm by PTV volume.\nThe deviation assessment in this app refers to those tables; it is not a recommendation or an instruction."
+          }
+        }
+      }
+    },
+    "Whelan 2010 (OCOG)" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whelan 2010 (OCOG)"
+          }
+        }
+      }
     },
     "cc" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "cc"
+          }
+        }
+      }
     },
     "d = D / n" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "d = D / n"
+          }
+        }
+      }
+    },
+    "d' = (α/β)/2 · [ -1 + √(1 + 4·BED / (n'·(α/β))) ]" : {
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "d' = (α/β)/2 · [ -1 + √(1 + 4·BED / (n'·(α/β))) ]"
+          }
+        }
+      }
     },
     "https://yhi264.github.io/pocketrt/privacy/" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "https://yhi264.github.io/pocketrt/privacy/"
+          }
+        }
+      }
     },
     "n は分割回数、d は 1 回線量（= 総線量 ÷ n）、α/β は組織固有のパラメータです。\nLinear-Quadratic モデルに基づき、分割の違いを揃えて比較するための指標です。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "n is the number of fractions, d the dose per fraction (= total dose ÷ n), and α/β a tissue-specific parameter.\nBased on the linear-quadratic model, these indices allow schedules with different fractionation to be compared on a common basis."
+          }
+        }
+      }
     },
     "Σ BED" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σ BED"
+          }
+        }
+      }
     },
     "Σ EQD2" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Σ EQD2"
+          }
+        }
+      }
     },
     "α/β" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "α/β"
+          }
+        }
+      }
     },
     "α/β は 0.5〜30 Gy で入力してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter α/β between 0.5 and 30 Gy."
+          }
+        }
+      }
     },
     "α/β プリセット" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "α/β presets"
+          }
+        }
+      }
     },
     "α/β 値について" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About α/β values"
+          }
+        }
+      }
     },
     "α/β（任意）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "α/β (optional)"
+          }
+        }
+      }
     },
     "• 担当医師と医学物理士の判断" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The judgment of the attending physician and the medical physicist"
+          }
+        }
+      }
     },
     "• 施設のプロトコル" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Your institution’s protocol"
+          }
+        }
+      }
     },
     "• 最新のガイドライン（JASTRO, NCCN, ESTRO 等）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• Current guidelines (JASTRO, NCCN, ESTRO, etc.)"
+          }
+        }
+      }
     },
     "⚠ 再照射では回復係数(recovery factor)を考慮する必要があります。本計算は単純加算であり、再照射計画には用いないでください。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "⚠ Re-irradiation requires a recovery factor to be taken into account. This calculation is a simple sum and must not be used for re-irradiation planning."
+          }
+        }
+      }
+    },
+    "、" : {
+      "comment" : "登録した閾値どうしの区切り",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", "
+          }
+        }
+      }
     },
     "「基準内」未満なら基準内、「許容」未満なら基準をやや超える、それ以上は基準を超える。「許容」は空欄にできます（2 段階になります）。定めていない指標は両方空欄のままにしてください。少なくとも 1 つの指標に「基準内」の入力が必要です。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Below the “Within criteria” value counts as within criteria, below the “Acceptable” value as slightly exceeding criteria, and anything above that as exceeding criteria. “Acceptable” may be left blank (giving a two-level scale). Leave both fields blank for indices you have not defined. At least one index must have a “Within criteria” value."
+          }
+        }
+      }
     },
     "お問い合わせ" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Contact"
+          }
+        }
+      }
     },
     "こどもの日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Children’s Day"
+          }
+        }
+      }
     },
     "このアプリが対応していない形式です" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This file format is not supported by the app."
+          }
+        }
+      }
     },
     "このアプリについて" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About this app"
+          }
+        }
+      }
     },
     "このプリセットを削除しますか" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete this preset?"
+          }
+        }
+      }
     },
     "このプロトコルが %lld 分割で検討したのは %@です。入力は %@ Gy（%@ Gy/回）のため判定できません" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For %1$lld fractions this protocol studied %2$@. The entered dose is %3$@ Gy (%4$@ Gy/fraction), so no assessment can be made."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -365,6 +1438,12 @@
     },
     "このプロトコルが検討したのは %@ 分割です。入力は %lld 分割のため判定できません" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This protocol studied %1$@ fractions. The entered schedule has %2$lld fractions, so no assessment can be made."
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -374,244 +1453,814 @@
       }
     },
     "この判定は利用者が登録した基準によるものです。公表されたプロトコルへの適合を示すものではありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This assessment uses criteria entered by the user. It does not indicate conformity with any published protocol."
+          }
+        }
+      }
     },
     "この判定基準について" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About these criteria"
+          }
+        }
+      }
     },
     "この判定基準は 1993 年発表の文書です。IMRT / VMAT や多発病変への単一アイソセンター照射が普及する前のものであり、現在の実務との関係は利用者が判断してください。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "These criteria come from a document published in 1993, before IMRT / VMAT and single-isocenter treatment of multiple lesions became widespread. Users must judge for themselves how they relate to current practice."
+          }
+        }
+      }
     },
     "この基準を削除しますか" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete these criteria?"
+          }
+        }
+      }
     },
     "ご利用にあたって" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Before you begin"
+          }
+        }
+      }
     },
     "すべてのコースをこの α/β で評価します。BED は組織ごとの量なので、コースごとに変えた値を足しても、その和が生物効果を表す組織はありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "All courses are evaluated with this α/β. BED is a tissue-specific quantity, so if a different value is used for each course there is no tissue for which the resulting sum represents the biological effect."
+          }
+        }
+      }
     },
     "みどりの日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Greenery Day"
+          }
+        }
+      }
     },
     "やめる" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "アイソセンタ処方" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prescribed to the isocenter"
+          }
+        }
+      }
     },
     "アイソセンタ処方。JROSG10-1 の推奨線量" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prescribed to the isocenter. The recommended dose of JROSG10-1."
+          }
+        }
+      }
     },
     "カレンダー" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calendar"
+          }
+        }
+      }
     },
     "キャンセル" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cancel"
+          }
+        }
+      }
     },
     "コース %lld" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Course %lld"
+          }
+        }
+      }
     },
     "コースを追加" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add course"
+          }
+        }
+      }
     },
     "スケジュール" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schedule"
+          }
+        }
+      }
     },
     "スケジュール条件" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schedule settings"
+          }
+        }
+      }
     },
     "スポーツの日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sports Day"
+          }
+        }
+      }
     },
     "デフォルト" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Default"
+          }
+        }
+      }
     },
     "ネットワーク通信" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Network communication"
+          }
+        }
+      }
     },
     "バージョン" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Version"
+          }
+        }
+      }
     },
     "ファイルにアクセスできませんでした" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file could not be accessed."
+          }
+        }
+      }
     },
     "ファイルの形式が正しくありません" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file format is not valid."
+          }
+        }
+      }
     },
     "ファイルを読み込めませんでした" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file could not be imported."
+          }
+        }
+      }
     },
     "ファイルを読めませんでした" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The file could not be read."
+          }
+        }
+      }
     },
     "プライバシーポリシー" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Privacy Policy"
+          }
+        }
+      }
     },
     "プリセット" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Presets"
+          }
+        }
+      }
     },
     "プリセットから選ぶ" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Choose from presets"
+          }
+        }
+      }
     },
     "プリセットの管理" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage presets"
+          }
+        }
+      }
     },
     "プリセットは代表的なレジメン例の参考表示です。施設のプロトコルと最新のガイドラインを必ず参照してください。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The presets are reference examples of representative regimens. Always consult your institution’s protocol and current guidelines."
+          }
+        }
+      }
     },
     "プリセットを編集" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit preset"
+          }
+        }
+      }
     },
     "プリセットを読み込みますか" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import presets?"
+          }
+        }
+      }
     },
     "プリセットを追加" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add preset"
+          }
+        }
+      }
     },
     "プロトコル" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Protocol"
+          }
+        }
+      }
     },
     "プロトコルが選択されていません" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No protocol has been selected."
+          }
+        }
+      }
     },
     "メモは 100 文字までです" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notes may be up to 100 characters."
+          }
+        }
+      }
     },
     "メモ（任意）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Notes (optional)"
+          }
+        }
+      }
+    },
+    "・" : {
+      "comment" : "検討された線量分割どうしの区切り",
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : ", "
+          }
+        }
+      }
     },
     "・LQ モデルは 1 回線量が大きい領域（SBRT / SRS）での妥当性が議論されています。\n  高線量域では、計算値を確定的なものとして扱わないでください。\n\n・治療期間（OTT）の延長に対する生物学的補正は実装していません。\n  計画的に治療期間を短縮すると転帰が改善することは、ランダム化試験で支持されています。\n  一方、予期せぬ中断による延長の影響はこれとは別の問いで、根拠は観察研究にとどまります。\n  その影響量を係数で定量できるかはさらに不確かで、補正によって転帰を回収できることを\n  示す臨床エビデンスは確認できませんでした。\n  中断が生じた場合は、施設のプロトコルと成書に従ってください。\n\n・分割内の中断（照射中の数十分の中断）は亜致死損傷回復の問題であり、\n  治療期間の問題とは別のモデルです。本アプリは扱いません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "• The validity of the LQ model at large fraction sizes (SBRT / SRS) is debated.\n  In the high-dose range, do not treat the computed values as definitive.\n\n• No biological correction for prolongation of overall treatment time (OTT) is implemented.\n  Randomized trials support the finding that deliberately shortening overall treatment time improves outcome.\n  The effect of prolongation caused by unplanned interruptions is a separate question, and the\n  evidence for it comes only from observational studies. Whether that effect can be quantified by a\n  coefficient is more uncertain still, and no clinical evidence was found showing that such a\n  correction recovers the lost outcome.\n  If an interruption occurs, follow your institution’s protocol and standard textbooks.\n\n• Interruptions within a fraction (a pause of tens of minutes during delivery) concern sublethal\n  damage repair and are a different model from overall treatment time. This app does not address them."
+          }
+        }
+      }
     },
     "中等度寡分割" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Moderate hypofractionation"
+          }
+        }
+      }
     },
     "乳癌" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breast cancer"
+          }
+        }
+      }
     },
     "乳癌寡分割 (START-B)" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breast hypofractionation (START-B)"
+          }
+        }
+      }
     },
     "乳癌寡分割 (Whelan)" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breast hypofractionation (Whelan)"
+          }
+        }
+      }
     },
     "乳癌温存術後" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breast, post breast-conserving surgery"
+          }
+        }
+      }
     },
     "乳癌超寡分割 (FAST-F)" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Breast ultra-hypofractionation (FAST-Forward)"
+          }
+        }
+      }
     },
     "予定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Schedule"
+          }
+        }
+      }
     },
     "予測" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Projection"
+          }
+        }
+      }
     },
     "今日の進捗" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Today’s progress"
+          }
+        }
+      }
     },
     "休" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Off"
+          }
+        }
+      }
     },
     "低 α/β 腫瘍" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Low α/β tumor"
+          }
+        }
+      }
     },
     "保存" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Save"
+          }
+        }
+      }
     },
     "保存に失敗しました" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saving failed."
+          }
+        }
+      }
     },
     "保存データが新しい形式です（version %lld）。アプリを更新してください。誤って上書きしないよう、変更は保存されません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved data uses a newer format (version %lld). Please update the app. To avoid overwriting it by mistake, changes will not be saved."
+          }
+        }
+      }
     },
     "保存データは新しい形式のまま残っています。アプリを更新すると読めます。読み込んで置き換えると、その登録を失います。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved data remains intact in the newer format and will be readable once the app is updated. Importing over it would discard those entries."
+          }
+        }
+      }
     },
     "保存データは端末に残っています。先に「再読み込み」をお試しください。読み込んで置き換えると、読めるようになったはずの登録を失います。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved data is still on this device. Try “Reload” first. Importing over it would discard entries that could otherwise have been read."
+          }
+        }
+      }
     },
     "保存データを破棄" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard saved data"
+          }
+        }
+      }
     },
     "保存データを破棄しますか" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard the saved data?"
+          }
+        }
+      }
     },
     "保存データを読めない原因を特定できていません。読み込んで置き換えると、残っているかもしれない登録を失います。アプリを再起動してからお試しください。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The reason the saved data cannot be read has not been identified. Importing over it would discard entries that may still be intact. Please restart the app and try again."
+          }
+        }
+      }
     },
     "保存データを読めなかったため、読み込んだ %lld 件で置き換えました" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved data could not be read, so it was replaced with the %lld imported entries."
+          }
+        }
+      }
     },
     "保存データを読めませんでした。誤って上書きしないよう、変更は保存されません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved data could not be read. To avoid overwriting it by mistake, changes will not be saved."
+          }
+        }
+      }
     },
     "保存データを開けませんでした。端末のロックを解除してからアプリを再起動すると読めることがあります。誤って上書きしないよう、変更は保存されません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The saved data could not be opened. Unlocking the device and restarting the app may make it readable. To avoid overwriting it by mistake, changes will not be saved."
+          }
+        }
+      }
     },
     "保存先を用意できないため、読み込んでも保存できません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No storage location is available, so imported entries cannot be saved."
+          }
+        }
+      }
     },
     "保存先を用意できませんでした。この端末では自施設の判定基準を保存できません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No storage location could be prepared. Institutional criteria cannot be saved on this device."
+          }
+        }
+      }
     },
     "保存先を用意できませんでした。この端末では自施設プリセットを保存できません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No storage location could be prepared. Institutional presets cannot be saved on this device."
+          }
+        }
+      }
     },
     "個別休止" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Individual break"
+          }
+        }
+      }
     },
     "値が範囲外のプリセットがあるため、何も取り込みませんでした: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing was imported because some presets have values out of range: %@"
+          }
+        }
+      }
     },
     "値が範囲外の基準があるため、何も取り込みませんでした: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Nothing was imported because some criteria have values out of range: %@"
+          }
+        }
+      }
     },
     "元の制約" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Original schedule"
+          }
+        }
+      }
     },
     "元の制約（総線量と分割数）から BED を求め、それと等しい BED になる別の分割を逆算します。\n分割数を指定した場合は上式で 1 回線量 d' を解きます。\n1 回線量を指定した場合は n' = BED / (d'·(1 + d'/(α/β))) を計算し、整数に丸めます。\nこの丸めにより、1 回線量を指定したときの結果は元の BED と厳密には一致しません。\n表示される BED は、丸めた分割数で再計算した値です。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "BED is computed from the original schedule (total dose and number of fractions), and an alternative schedule with the same BED is derived.\nIf you specify the number of fractions, the dose per fraction d′ is solved from the equation above.\nIf you specify the dose per fraction, n′ = BED / (d′·(1 + d′/(α/β))) is computed and rounded to an integer.\nBecause of this rounding, the result obtained by specifying the dose per fraction does not match the original BED exactly.\nThe BED shown is recomputed from the rounded number of fractions."
+          }
+        }
+      }
     },
     "元日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "New Year’s Day"
+          }
+        }
+      }
     },
     "免責事項" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disclaimer"
+          }
+        }
+      }
     },
     "入力に矛盾があるため判定できません" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The entered values are inconsistent, so no assessment can be made."
+          }
+        }
+      }
     },
     "入力を確認してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please check your entries."
+          }
+        }
+      }
     },
     "入力待ち" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Awaiting input"
+          }
+        }
+      }
     },
     "全脳照射" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Whole-brain radiotherapy"
+          }
+        }
+      }
     },
     "公開されている原本はこちら:" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The published original is available here:"
+          }
+        }
+      }
     },
     "内蔵" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Built-in"
+          }
+        }
+      }
     },
     "内蔵プリセットは一覧での表示を切り替えられますが、線量分割と出典は変更できません。値を書き換えると、出典を表示したまま中身が別のものになるためです。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Built-in presets can be shown or hidden in the list, but their dose fractionation and source cannot be changed. Editing the values would leave the source on display while the content became something else."
+          }
+        }
+      }
     },
     "再読み込み" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Reload"
+          }
+        }
+      }
     },
     "処方線量" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prescription dose"
+          }
+        }
+      }
     },
     "出典" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sources"
+          }
+        }
+      }
     },
     "出典: %@ / α/β %@" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source: %1$@ / α/β %2$@"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -621,472 +2270,1563 @@
       }
     },
     "出典: %@。本判定は公表された基準の参照であり、推奨や指示ではありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source: %@. This assessment refers to published criteria; it is not a recommendation or an instruction."
+          }
+        }
+      }
     },
     "出典: %@。表にない PTV 体積は原典 Note 1 に従い線形補間しています。本判定は公表された表の参照であり、推奨や指示ではありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source: %@. PTV volumes not listed in the table are linearly interpolated in accordance with Note 1 of the original. This assessment refers to a published table; it is not a recommendation or an instruction."
+          }
+        }
+      }
     },
     "出典なし。利用者が登録" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "No source. Entered by the user."
+          }
+        }
+      }
     },
     "分割数" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fractions"
+          }
+        }
+      }
     },
     "分割数が未入力です" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The number of fractions has not been entered."
+          }
+        }
+      }
     },
     "分割数は 1〜99 で入力してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a number of fractions between 1 and 99."
+          }
+        }
+      }
     },
     "分割数指定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Specify number of fractions"
+          }
+        }
+      }
     },
     "判定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Assessment"
+          }
+        }
+      }
     },
     "判定しない" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not assessed"
+          }
+        }
+      }
     },
     "判定基準は Shaw E, et al. Radiation Therapy Oncology Group: radiosurgery quality assurance guidelines. Int J Radiat Oncol Biol Phys. 1993 の本文 p.1235「Quality assurance review」節から逐字転記しています。RTOG 0813 / 0915 の判定表がプロトコル文書にあり論文には載っていないのとは異なり、この判定基準は公表論文の本文そのものに記載されています。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The criteria are transcribed verbatim from the “Quality assurance review” section on p. 1235 of Shaw E, et al. Radiation Therapy Oncology Group: radiosurgery quality assurance guidelines. Int J Radiat Oncol Biol Phys. 1993. Unlike the RTOG 0813 / 0915 tables, which appear in the protocol documents and not in the published papers, these criteria are stated in the body of the published paper itself."
+          }
+        }
+      }
     },
     "判定表は RTOG 0813 / 0915 のプロトコル文書 Table 1（いずれも p.16「Conformality of Prescribed Dose for Calculations Based on Deposition of Photon Beam Energy in Heterogeneous Tissue」）から転記しています。両プロトコルの表は逐字照合の結果、誤植を含めて完全に同一でした。下に挙げた論文は各試験の設計と結果を報告するもので、この表そのものは含みません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The assessment table is transcribed from Table 1 of the RTOG 0813 / 0915 protocol documents (in both cases p. 16, “Conformality of Prescribed Dose for Calculations Based on Deposition of Photon Beam Energy in Heterogeneous Tissue”). Verbatim comparison showed the two protocols’ tables to be completely identical, typographical errors included. The papers listed below report the design and results of each trial; they do not contain the table itself."
+          }
+        }
+      }
     },
     "判定表は体積の比（R100%、R50%）と処方線量に対する割合（D2cm、V20）だけで定義されており、絶対線量を含みません。このため群や線量レベルによらず共通で、上記のいずれの線量分割にも同じ表を用います。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The table is defined solely in terms of volume ratios (R100%, R50%) and percentages of the prescription dose (D2cm, V20); it contains no absolute doses. It is therefore common to all arms and dose levels, and the same table is used for every fractionation listed above."
+          }
+        }
+      }
     },
     "削除" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delete"
+          }
+        }
+      }
     },
     "削除された基準" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deleted criteria"
+          }
+        }
+      }
     },
     "前立腺癌" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prostate cancer"
+          }
+        }
+      }
     },
     "前立腺癌中等度寡分割" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prostate, moderate hypofractionation"
+          }
+        }
+      }
     },
     "前立腺癌根治" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Prostate, definitive"
+          }
+        }
+      }
     },
     "勤労感謝の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Labor Thanksgiving Day"
+          }
+        }
+      }
     },
     "単純計算" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculator"
+          }
+        }
+      }
     },
     "原典が明示的に定めていない境界（MDPD がちょうど 2.5、PITV がちょうど 0.9 および 2.5）は、安全側（重い方の判定段階）に倒しています。原典が明示している境界（MDPD ≦ 2.0、PITV が 1.0 以上 2.0 未満）はそのまま用いています。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Boundaries that the original does not state explicitly (MDPD exactly 2.5; PITV exactly 0.9 and exactly 2.5) are resolved on the safe side, toward the more severe category. Boundaries the original does state (MDPD ≤ 2.0; PITV from 1.0 up to but not including 2.0) are used as written."
+          }
+        }
+      }
     },
     "原典の 3 箇所（PTV 3.8 cc の R100% Minor、PTV 126.0 / 163.0 cc の D2cm Minor）は 不等号の向きが他の全行と逆に記されています。値が単調増加していることから誤植と判断し、他の行に揃えて転記しています。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "In three places in the original (R100% Minor at PTV 3.8 cc, and D2cm Minor at PTV 126.0 and 163.0 cc) the inequality signs are written in the opposite direction from every other row. Since the values increase monotonically, these were judged to be typographical errors and transcribed in line with the other rows."
+          }
+        }
+      }
     },
     "原典は Coverage・Homogeneity index（MDPD）・Conformity index（PITV）の 3 基準を 定めていますが、本アプリは MDPD と PITV の 2 つだけを判定します。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The original defines three criteria — Coverage, Homogeneity index (MDPD) and Conformity index (PITV) — but this app assesses only MDPD and PITV."
+          }
+        }
+      }
     },
     "収録された線量分割プリセットは代表例の参考表示であり、最新エビデンスと施設プロトコルとの照合を行ってください。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The included fractionation presets are reference examples; please check them against current evidence and your institution’s protocol."
+          }
+        }
+      }
     },
     "収集する情報" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Information collected"
+          }
+        }
+      }
     },
     "収集する情報が存在しないため、第三者への提供は行いません。解析ツール、広告 SDK、クラッシュレポート収集ツールのいずれも組み込んでいません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Since no information is collected, none is disclosed to third parties. The app embeds no analytics tools, no advertising SDKs and no crash reporting tools."
+          }
+        }
+      }
     },
     "取り込む" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import"
+          }
+        }
+      }
     },
     "合算" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sum"
+          }
+        }
+      }
     },
     "同意して開始" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Agree and start"
+          }
+        }
+      }
     },
     "同時併用化療の有無など、線量分割だけでは表せない条件を書けます。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Use this for conditions that dose fractionation alone cannot express, such as whether concurrent chemotherapy is given."
+          }
+        }
+      }
     },
     "名前" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Name"
+          }
+        }
+      }
     },
     "名前は 40 文字までです" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Names may be up to 40 characters."
+          }
+        }
+      }
     },
     "名前を入力してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Please enter a name."
+          }
+        }
+      }
     },
     "品質" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quality"
+          }
+        }
+      }
     },
     "品質指標" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Quality indices"
+          }
+        }
+      }
     },
     "品質指標の逸脱判定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deviation assessment of quality indices"
+          }
+        }
+      }
     },
     "品質指標の逸脱判定（自施設の基準）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deviation assessment of quality indices (institutional criteria)"
+          }
+        }
+      }
     },
     "品質指標の逸脱判定（頭部定位照射）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Deviation assessment of quality indices (intracranial stereotactic irradiation)"
+          }
+        }
+      }
     },
     "国民の休日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "National Holiday"
+          }
+        }
+      }
     },
     "土日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Weekends"
+          }
+        }
+      }
     },
     "土日も照射" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treat on weekends"
+          }
+        }
+      }
     },
     "土曜" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Saturday"
+          }
+        }
+      }
     },
     "均一性指数（HI）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Homogeneity index (HI)"
+          }
+        }
+      }
     },
     "基本情報" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basic information"
+          }
+        }
+      }
     },
     "基準をやや超える" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Slightly exceeds criteria"
+          }
+        }
+      }
     },
     "基準を編集" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit criteria"
+          }
+        }
+      }
     },
     "基準を読み込みますか" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import criteria?"
+          }
+        }
+      }
     },
     "基準を超える" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Exceeds criteria"
+          }
+        }
+      }
     },
     "基準を追加" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add criteria"
+          }
+        }
+      }
     },
     "基準内" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Within criteria"
+          }
+        }
+      }
     },
     "多コース合算" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Multi-course sum"
+          }
+        }
+      }
     },
     "天皇誕生日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The Emperor’s Birthday"
+          }
+        }
+      }
     },
     "完了" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Done"
+          }
+        }
+      }
     },
     "寡分割計算" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hypofractionation"
+          }
+        }
+      }
     },
     "対象は手術不能の中心型 T1-2（5 cm 以下）N0M0 非小細胞肺癌。10〜12 Gy/Fr の 5 分割で線量漸増した第 1/2 相試験。最大耐容線量は 12.0 Gy/Fr。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Population: medically inoperable centrally located T1–2 (≤ 5 cm) N0M0 non-small-cell lung cancer. A phase 1/2 dose-escalation trial using five fractions of 10–12 Gy. The maximum tolerated dose was 12.0 Gy per fraction."
+          }
+        }
+      }
     },
     "対象は手術不能の末梢型（中枢気管支から 2 cm 以上）T1-2 N0M0 非小細胞肺癌。34 Gy/1 Fr（第 1 群）と 48 Gy/4 Fr（第 2 群）を比較した第 2 相ランダム化試験。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Population: medically inoperable peripherally located (≥ 2 cm from the central bronchial tree) T1–2 N0M0 non-small-cell lung cancer. A randomized phase 2 trial comparing 34 Gy in 1 fraction (arm 1) with 48 Gy in 4 fractions (arm 2)."
+          }
+        }
+      }
     },
     "対象は頭部への定位放射線照射（SRS/SRT）全般。特定の線量分割や臨床試験に紐づかない RTOG の QA の枠組みで、1993 年発表。IMRT/VMAT や多発病変への単一アイソセンター照射が普及する前の文書であり、現在の実務との関係は利用者が判断する。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Scope: intracranial stereotactic irradiation (SRS/SRT) in general. An RTOG quality-assurance framework not tied to any particular fractionation or clinical trial, published in 1993. It predates the spread of IMRT/VMAT and single-isocenter treatment of multiple lesions, so users must judge for themselves how it relates to current practice."
+          }
+        }
+      }
     },
     "少なくとも 1 つの指標に閾値を入力してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a threshold for at least one index."
+          }
+        }
+      }
     },
     "山の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Mountain Day"
+          }
+        }
+      }
     },
     "建国記念の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "National Foundation Day"
+          }
+        }
+      }
     },
     "強制休止日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forced break days"
+          }
+        }
+      }
     },
     "強制照射日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Forced treatment days"
+          }
+        }
+      }
     },
     "情報" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Info"
+          }
+        }
+      }
     },
     "憲法記念日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Constitution Memorial Day"
+          }
+        }
+      }
     },
     "成人の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Coming of Age Day"
+          }
+        }
+      }
     },
     "指標" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Index"
+          }
+        }
+      }
     },
     "指標の限界（頭部定位照射・GI）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Limitations of the index (intracranial stereotactic irradiation, GI)"
+          }
+        }
+      }
     },
     "振替休日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Substitute Holiday"
+          }
+        }
+      }
     },
     "換算" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Convert"
+          }
+        }
+      }
     },
     "換算後の分割" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Converted schedule"
+          }
+        }
+      }
     },
     "換算結果" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conversion result"
+          }
+        }
+      }
     },
     "放射線治療計画ガイドライン 2024 年版 中枢神経「SRS：辺縁線量 12〜13 Gy で行われることが多く」" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Radiotherapy Planning Guidelines 2024, Central Nervous System. Quoted in the original Japanese (no official English edition; the rendering below is editorial): 「SRS：辺縁線量 12〜13 Gy で行われることが多く」— “For SRS a marginal dose of 12–13 Gy is most often used.”"
+          }
+        }
+      }
     },
     "放射線治療計画ガイドライン 2024 年版 泌尿器「IMRT の場合には 74〜78 Gy が用いられることが多い」。分割数は同記載からは確認できない（1 回 2 Gy とすれば 39 回）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Radiotherapy Planning Guidelines 2024, Genitourinary. Quoted in the original Japanese (no official English edition; the rendering below is editorial): 「IMRT の場合には 74〜78 Gy が用いられることが多い」— “With IMRT, 74–78 Gy is most often used.” The number of fractions cannot be confirmed from this statement (39 fractions if 2 Gy per fraction is assumed)."
+          }
+        }
+      }
     },
     "放射線治療計画ガイドライン 2024 年版 緩和「全脳照射では、30 Gy/10 回/2 週が標準的である」" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Radiotherapy Planning Guidelines 2024, Palliative Care. Quoted in the original Japanese (no official English edition; the rendering below is editorial): 「全脳照射では、30 Gy/10 回/2 週が標準的である」— “For whole-brain radiotherapy, 30 Gy in 10 fractions over 2 weeks is standard.”"
+          }
+        }
+      }
     },
     "放射線治療計画ガイドライン 2024 年版 胸部「通常分割照射（50 Gy/25 回/35 日）」" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Radiotherapy Planning Guidelines 2024, Thorax. Quoted in the original Japanese (no official English edition; the rendering below is editorial): 「通常分割照射（50 Gy/25 回/35 日）」— “conventionally fractionated irradiation (50 Gy in 25 fractions over 35 days).”"
+          }
+        }
+      }
     },
     "放射線治療計画ガイドライン 2024 年版 頭頸部「70 Gy/35 回/7 週の通常分割照射が標準分割照射法である」" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "JASTRO Radiotherapy Planning Guidelines 2024, Head and Neck. Quoted in the original Japanese (no official English edition; the rendering below is editorial): 「70 Gy/35 回/7 週の通常分割照射が標準分割照射法である」— “Conventionally fractionated irradiation of 70 Gy in 35 fractions over 7 weeks is the standard fractionation.”"
+          }
+        }
+      }
     },
     "敬老の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Respect for the Aged Day"
+          }
+        }
+      }
     },
     "数値を入力" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a number"
+          }
+        }
+      }
     },
     "整数を入力" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter an integer"
+          }
+        }
+      }
     },
     "文化の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Culture Day"
+          }
+        }
+      }
     },
     "方式" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Definition"
+          }
+        }
+      }
     },
     "日付を選択" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Select a date"
+          }
+        }
+      }
     },
     "日曜" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Sunday"
+          }
+        }
+      }
     },
     "早期肺癌 中心" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Early-stage lung cancer, central"
+          }
+        }
+      }
     },
     "早期肺癌 末梢" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Early-stage lung cancer, peripheral"
+          }
+        }
+      }
     },
     "春分の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Vernal Equinox Day"
+          }
+        }
+      }
     },
     "昭和の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Showa Day"
+          }
+        }
+      }
     },
     "晩期反応組織（一般）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Late-responding tissue (general)"
+          }
+        }
+      }
     },
     "書き出したファイルから読み込む" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import from an exported file"
+          }
+        }
+      }
     },
     "書き出す" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Export"
+          }
+        }
+      }
     },
     "有効なコースがありません" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "There are no valid courses."
+          }
+        }
+      }
     },
     "未設定" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Not set"
+          }
+        }
+      }
     },
     "本アプリが収録する α/β は代表的な参考値です。同じ組織でも文献によって報告値は一致しません。\n施設のプロトコルと照合してください。\n\n腫瘍（一般）10 Gy / 前立腺癌 1.5 Gy / 乳癌 4 Gy /\n晩期反応組織（一般）3 Gy / 脊髄 2 Gy / 脳幹 2 Gy /\n皮膚（急性）10 Gy / 皮膚（晩期）3 Gy" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The α/β values included in this app are representative reference values. Reported values differ between publications even for the same tissue.\nPlease check them against your institution’s protocol.\n\nTumor (general) 10 Gy / Prostate cancer 1.5 Gy / Breast cancer 4 Gy /\nLate-responding tissue (general) 3 Gy / Spinal cord 2 Gy / Brainstem 2 Gy /\nSkin (acute) 10 Gy / Skin (late) 3 Gy"
+          }
+        }
+      }
     },
     "本アプリが扱わないこと" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What this app does not cover"
+          }
+        }
+      }
     },
     "本アプリに入力された線量、分割回数、治療開始日などの情報は、すべて利用者の端末内でのみ処理されます。開発者を含むいかなる第三者にも送信されることはありません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Doses, numbers of fractions, treatment start dates and any other values entered into the app are processed solely on the user’s own device. They are never transmitted to any third party, the developer included."
+          }
+        }
+      }
     },
     "本アプリの位置づけ" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "What this app is"
+          }
+        }
+      }
     },
     "本アプリの使用により生じたいかなる結果についても、開発者は責任を負いません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The developer accepts no liability for any consequence arising from the use of this app."
+          }
+        }
+      }
     },
     "本アプリはネットワーク通信を行いません。すべての計算は端末内で完結します。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The app performs no network communication. Every calculation is completed on the device."
+          }
+        }
+      }
     },
     "本アプリは放射線治療領域の生物学的等価線量(BED/EQD2)などの計算を補助する、**教育および参考を目的とした**ツールです。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "This app is a tool **intended for education and reference** that assists with calculations such as biologically effective dose (BED/EQD2) in radiation oncology."
+          }
+        }
+      }
     },
     "本ポリシーに関するお問い合わせは、App Store Connect に登録された開発者連絡先までお願いします。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "For inquiries about this policy, please use the developer contact details registered with App Store Connect."
+          }
+        }
+      }
     },
     "標的が近接して複数ある場合、この値は意味をなさないことがあります。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "When several targets lie close together, this value may be meaningless."
+          }
+        }
+      }
     },
     "標的と処方" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Target and prescription"
+          }
+        }
+      }
     },
     "正の数値を入力" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a positive number"
+          }
+        }
+      }
     },
     "正の整数を入力" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a positive integer"
+          }
+        }
+      }
     },
     "比" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Ratio"
+          }
+        }
+      }
     },
     "治療期間" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treatment duration"
+          }
+        }
+      }
     },
     "治療期間は表示範囲（%lld ヶ月）を超えています。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The treatment duration exceeds the display range (%lld months)."
+          }
+        }
+      }
     },
     "海の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Marine Day"
+          }
+        }
+      }
     },
     "照射日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treatment days"
+          }
+        }
+      }
     },
     "照射済" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Delivered"
+          }
+        }
+      }
     },
     "登録した閾値: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Thresholds entered: %@"
+          }
+        }
+      }
     },
     "皮膚（急性）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skin (acute)"
+          }
+        }
+      }
     },
     "皮膚（晩期）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Skin (late)"
+          }
+        }
+      }
     },
     "直近 14 日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Last 14 days"
+          }
+        }
+      }
     },
     "破棄" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Discard"
+          }
+        }
+      }
     },
     "祝" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Hol"
+          }
+        }
+      }
     },
     "祝日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holidays"
+          }
+        }
+      }
     },
     "祝日も照射" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Treat on holidays"
+          }
+        }
+      }
     },
     "祝日データは%lld年までです。それ以降の祝日は反映されません" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Holiday data extends only to %lld. Holidays after that are not reflected."
+          }
+        }
+      }
     },
     "秋分の日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Autumnal Equinox Day"
+          }
+        }
+      }
     },
     "空欄にすると、このプリセットを選んでも α/β を変更しません。プロトコルが α/β を定めていない場合は空欄にしてください。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "If left blank, selecting this preset will not change α/β. Leave it blank when the protocol does not specify an α/β."
+          }
+        }
+      }
     },
     "第三者への提供" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Disclosure to third parties"
+          }
+        }
+      }
     },
     "等線量体積" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Isodose volume"
+          }
+        }
+      }
     },
     "累積線量" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Cumulative dose"
+          }
+        }
+      }
     },
     "終了予定日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Expected end date"
+          }
+        }
+      }
     },
     "結果" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Result"
+          }
+        }
+      }
     },
     "総線量" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Total dose"
+          }
+        }
+      }
     },
     "総線量は 0.1〜200 Gy で入力してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter a total dose between 0.1 and 200 Gy."
+          }
+        }
+      }
     },
     "線量" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dose"
+          }
+        }
+      }
     },
     "線量分割" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fractionation"
+          }
+        }
+      }
     },
     "線量分割の出典: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Source of the fractionation: %@"
+          }
+        }
+      }
     },
     "線量分割換算" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Fractionation conversion"
+          }
+        }
+      }
     },
     "線量勾配（R50%、D2cm、GI）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dose gradient (R50%, D2cm, GI)"
+          }
+        }
+      }
     },
     "線量統計" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Dose statistics"
+          }
+        }
+      }
     },
     "編集" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Edit"
+          }
+        }
+      }
     },
     "緩和" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Palliative"
+          }
+        }
+      }
     },
     "聴神経腫瘍" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acoustic neuroma"
+          }
+        }
+      }
     },
     "脊髄" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Spinal cord"
+          }
+        }
+      }
     },
     "脳幹" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brainstem"
+          }
+        }
+      }
     },
     "脳転移 SRS 単発・標準" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brain metastasis, single-fraction SRS, standard"
+          }
+        }
+      }
     },
     "脳転移 SRS 単発・高線量" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Brain metastasis, single-fraction SRS, high dose"
+          }
+        }
+      }
     },
     "腫瘍（一般）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tumor (general)"
+          }
+        }
+      }
     },
     "臨床上の判断は、各施設のプロトコルおよび担当医の責任において行われる必要があります。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Clinical decisions must be made in accordance with each institution’s protocols and under the responsibility of the attending physician."
+          }
+        }
+      }
     },
     "自施設のプロトコル" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Institutional protocols"
+          }
+        }
+      }
     },
     "自施設のプロトコル: %@" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Institutional protocol: %@"
+          }
+        }
+      }
     },
     "自施設の基準" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Institutional criteria"
+          }
+        }
+      }
     },
     "自施設の基準の管理" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage institutional criteria"
+          }
+        }
+      }
     },
     "自施設の基準を管理…" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Manage institutional criteria…"
+          }
+        }
+      }
     },
     "表にない PTV 体積は、原典 Note 1「For values of PTV dimension or volume not specified, linear interpolation between table entries is required.」に従って線形補間します。表の範囲（1.8〜163.0 cc）の外では原典に規定がないため、外挿せず判定しません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PTV volumes not listed in the table are linearly interpolated in accordance with Note 1 of the original: “For values of PTV dimension or volume not specified, linear interpolation between table entries is required.” Outside the range of the table (1.8–163.0 cc) the original gives no rule, so no extrapolation is performed and no assessment is made."
+          }
+        }
+      }
     },
     "計算" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Calculate"
+          }
+        }
+      }
     },
     "計算の根拠" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Basis of the calculation"
+          }
+        }
+      }
     },
     "計算式と α/β" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Formulas and α/β"
+          }
+        }
+      }
     },
     "計算式と α/β の解説" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "About the formulas and α/β"
+          }
+        }
+      }
     },
     "計算式を見る" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "View the formulas"
+          }
+        }
+      }
     },
     "計算結果は臨床判断を直接行うものではなく、最終的な治療方針は必ず以下によって決定してください：" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The results do not themselves constitute a clinical decision. The final treatment plan must always be determined by:"
+          }
+        }
+      }
     },
     "許容" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Acceptable"
+          }
+        }
+      }
     },
     "許容値 MDPD: %.1f 以下で none、%.1f 超 %.1f 未満で minor、%.1f 以上で major" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "MDPD tolerance: none at %1$.1f or below, minor above %2$.1f and below %3$.1f, major at %4$.1f or above"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -1097,6 +3837,12 @@
     },
     "許容値 PITV: %.1f 以上 %.1f 未満で none、%.1f 超 %.1f 未満または %.1f 以上 %.1f 未満で minor、%.1f 以下または %.1f 以上で major" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "PITV tolerance: none from %1$.1f up to but not including %2$.1f, minor above %3$.1f and below %4$.1f or from %5$.1f up to but not including %6$.1f, major at %7$.1f or below or at %8$.1f or above"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -1107,6 +3853,12 @@
     },
     "許容値: R50%% < %.2f (none) / < %.2f (minor)、D2cm < %.1f%% / < %.1f%%" : {
       "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tolerance: R50%% < %1$.2f (none) / < %2$.2f (minor); D2cm < %3$.1f%% / < %4$.1f%%"
+          }
+        },
         "ja" : {
           "stringUnit" : {
             "state" : "new",
@@ -1116,61 +3868,194 @@
       }
     },
     "評価する組織" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Tissue to evaluate"
+          }
+        }
+      }
     },
     "評価する組織の α/β を入力してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Enter the α/β of the tissue to evaluate."
+          }
+        }
+      }
     },
     "読み込み" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import"
+          }
+        }
+      }
     },
     "読み込む" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Import"
+          }
+        }
+      }
     },
     "読み込めませんでした" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Could not be imported."
+          }
+        }
+      }
     },
     "読めなくなった保存データを破棄し、空の状態から登録し直します。取り消せません。" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The unreadable saved data will be discarded and you will start again from an empty state. This cannot be undone."
+          }
+        }
+      }
     },
     "追加" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Add"
+          }
+        }
+      }
     },
     "通常分割" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conventional fractionation"
+          }
+        }
+      }
     },
     "適合性指数（CI）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Conformity index (CI)"
+          }
+        }
+      }
     },
     "選択していた基準は削除されました。プロトコルを選び直してください" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "The criteria you had selected have been deleted. Please choose a protocol again."
+          }
+        }
+      }
     },
     "閉じる" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Close"
+          }
+        }
+      }
     },
     "開く" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Open"
+          }
+        }
+      }
     },
     "開始日" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Start date"
+          }
+        }
+      }
     },
     "閾値" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Threshold"
+          }
+        }
+      }
     },
     "頭部定位照射（RTOG QA ガイドライン）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Intracranial stereotactic irradiation (RTOG QA guidelines)"
+          }
+        }
+      }
     },
     "頭頸部根治" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Head and neck, definitive"
+          }
+        }
+      }
     },
     "食道癌根治" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Esophageal cancer, definitive"
+          }
+        }
+      }
     },
     "骨転移" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "Bone metastasis"
+          }
+        }
+      }
     },
     "（名前なし）" : {
-
+      "localizations" : {
+        "en" : {
+          "stringUnit" : {
+            "state" : "translated",
+            "value" : "(No name)"
+          }
+        }
+      }
     }
   },
   "version" : "1.0"

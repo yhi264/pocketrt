@@ -107,6 +107,52 @@ jobs:
           print(f"String Catalog は同期されています（抽出 {len(extracted)} 件 / コミット済み {len(committed)} 件）")
           PYEOF
 
+      # 版番号が 3 か所で食い違ったまま公開されることを防ぐ。
+      #
+      # 2026-09-06 に、公開リポジトリが 0.10.0 (build 3) のまま 3 週間放置され、
+      # App Store で公開中の 1.0.0 が載っていない状態が見つかった。直近の
+      # commit は紹介ページ（docs/）ばかりで、リポジトリが動いているように
+      # 見えていたことが発覚を遅らせた。
+      #
+      # ここから非公開リポジトリは見えないので「本当に最新か」は判定できない。
+      # 判定できるのは、公開されている 3 つ（project.yml・生成された
+      # project.pbxproj・CHANGELOG.md）が互いに整合しているかまでである。
+      # 雑な同期はこれで落ちる。
+      - name: Verify version numbers agree
+        run: |
+          set -euo pipefail
+          python3 - <<'PYEOF'
+          import re, sys
+          spec = open("project.yml", encoding="utf-8").read()
+          version = re.search(r'^\s*MARKETING_VERSION:\s*"([^"]+)"', spec, re.M).group(1)
+          build = re.search(r'^\s*CURRENT_PROJECT_VERSION:\s*"([^"]+)"', spec, re.M).group(1)
+
+          pbx = open("PocketRT.xcodeproj/project.pbxproj", encoding="utf-8").read()
+          if set(re.findall(r"MARKETING_VERSION = ([^;]+);", pbx)) != {version} \
+             or set(re.findall(r"CURRENT_PROJECT_VERSION = ([^;]+);", pbx)) != {build}:
+              print("::error::project.pbxproj が project.yml と食い違っています")
+              sys.exit(1)
+
+          log = open("CHANGELOG.md", encoding="utf-8").read()
+          heads = re.findall(r"^## (.+)$", log, re.M)
+          top = heads[0] if heads else ""
+          if top == "未リリース":
+              body = log.split("## 未リリース", 1)[1].split("\n## ", 1)[0]
+              m = re.search(r"バージョンは (\d+\.\d+\.\d+)（build (\d+)）を予定している。", body)
+              declared = (m.group(1), m.group(2)) if m else None
+          else:
+              m = re.match(r"^(\d+\.\d+\.\d+) — .*（build (\d+)）\s*$", top)
+              declared = (m.group(1), m.group(2)) if m else None
+          if declared is None:
+              print(f"::error::CHANGELOG の先頭 {top!r} から版番号を読めません")
+              sys.exit(1)
+          if declared != (version, build):
+              print(f"::error::CHANGELOG は {declared[0]} (build {declared[1]}) ですが "
+                    f"project.yml は {version} (build {build}) です")
+              sys.exit(1)
+          print(f"版番号は整合しています: {version} (build {build})")
+          PYEOF
+
       - name: Upload log on failure
         if: failure()
         uses: actions/upload-artifact@v4

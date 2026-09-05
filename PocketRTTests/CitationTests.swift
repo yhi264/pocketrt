@@ -10,7 +10,7 @@ struct CitationDataTests {
         for p in FractionationPresets.all {
             #expect(!p.citations.isEmpty, "citations 未設定: \(p.regimenLabel)")
             for c in p.citations {
-                #expect(!c.shortLabel.isEmpty, "shortLabel 未設定: \(p.regimenLabel)")
+                #expect(!String(localized: c.shortLabel).isEmpty, "shortLabel 未設定: \(p.regimenLabel)")
             }
         }
     }
@@ -20,7 +20,7 @@ struct CitationDataTests {
         for c in Citations.all {
             let hasPrimary = (c.pmid != nil) || (c.doi != nil)
             let hasNote = (c.guidelineNote != nil) || (c.unsourcedNote != nil)
-            #expect(hasPrimary || hasNote, "根拠なし: \(c.shortLabel)")
+            #expect(hasPrimary || hasNote, "根拠なし: \(String(localized: c.shortLabel))")
         }
     }
 
@@ -46,10 +46,43 @@ struct CitationDataTests {
         #expect(!FractionationPresets.all.contains { $0.citations.contains { $0.id == "jcog0702" } })
     }
 
+    @Test("脳転移 SRS 20 Gy/1 Fr の出典は JLGK0901（RTOG 90-05 ではない）")
+    func brainMetsSRS20GyCitationIsJLGK0901() {
+        let p = FractionationPresets.all.first { $0.id == "srt_brain_mets_srs_standard" }
+        #expect(p != nil)
+        #expect(p?.totalDose == 20.0)
+        #expect(p?.fractions == 1)
+        #expect(p?.citations.count == 1)
+        #expect(p?.citations.first?.id == "jlgk0901")
+        #expect(p?.citations.first?.pmid == "24621620")
+    }
+
+    // RTOG 90-05 の線量段階は 18 / 15 / 12 Gy から 3 Gy 刻みであり、20 Gy は存在しない。
+    // 20 Gy をこの文献に紐付け直す退行を防ぐ（data-sources.md §B3「訂正した誤り」4）。
+    @Test("RTOG 90-05 を出典に持つプリセットは 24 Gy/1 Fr の 1 件だけ")
+    func rtog9005IsUsedOnlyBy24Gy() {
+        let presets = FractionationPresets.all.filter { p in
+            p.citations.contains { $0.id == "rtog_90_05" }
+        }
+        #expect(presets.map(\.id) == ["srt_brain_mets_srs_high"])
+        #expect(presets.allSatisfy { $0.totalDose == 24.0 && $0.fractions == 1 })
+    }
+
+    // 20 Gy は腫瘍体積、24 Gy は最大径で条件が付く。線量だけを出すと
+    // 条件のない推奨に見えるため、両者は note を必ず持つ。
+    @Test("脳転移 SRS 単回の 2 件は適用条件の note を持つ")
+    func brainMetsSRSPresetsHaveConditionNote() {
+        for id in ["srt_brain_mets_srs_standard", "srt_brain_mets_srs_high"] {
+            let p = FractionationPresets.all.first { $0.id == id }
+            #expect(p != nil, "プリセットが無い: \(id)")
+            #expect(p?.note != nil, "適用条件の note が無い: \(id)")
+        }
+    }
+
     @Test("unsourcedNote を持つ citation は pmid / doi を持たない")
     func unsourcedHasNoPrimary() {
         for c in Citations.all where c.unsourcedNote != nil {
-            #expect(c.pmid == nil && c.doi == nil, "慣用扱いなのに一次文献がある: \(c.shortLabel)")
+            #expect(c.pmid == nil && c.doi == nil, "慣用扱いなのに一次文献がある: \(String(localized: c.shortLabel))")
         }
     }
 
@@ -62,7 +95,7 @@ struct CitationDataTests {
         #expect(p?.citations.count == 2)
         #expect(p?.citations.map(\.id) == ["jcog0303", "jcog0909"])
         for c in p?.citations ?? [] {
-            #expect(c.pmid != nil, "PMID 未設定: \(c.shortLabel)")
+            #expect(c.pmid != nil, "PMID 未設定: \(String(localized: c.shortLabel))")
         }
     }
 }

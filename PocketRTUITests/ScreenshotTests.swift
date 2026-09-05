@@ -27,19 +27,97 @@ final class ScreenshotTests: XCTestCase {
 
     private var app: XCUIApplication!
 
+    // MARK: - 言語ごとの画面文言
+    //
+    // 要素の特定に使う文言を 1 箇所に集める。UI テストは表示名で要素を探すため、
+    // 言語を切り替えると探し方ごと変わる。撮影手順（どの画面をどの順に撮るか）は
+    // 言語によらず同じなので、変わるのはこの表だけにする。
+    //
+    // **英語の値は Localizable.xcstrings の en と一致していなければならない。**
+    // 片方だけ直すと、撮影は「見つからない」で失敗する（黙って別の絵を撮るより
+    // 失敗する方がよい。提出物に混ざってから気づくことになるため）。
+    private struct Labels {
+        let languageCode: String
+        let localeIdentifier: String
+        let accept: String
+        let tabCalc: String
+        let tabSum: String
+        let tabConvert: String
+        let tabSchedule: String
+        let tabQuality: String
+        let ptvVolume: String
+        let prescriptionDose: String
+        let fractions: String
+        let keyboardDone: String
+        let protocolPicker: String
+        let cranialMenuItem: String
+        /// 自施設の基準（fixture が持つ名前）。翻訳ではなく投入するデータ側の名前。
+        let institutionalMenuItem: String
+        let manageInstitutional: String
+        let close: String
+        let calendar: String
+        let verdict: String
+
+        static let ja = Labels(
+            languageCode: "ja", localeIdentifier: "ja_JP",
+            accept: "同意して開始",
+            tabCalc: "計算", tabSum: "合算", tabConvert: "換算",
+            tabSchedule: "予定", tabQuality: "品質",
+            ptvVolume: "PTV 体積", prescriptionDose: "処方線量", fractions: "分割数",
+            keyboardDone: "完了",
+            protocolPicker: "プロトコル",
+            cranialMenuItem: "頭部",
+            institutionalMenuItem: "当院 肺SBRT",
+            manageInstitutional: "自施設の基準を管理",
+            close: "閉じる",
+            calendar: "カレンダー",
+            verdict: "判定")
+
+        static let en = Labels(
+            languageCode: "en", localeIdentifier: "en_US",
+            accept: "Agree and start",
+            tabCalc: "Calculate", tabSum: "Sum", tabConvert: "Convert",
+            tabSchedule: "Schedule", tabQuality: "Quality",
+            ptvVolume: "PTV volume", prescriptionDose: "Prescription dose", fractions: "Fractions",
+            keyboardDone: "Done",
+            protocolPicker: "Protocol",
+            cranialMenuItem: "Intracranial",
+            institutionalMenuItem: "Our institution — Lung SBRT",
+            manageInstitutional: "Manage institutional criteria",
+            close: "Close",
+            calendar: "Calendar",
+            verdict: "Assessment")
+    }
+
+    private var labels: Labels = .ja
+
     // MARK: - 撮影本体
 
     /// 起動を `setUpWithError()` に置かない。クラスを `@MainActor` にしても
     /// override した `setUpWithError()` は基底クラスの nonisolated を引き継ぎ、
     /// XCUIApplication の操作が隔離違反になる。
     func testCaptureAppStoreScreenshots() throws {
+        try capture(in: .ja)
+    }
+
+    /// 英語版（App Store の英語ロケール用）。撮る画面と順番は日本語版と同じ。
+    /// 別々の絵を撮ると、ストアの並びが言語で食い違う。
+    func testCaptureAppStoreScreenshotsInEnglish() throws {
+        try capture(in: .en)
+    }
+
+    private func capture(in labels: Labels) throws {
+        self.labels = labels
         continueAfterFailure = false
         app = XCUIApplication()
-        app.launchArguments += ["-AppleLanguages", "(ja)", "-AppleLocale", "ja_JP"]
+        app.launchArguments += [
+            "-AppleLanguages", "(\(labels.languageCode))",
+            "-AppleLocale", labels.localeIdentifier
+        ]
         app.launch()
 
         // 1. 免責同意。初回起動でだけ出る。撮ってから閉じる。
-        let accept = app.buttons["同意して開始"]
+        let accept = app.buttons[labels.accept]
         if accept.waitForExistence(timeout: 5) {
             capture("09-disclaimer")
             accept.tap()
@@ -51,48 +129,48 @@ final class ScreenshotTests: XCTestCase {
         // 代表例になっている。既定値を打ち直そうとすると、既定値を消す必要が
         // あり、`.decimalPad` では消去キーが typeText で効かない（実測）。
         // 撮りたい絵が既に出ているのに、消して打ち直す手順を足す理由がない。
-        tab("計算")
+        tab(labels.tabCalc)
         capture("01-simple-calc")
 
         // 3. 品質タブ — 肺 SBRT（内蔵プロトコル）
-        tab("品質")
+        tab(labels.tabQuality)
         fillQualityInputs()
         selectProtocol(containing: "0813")
         showVerdict()
         capture("06-quality-lung-sbrt")
 
         // 4. 品質タブ — 頭部定位照射（D4）
-        selectProtocol(containing: "頭部")
+        selectProtocol(containing: labels.cranialMenuItem)
         showVerdict()
         capture("07-quality-cranial-srs")
 
         // 5. 品質タブ — 自施設の基準（D2）
-        selectProtocol(containing: "当院 肺SBRT")
+        selectProtocol(containing: labels.institutionalMenuItem)
         showVerdict()
         capture("08-quality-institutional")
 
         // 6. 自施設の基準の管理画面（D2 の編集画面）
         openProtocolMenu()
-        tapMenuItem(containing: "自施設の基準を管理")
+        tapMenuItem(containing: labels.manageInstitutional)
         _ = app.navigationBars.firstMatch.waitForExistence(timeout: 5)
         capture("10-institutional-editor")
         closeSheet()
 
         // 7. 予定タブ（条件と予測）
-        tab("予定")
+        tab(labels.tabSchedule)
         capture("04-schedule")
 
         // 8. 予定タブ（カレンダー）。この機能の目玉は終了予定日の数字ではなく、
         //    祝日・週末・休止日を織り込んだカレンダーそのものなので、別に 1 枚撮る。
-        scrollTo("カレンダー")
+        scrollTo(labels.calendar)
         capture("05-schedule-calendar")
 
         // 9. 合算タブ
-        tab("合算")
+        tab(labels.tabSum)
         capture("02-multi-course")
 
         // 10. 換算タブ
-        tab("換算")
+        tab(labels.tabConvert)
         capture("03-conversion")
     }
 
@@ -196,9 +274,9 @@ final class ScreenshotTests: XCTestCase {
     /// R50%  = V50 / PTV    = 90 / 20 = 4.50
     /// D2cm  = 22 / 50      = 44.0 %Rx
     private func fillQualityInputs() {
-        fill("PTV 体積", "20")
-        fill("処方線量", "50")
-        fill("分割数", "5")
+        fill(labels.ptvVolume, "20")
+        fill(labels.prescriptionDose, "50")
+        fill(labels.fractions, "5")
         fill("PIV", "24")
         fill("PTV∩PIV", "19")
         fill("V50%", "90")
@@ -217,7 +295,7 @@ final class ScreenshotTests: XCTestCase {
     private func dismissKeyboard() {
         guard app.keyboards.count > 0 else { return }
 
-        let done = app.toolbars.buttons["完了"]
+        let done = app.toolbars.buttons[labels.keyboardDone]
         if done.waitForExistence(timeout: 2) { done.tap() }
 
         if app.keyboards.count > 0 {
@@ -236,7 +314,7 @@ final class ScreenshotTests: XCTestCase {
     // MARK: - プロトコルの選択
 
     private func openProtocolMenu() {
-        let picker = app.buttons["プロトコル"]
+        let picker = app.buttons[labels.protocolPicker]
         guard picker.waitForExistence(timeout: 5) else {
             capture("FAILED-protocol-menu")
             XCTFail("プロトコルの選択が見つからない")
@@ -252,7 +330,7 @@ final class ScreenshotTests: XCTestCase {
     private func selectProtocol(containing text: String) {
         openProtocolMenu()
         tapMenuItem(containing: text)
-        XCTAssertTrue(app.buttons["プロトコル"].waitForExistence(timeout: 5))
+        XCTAssertTrue(app.buttons[labels.protocolPicker].waitForExistence(timeout: 5))
     }
 
     private func tapMenuItem(containing text: String) {
@@ -267,7 +345,7 @@ final class ScreenshotTests: XCTestCase {
     }
 
     private func closeSheet() {
-        let close = app.buttons["閉じる"]
+        let close = app.buttons[labels.close]
         if close.waitForExistence(timeout: 3) { close.tap() }
     }
 
@@ -288,7 +366,7 @@ final class ScreenshotTests: XCTestCase {
     /// 品質タブで最も伝えたいのは指標の数値ではなく「基準内か、超えているか」
     /// の判定なので、そこが写らない絵を提出しても機能が伝わらない。
     private func showVerdict() {
-        let verdict = app.staticTexts["判定"]
+        let verdict = app.staticTexts[labels.verdict]
         guard verdict.waitForExistence(timeout: 5) else {
             capture("FAILED-verdict")
             XCTFail("判定パネルが見つからない")

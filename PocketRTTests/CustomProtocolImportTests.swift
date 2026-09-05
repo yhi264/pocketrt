@@ -2,7 +2,7 @@ import Testing
 import Foundation
 @testable import PocketRT
 
-/// 自施設の判定基準の書き出しと読み込み（ROADMAP 順位 16）。
+/// 自施設の判定基準の書き出しと読み込み。
 ///
 /// D1（プリセット）の取り込みテストと同じ観点に加え、**D2 固有の危険**
 /// ——データが無事なまま読めていない状態で読み込ませないこと——を厚く見る。
@@ -87,7 +87,7 @@ struct CustomProtocolImportTests {
         #expect(model.protocols.first { $0.id == "overwrite" }?.thresholds[.r50]?.within == 6.0)
     }
 
-    // MARK: - 検証（ROADMAP 順位 15・16 の核心）
+    // MARK: - 検証（この機能の核心）
 
     @Test("範囲外の値を含むファイルは 1 件も取り込まない")
     func rejectsOutOfRangeValues() throws {
@@ -258,7 +258,7 @@ struct CustomProtocolImportTests {
         #expect(p.willReplace, "確認ダイアログで「置き換える」と伝えられなければならない")
     }
 
-    // MARK: - 保存ファイル自体の検証（ROADMAP 順位 15）
+    // MARK: - 保存ファイル自体の検証
 
     @Test("範囲外の値を含む保存ファイルは corruptedContent として扱う")
     func storeRejectsOutOfRangeOnLoad() throws {

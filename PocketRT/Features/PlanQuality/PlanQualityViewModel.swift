@@ -379,16 +379,24 @@ final class PlanQualityViewModel {
     ///
     /// `.builtIn` / `.none` では空文字列を返す。呼び出し側（View）は
     /// 空なら表示行そのものを出さない。
+    /// 登録した閾値の要約。
+    ///
+    /// 段階名（「基準内」「基準をやや超える」）と区切りは、素の `String` に
+    /// 書くとカタログに入らず、英語環境で日本語のまま出る。判定そのものは
+    /// 訳されているのにこの 1 行だけ日本語という状態になっていた（2026-09-05）。
     var customThresholdSummary: String {
         guard let p = resolvedCustomProtocol else { return "" }
         return MetricKey.allCases.compactMap { key -> String? in
             guard let t = p.thresholds[key] else { return nil }
-            var text = "\(key.displayName) < \(DoseFormat.plainString(t.within))（基準内）"
+            let name = key.displayName
+            let within = DoseFormat.plainString(t.within)
+            var text = String(localized: "\(name) < \(within)（基準内）")
             if let tolerated = t.tolerated {
-                text += " / < \(DoseFormat.plainString(tolerated))（基準をやや超える）"
+                let value = DoseFormat.plainString(tolerated)
+                text += String(localized: " / < \(value)（基準をやや超える）")
             }
             return text
-        }.joined(separator: "、")
+        }.joined(separator: String(localized: "、", comment: "登録した閾値どうしの区切り"))
     }
 
     var r50Deviation: DeviationLevel? {

@@ -69,7 +69,7 @@ struct PresetSheet: View {
                                                 .font(.callout.monospacedDigit())
                                                 .foregroundStyle(.secondary)
                                         }
-                                        Text("出典: \(p.citations.map(\.shortLabel).joined(separator: " / ")) / α/β \(String(format: "%.1f", p.recommendedAlphaBeta))")
+                                        Text("出典: \(p.citations.map { String(localized: $0.shortLabel) }.joined(separator: " / ")) / α/β \(String(format: "%.1f", p.recommendedAlphaBeta))")
                                             .font(.caption2)
                                             .foregroundStyle(.tertiary)
                                         if let note = p.note {

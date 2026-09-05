@@ -115,3 +115,33 @@ COUNT=$(python3 -c "import json,sys; print(len(json.load(open('$CATALOG'))['stri
   exit 1
 }
 echo "==> 完了: ${COUNT} 件"
+
+# 英語の抜けを検出する。
+#
+# ソース言語が ja のため、en の訳が無いキーは英語環境で日本語のまま出る。
+# 画面には出るので気づきにくく、提出物（App Store のスクリーンショット）に
+# 日本語が混ざってから見つかることになる。ここで止める。
+#
+# 空文字と空白のみのキーは対象外。表示される語ではなく、SwiftUI が
+# レイアウトのために引く実体のない文字列で、訳す対象がない。
+echo "==> 英語の抜けを確認"
+python3 - "$CATALOG" <<'AUDIT'
+import json, sys
+catalog = sys.argv[1]
+strings = json.load(open(catalog))["strings"]
+missing = []
+for key, entry in strings.items():
+    if not key.strip():
+        continue
+    unit = entry.get("localizations", {}).get("en", {}).get("stringUnit", {})
+    if not unit.get("value", ""):
+        missing.append(key)
+if missing:
+    print("error: en の訳が無いキーが %d 件あります" % len(missing), file=sys.stderr)
+    for key in missing[:20]:
+        print("    %r" % key, file=sys.stderr)
+    if len(missing) > 20:
+        print("    ... 他 %d 件" % (len(missing) - 20), file=sys.stderr)
+    sys.exit(1)
+print("    未訳なし")
+AUDIT

@@ -10,8 +10,8 @@ import UniformTypeIdentifiers
 /// **自分で書き出したファイルを自分で読み込めない。**書き出しと読み込みは対で
 /// 意味を持つ機能であり、片道になっていては用をなさない。
 ///
-/// D2 の `CustomProtocolExportFile` と同じ形。ROADMAP 順位 14（2 つの store の
-/// 共通化）と同じ理由で、いまは共通化せず 2 箇所を手で揃える。**片方を直したら
+/// D2 の `CustomProtocolExportFile` と同じ形。2 つの store の共通化を
+/// 先送りしているのと同じ理由で、いまは共通化せず 2 箇所を手で揃える。**片方を直したら
 /// もう片方も確認すること。**
 struct InstitutionalPresetExportFile: Transferable {
     let data: Data

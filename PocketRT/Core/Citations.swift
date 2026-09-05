@@ -63,6 +63,30 @@ enum Citations {
         journal: "Int J Radiat Oncol Biol Phys", year: 2022,
         pmid: "35932949", doi: "10.1016/j.ijrobp.2022.05.054")
 
+    /// 脳転移 SRS 単回 20 Gy の出典。
+    ///
+    /// **RTOG 90-05 を出典にしてはならない。** 同試験の線量段階は開始線量
+    /// 18 Gy（最大径 ≤20 mm）/ 15 Gy（21-30 mm）/ 12 Gy（31-40 mm）から
+    /// 3 Gy 刻みで増量するもので、20 Gy という段階が存在しない（MTD は
+    /// 24 / 18 / 15 Gy）。2026-08-03 の実装は 20 Gy と 24 Gy の両方を
+    /// RTOG 90-05 に紐付けていたが、20 Gy は同試験に無い値だった
+    /// （app/docs/data-sources.md §B3「訂正した誤り」4）。
+    ///
+    /// JLGK0901 は腫瘍体積 4-10 mL に辺縁線量 20 Gy、4 mL 未満に 22 Gy を
+    /// 処方している。20 Gy/1 回の前向き研究上の根拠はこちらにある。
+    /// **体積の条件が付く**ため、プリセットの `note` で併記する。
+    static let jlgk0901 = Citation(
+        id: "jlgk0901", shortLabel: "JLGK0901",
+        authors: "Yamamoto M, Serizawa T, Shuto T, et al.",
+        title: "Stereotactic radiosurgery for patients with multiple brain metastases (JLGK0901): a multi-institutional prospective observational study.",
+        journal: "Lancet Oncol", year: 2014,
+        pmid: "24621620", doi: "10.1016/S1470-2045(14)70061-0")
+
+    /// 脳転移 SRS 単回 24 Gy の出典。
+    ///
+    /// 24 Gy は**最大径 20 mm 以下**に対する最大耐容線量であり、対象は
+    /// 再発・既照射例である。無条件の推奨線量ではないので、プリセットの
+    /// `note` に条件を書く。20 Gy には使えない（`jlgk0901` のコメント参照）。
     static let rtog9005 = Citation(
         id: "rtog_90_05", shortLabel: "RTOG 90-05",
         authors: "Shaw E, Scott C, Souhami L, et al.",
@@ -152,7 +176,7 @@ enum Citations {
     /// **`conformity`（肺 SBRT）とは別に持つ。** 判定基準の由来が違う（この論文の
     /// 本文そのものに判定基準がある。0813 / 0915 はプロトコル文書にあり論文には
     /// 無い）ため、出典一覧の注記も別にする必要があり、混ぜると食い違って見える
-    /// （app/docs/superpowers/plans/2026-08-15-pocketrt-cranial-srs-protocol.md）。
+    /// （頭部定位照射の設計文書に記録）。
     static let shaw1993 = Citation(
         id: "shaw1993", shortLabel: "Shaw 1993（RTOG SRS QA guidelines）",
         authors: "Shaw E, Kline R, Gillin M, Souhami L, Hirschfeld A, Dinapoli R, Martin L.",
@@ -171,8 +195,7 @@ enum Citations {
     /// 持たず、本アプリはこの文献を判定に使っていない。`shaw1993`（判定基準）
     /// とは役割が違うので、`cranialConformity` には含めず別に持つ。混ぜると
     /// 「頭部定位照射の判定基準の出典」に見えてしまい、Shaw 1993 と混同される
-    /// （app/docs/superpowers/plans/2026-08-15-pocketrt-cranial-srs-protocol.md、
-    /// data-sources.md §B6）。
+    /// （頭部定位照射の設計文書、data-sources.md §B6）。
     ///
     /// data-sources.md §B6 の逐字転記には論文の正式なタイトルが記録されておらず
     /// （著者・誌名・巻号・DOI のみ）、**推測でタイトルを補わない**
@@ -188,7 +211,7 @@ enum Citations {
     static let cranialLimitations: [Citation] = [trog2026SRSWorkingGroup]
 
     static let all: [Citation] = [
-        chhip, startB, fastForward, whelan, jcog0403, jrosg10_1, jcog0303, jcog0909, rtog9005, boneMetsMeta,
+        chhip, startB, fastForward, whelan, jcog0403, jrosg10_1, jcog0303, jcog0909, jlgk0901, rtog9005, boneMetsMeta,
         jastroHeadNeck, jastroProstate, jastroBreast, jastroWholeBrain, jastroAcoustic,
         stupp, bonePainTrial
     ]

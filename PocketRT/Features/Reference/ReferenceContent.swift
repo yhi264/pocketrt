@@ -2,14 +2,18 @@ import Foundation
 
 /// 解説 1 セクション。
 ///
-/// `title` と `body` は `LocalizedStringResource` で保持する。
+/// `title`・`body`・`formula` は `LocalizedStringResource` で保持する。
 /// 素の `String` だと String Catalog に抽出されない。
-/// `id` は言語非依存の安定キー、`formula` は数式なのでいずれも `String` のまま。
+/// `id` は言語非依存の安定キーなので `String` のまま。
+///
+/// `formula` は当初「数式だから言語に依らない」として `String` にしていたが、
+/// 線量勾配の D2cm だけは式の中に日本語の語（「PTV から 2 cm 外側の最大線量」）が
+/// 入っており、英語環境で日本語のまま出ていた（2026-09-05）。
 struct ReferenceSection: Identifiable {
     let id: String
     let title: LocalizedStringResource
     /// 数式（等幅で表示する）
-    let formula: String?
+    let formula: LocalizedStringResource?
     let body: LocalizedStringResource
 }
 

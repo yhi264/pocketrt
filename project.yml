@@ -11,8 +11,8 @@ settings:
     # String Catalog への抽出には .stringsdata の生成が要る。
     # 既定は NO で、無効のままだと Text("リテラル") すらカタログに入らない。
     SWIFT_EMIT_LOC_STRINGS: YES
-    MARKETING_VERSION: "1.0.0"
-    CURRENT_PROJECT_VERSION: "10"
+    MARKETING_VERSION: "1.1.0"
+    CURRENT_PROJECT_VERSION: "11"
     DEVELOPMENT_TEAM: ""
     CODE_SIGN_STYLE: Automatic
 targets:

@@ -146,7 +146,7 @@ struct CitationListView: View {
             // 判定基準の由来が違う。上の節の provenanceNote は「論文はこの表そのものを
             // 含まない」と述べており、Shaw 1993（論文本文に判定基準がある）に
             // そのまま当てはめると誤りになる。節を分けて注記も別にする
-            // （app/docs/superpowers/plans/2026-08-15-pocketrt-cranial-srs-protocol.md）。
+            // （頭部定位照射の設計文書に記録）。
             Section {
                 Text(ConformityCriteria.cranialProvenanceNote)
                     .font(.caption)

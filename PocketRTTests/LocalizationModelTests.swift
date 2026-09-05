@@ -26,10 +26,12 @@ struct LocalizationModelTests {
         #expect(p.flatMap { $0.note.map { String(localized: $0) } } == "デフォルト")
     }
 
-    @Test("線量分割プリセットは 18 件で、うち 2 件が注記を持つ")
+    // 注記の 4 件は、肺 SBRT の 2 件（処方点）と脳転移 SRS 単発の 2 件
+    // （腫瘍の大きさによる適用条件。2026-09-05 追加）。
+    @Test("線量分割プリセットは 18 件で、うち 4 件が注記を持つ")
     func fractionationPresetCounts() {
         #expect(FractionationPresets.all.count == 18)
-        #expect(FractionationPresets.all.filter { $0.note != nil }.count == 2)
+        #expect(FractionationPresets.all.filter { $0.note != nil }.count == 4)
     }
 
     @Test("線量分割プリセットの部位名は空でない")
@@ -75,7 +77,7 @@ struct LocalizationModelTests {
     @Test("すべての出典が一次文献かガイドラインに基づく")
     func everyCitationHasAKnownSource() {
         for c in Citations.all {
-            #expect(c.kind != .unsourced, "根拠が同定できていない: \(c.shortLabel)")
+            #expect(c.kind != .unsourced, "根拠が同定できていない: \(String(localized: c.shortLabel))")
         }
     }
 

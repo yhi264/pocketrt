@@ -16,7 +16,9 @@ enum SourceKind: Sendable {
 /// 推測で `pmid` / `doi` を埋めることは禁止する（app/docs/data-sources.md 参照）。
 struct Citation: Identifiable, Sendable {
     let id: String
-    let shortLabel: String
+    /// 表示用の短縮ラベル。「JASTRO 計画GL 2024 頭頸部」のように日本語を含むものが
+    /// あるため、`LocalizedStringResource` で持つ（英語 UI に日本語が残らないように）。
+    let shortLabel: LocalizedStringResource
     let authors: String
     let title: String
     let journal: String
@@ -29,7 +31,7 @@ struct Citation: Identifiable, Sendable {
 
     init(
         id: String,
-        shortLabel: String,
+        shortLabel: LocalizedStringResource,
         authors: String = "",
         title: String = "",
         journal: String = "",

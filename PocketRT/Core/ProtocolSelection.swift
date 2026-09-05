@@ -28,10 +28,10 @@ struct StudiedSchedule: Sendable, Hashable {
         let hi = dosePerFraction.upperBound
         let totalLo = DoseFormat.doseString(lo * Double(fractions))
         if lo == hi {
-            return "\(totalLo) Gy/\(fractions) Fr"
+            return String(localized: "\(totalLo) Gy/\(fractions) Fr")
         }
         let totalHi = DoseFormat.doseString(hi * Double(fractions))
-        return "\(totalLo)〜\(totalHi) Gy/\(fractions) Fr"
+        return String(localized: "\(totalLo)〜\(totalHi) Gy/\(fractions) Fr")
     }
 
     /// 「48 Gy（12 Gy/回）」「50〜60 Gy（10〜12 Gy/回）」のような表示
@@ -40,13 +40,19 @@ struct StudiedSchedule: Sendable, Hashable {
         let hi = dosePerFraction.upperBound
         let totalLo = lo * Double(fractions)
         let totalHi = hi * Double(fractions)
+        // String(format:) はカタログを引かないため、書式そのものが日本語で
+        // 固定される（「Gy/回」が英語環境にも出ていた。2026-09-05）。
+        // String(localized:) にして、書式ごと訳せるようにする。
         if lo == hi {
-            return String(format: "%@ Gy（%@ Gy/回）",
-                          DoseFormat.doseString(totalLo), DoseFormat.doseString(lo))
+            let total = DoseFormat.doseString(totalLo)
+            let perFraction = DoseFormat.doseString(lo)
+            return String(localized: "\(total) Gy（\(perFraction) Gy/回）")
         }
-        return String(format: "%@〜%@ Gy（%@〜%@ Gy/回）",
-                      DoseFormat.doseString(totalLo), DoseFormat.doseString(totalHi),
-                      DoseFormat.doseString(lo), DoseFormat.doseString(hi))
+        let totalLoText = DoseFormat.doseString(totalLo)
+        let totalHiText = DoseFormat.doseString(totalHi)
+        let loText = DoseFormat.doseString(lo)
+        let hiText = DoseFormat.doseString(hi)
+        return String(localized: "\(totalLoText)〜\(totalHiText) Gy（\(loText)〜\(hiText) Gy/回）")
     }
 }
 
@@ -111,7 +117,8 @@ enum BuiltInProtocol: String, CaseIterable, Identifiable, Sendable {
     /// 選ぶ時点で判断できない。`studiedSchedules` から導くので、
     /// 検討された線量分割を直せばこの表示も追随する。
     var selectionDetail: String {
-        studiedSchedules.map(\.compactLabel).joined(separator: "・")
+        studiedSchedules.map(\.compactLabel)
+            .joined(separator: String(localized: "・", comment: "検討された線量分割どうしの区切り"))
     }
 
     /// プルダウンの各行に出す文字列。部位と線量分割を 1 行にまとめる。
